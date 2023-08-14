@@ -1,4 +1,4 @@
-# JPS ComfyUI Custom Nodes
+# JPS Custom Nodes for ComfyUI
 
 These nodes were originally made for use in JPS ComfyUI Workflows.
 
