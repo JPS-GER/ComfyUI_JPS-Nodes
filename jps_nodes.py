@@ -17,7 +17,7 @@ class SDXL_Resolutions:
             }
         }
     RETURN_TYPES = ("INT","INT",)
-    RETURN_NAMES = ("height", "width")
+    RETURN_NAMES = ("width", "height")
     FUNCTION = "get_resolutions"
 
     CATEGORY="JPS Nodes/SDXL"
@@ -70,10 +70,10 @@ class SDXL_Basic_Settings:
         return {
             "required": {
                 "resolution": (s.resolution,),
-                "steps_total": ("INT", {"default": 40, "min": 20, "max": 200, "step": 5}),
+                "steps_total": ("INT", {"default": 60, "min": 20, "max": 250, "step": 5}),
                 "base_percentage": ("INT", {"default": 80, "min": 5, "max": 100, "step": 5}),
-                "cfg_base": ("FLOAT", {"default": 6, "min": 1, "max": 20, "step": 0.1}),
-                "cfg_refiner": ("FLOAT", {"default": 0, "min": 0, "max": 20, "step": 0.1}),
+                "cfg_base": ("FLOAT", {"default": 6, "min": 1, "max": 10, "step": 0.1}),
+                "cfg_refiner": ("FLOAT", {"default": 0, "min": 0, "max": 10, "step": 0.1}),
                 "ascore_refiner": ("FLOAT", {"default": 6, "min": 1, "max": 10, "step": 0.1}),
                 "seed": ("INT", {"default": 0, "min": 0, "max": 0xffffffffffffffff}),
         }}
@@ -140,7 +140,7 @@ class SDXL_Additional_Settings:
                 "offset_percentage": ("INT", {"default": 50, "min": -200, "max": 200, "step": 10}),
                 "upscale_total_steps": ("INT", {"default": 30, "min": 10, "max": 100, "step": 5}),
                 "upscale_percentage": ("INT", {"default": 32, "min": 0, "max": 100, "step": 1}),
-                "facefix_percentage": ("INT", {"default": 10, "min": 0, "max": 100, "step": 1}),
+                "facefix_percentage": ("INT", {"default": 15, "min": 0, "max": 100, "step": 1}),
                 "filename_prefix": ("STRING", {"default": "JPS"}),
         }}
     RETURN_TYPES = ("FLOAT","INT","INT","FLOAT","STRING")
@@ -170,11 +170,11 @@ class Math_Resolution_Multiply:
         return {
             "required": {
                 "width": ("INT", {"default": 1024, "min": 256, "max": 4096, "step": 16}),
-                "height": ("INT", {"default": 1024, "min": 256, "max": 100, "step": 16}),
+                "height": ("INT", {"default": 1024, "min": 256, "max": 4096, "step": 16}),
                 "factor": ("INT", {"default": 2, "min": 1, "max": 4, "step": 1}),
         }}
     RETURN_TYPES = ("INT","INT")
-    RETURN_NAMES = ("width_resize", "height_resize")
+    RETURN_NAMES = ("width_resized", "height_resized")
     FUNCTION = "get_newres"
 
     CATEGORY="JPS Nodes/Math"
@@ -182,11 +182,11 @@ class Math_Resolution_Multiply:
     def get_newres(self,width,height,factor):
         factor = int(factor)
         width = int(width)
-        width_resize = int(width) * int(factor)
+        width_resized = int(width) * int(factor)
         height = int(height)
-        height_resize = int (height) * int(factor)
+        height_resized = int (height) * int(factor)
             
-        return(int(width_resize),int(height_resize))
+        return(int(width_resized),int(height_resized))
 
 #---------------------------------------------------------------------------------------------------------------------------------------------------#
 
@@ -220,7 +220,7 @@ class Math_Largest_Integer:
 #---------------------------------------------------------------------------------------------------------------------------------------------------#
 
 class Switch_Generation_Mode:
-    genmode = ["1 - TXT2IMG","2 - IMG2IMG"]
+    gen_modes = ["1 - TXT2IMG","2 - IMG2IMG"]
     
     def __init__(self):
         pass
@@ -229,27 +229,27 @@ class Switch_Generation_Mode:
     def INPUT_TYPES(s):
         return {
             "required": {
-                "genmode": (s.genmode,),
-                "image_percentage": ("INT", {"default": 50, "min": 0, "max": 100, "step": 1}),
+                "gen_modes": (s.gen_modes,),
+                "img_percentage": ("INT", {"default": 50, "min": 0, "max": 100, "step": 1}),
             }
         }
     RETURN_TYPES = ("INT","FLOAT",)
-    RETURN_NAMES = ("genmodevalue", "img_strength")
+    RETURN_NAMES = ("gen_mode", "img_strength")
     FUNCTION = "get_genmode"
 
     CATEGORY="JPS Nodes/Switches"
 
-    def get_genmode(self,genmode,image_percentage):
-        genmodevalue = 1
+    def get_genmode(self,gen_modes,img_percentage):
+        gen_mode = 1
         img_strength = 0
-        if(genmode == "1 - TXT2IMG"):
-            genmodevalue = int(1)
+        if(gen_modes == "1 - TXT2IMG"):
+            gen_mode = int(1)
             img_strength = 0.001
-        if(genmode == "2 - IMG2IMG"):
-            genmodevalue = int(2)
-            img_strength = image_percentage / 100
+        if(gen_modes == "2 - IMG2IMG"):
+            gen_mode = int(2)
+            img_strength = img_percentage / 100
             
-        return(int(genmodevalue),float(img_strength))
+        return(int(gen_mode),float(img_strength))
 
 #---------------------------------------------------------------------------------------------------------------------------------------------------#
 
