@@ -220,7 +220,7 @@ class Math_Largest_Integer:
 #---------------------------------------------------------------------------------------------------------------------------------------------------#
 
 class Switch_Generation_Mode:
-    gen_modes = ["1 - TXT2IMG","2 - IMG2IMG"]
+    mode = ["1 - TXT2IMG","2 - IMG2IMG"]
     
     def __init__(self):
         pass
@@ -229,7 +229,7 @@ class Switch_Generation_Mode:
     def INPUT_TYPES(s):
         return {
             "required": {
-                "gen_modes": (s.gen_modes,),
+                "mode": (s.mode,),
                 "img_percentage": ("INT", {"default": 50, "min": 0, "max": 100, "step": 1}),
             }
         }
@@ -239,13 +239,13 @@ class Switch_Generation_Mode:
 
     CATEGORY="JPS Nodes/Switches"
 
-    def get_genmode(self,gen_modes,img_percentage):
+    def get_genmode(self,mode,img_percentage):
         gen_mode = 1
         img_strength = 0
-        if(gen_modes == "1 - TXT2IMG"):
+        if(mode == "1 - TXT2IMG"):
             gen_mode = int(1)
             img_strength = 0.001
-        if(gen_modes == "2 - IMG2IMG"):
+        if(mode == "2 - IMG2IMG"):
             gen_mode = int(2)
             img_strength = img_percentage / 100
             
