@@ -18,16 +18,16 @@ You can also install the nodes using the following methods:
 # List of Custom Nodes
 
 __SDXL__
-* SDXL - Resolutions: optimized for a small size with only one dropdown input and width + height outputs
-* SDXL - Basic Settings: SDXL_Resolutions and some other values you need most of the time in a single node
-* SDXL - Additional Settings: additional settings used in my workflows (upscaler, face fix, etc.) 
+* SDXL - Resolutions: Optimized for a small node size with only one dropdown input and width + height outputs - AFAIK the smallest node that allows you to pick the resolutions recommended for SDXL.
+* SDXL - Basic Settings: Includes "SDXL - Resolutions" and some other values you need for most SDXL workflows in a single node.
+* SDXL - Additional Settings: Additional settings used in my workflows (upscaler, face fix, etc.) 
 
 __MATH__
-* Math - Resolution Multiply: multiply width and height values by a defined factor (useful for SDXL workflows, factor 2 is currently recommended)
-* Math - Largest Integer: input two INT values, get the higher one - useful to find larger size of an image
+* Math - Resolution Multiply: Multiply width and height values by a defined factor (useful for SDXL workflows, it's recommended to use factor 2 for CLIPTextEncodeSDXL nodes)
+* Math - Largest Integer: Input two INT values, get the higher one - useful to find larger size of an image
 
 __SWITCH__
-* Switch - Generation Mode: switch between TXT2IMG and IMG2IMG - useful in combiantion with latent image switch nodes
+* Switch - Generation Mode: Switch between TXT2IMG and IMG2IMG - useful in combiantion with latent image switch nodes, TXT2IMG will automatically set the image strength to zero.
 
 # Credits
 
