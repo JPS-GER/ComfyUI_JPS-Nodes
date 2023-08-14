@@ -23,7 +23,7 @@ __SDXL__
 * SDXL - Additional Settings: additional settings used in my workflows (upscaler, face fix, etc.) 
 
 __MATH__
-* Math - Resolution Multiply: multiply width and height values by a defined factor (useful for SDXL workflows, try factor 2x)
+* Math - Resolution Multiply: multiply width and height values by a defined factor (useful for SDXL workflows, factor 2 is currently recommended)
 * Math - Largest Integer: input two INT values, get the higher one - useful to find larger size of an image
 
 __SWITCH__
