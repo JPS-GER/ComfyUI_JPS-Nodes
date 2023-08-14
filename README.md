@@ -6,7 +6,7 @@ The nodes can be used in any ComfyUI workflow.
 
 # Installation
 
-If you have a previous version of the Comfyroll nodes from the Comfyroll Worflow Templates download, please delete this before installing these nodes.
+If you have a previous version of the "JPS Custom Nodes for ComfyUI", please delete this before installing these nodes.
 
 1. cd custom_nodes
 2. git clone https://github.com/JPS-GER/ComfyUI_JPS-Nodes.git
