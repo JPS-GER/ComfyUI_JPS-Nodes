@@ -237,7 +237,7 @@ class Switch_Generation_Mode:
     RETURN_NAMES = ("genmodevalue", "img_strength")
     FUNCTION = "get_genmode"
 
-    CATEGORY="JPS Nodes/Switch"
+    CATEGORY="JPS Nodes/Switches"
 
     def get_genmode(self,genmode,image_percentage):
         genmodevalue = 1
