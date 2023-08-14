@@ -3,7 +3,7 @@
 # for ComfyUI               https://github.com/comfyanonymous/ComfyUI    #
 #------------------------------------------------------------------------#
 
-class JPS_SDXL_Resolutions:
+class SDXL_Resolutions:
     resolution = ["square - 1024x1024 (1:1)","landscape - 1152x896 (4:3)","landscape - 1216x832 (3:2)","landscape - 1344x768 (16:9)","landscape - 1536x640 (21:9)", "portrait - 896x1152 (3:4)","portrait - 832x1216 (2:3)","portrait - 768x1344 (9:16)","portrait - 640x1536 (9:21)"]
     
     def __init__(self):
@@ -59,7 +59,7 @@ class JPS_SDXL_Resolutions:
 
 #---------------------------------------------------------------------------------------------------------------------------------------------------#
 
-class JPS_SDXL_BasicSettings:
+class SDXL_Basic_Settings:
     resolution = ["square - 1024x1024 (1:1)","landscape - 1152x896 (4:3)","landscape - 1216x832 (3:2)","landscape - 1344x768 (16:9)","landscape - 1536x640 (21:9)", "portrait - 896x1152 (3:4)","portrait - 832x1216 (2:3)","portrait - 768x1344 (9:16)","portrait - 640x1536 (9:21)"]
 
     def __init__(self):
@@ -128,7 +128,7 @@ class JPS_SDXL_BasicSettings:
 
 #---------------------------------------------------------------------------------------------------------------------------------------------------#
 
-class JPS_SDXL_AdditionalSettings:
+class SDXL_Additional_Settings:
 
     def __init__(self):
         pass
@@ -160,7 +160,7 @@ class JPS_SDXL_AdditionalSettings:
 
 #---------------------------------------------------------------------------------------------------------------------------------------------------#
 
-class JPS_Math_ResolutionMultiply:
+class Math_Resolution_Multiply:
     
     def __init__(self):
         pass
@@ -190,7 +190,7 @@ class JPS_Math_ResolutionMultiply:
 
 #---------------------------------------------------------------------------------------------------------------------------------------------------#
 
-class JPS_Math_LargestInt:
+class Math_Largest_Integer:
 
     def init(self):
         pass
@@ -219,7 +219,7 @@ class JPS_Math_LargestInt:
 
 #---------------------------------------------------------------------------------------------------------------------------------------------------#
 
-class JPS_Switch_GenerationMode:
+class Switch_Generation_Mode:
     genmode = ["1 - TXT2IMG","2 - IMG2IMG"]
     
     def __init__(self):
@@ -254,11 +254,11 @@ class JPS_Switch_GenerationMode:
 #---------------------------------------------------------------------------------------------------------------------------------------------------#
 
 NODE_CLASS_MAPPINGS = {
-    "SDXL Resolutions (JPS)": JPS_SDXL_Resolutions,
-    "SDXL BasicSettings (JPS)": JPS_SDXL_BasicSettings,
-    "SDXL AdditionalSettings (JPS)": JPS_SDXL_AdditionalSettings,
-    "Math ResolutionMultiply (JPS)": JPS_Math_ResolutionMultiply,
-    "Math LargestInt (JPS)": JPS_Math_LargestInt,
-    "Switch GenerationMode (JPS)": JPS_Switch_GenerationMode,
+    "SDXL Resolutions (JPS)": SDXL_Resolutions,
+    "SDXL Basic Settings (JPS)": SDXL_Basic_Settings,
+    "SDXL Additional Settings (JPS)": SDXL_Additional_Settings,
+    "Math Resolution Multiply (JPS)": Math_Resolution_Multiply,
+    "Math Largest Int (JPS)": Math_Largest_Integer,
+    "Switch Generation Mode (JPS)": Switch_Generation_Mode,
 }
 
