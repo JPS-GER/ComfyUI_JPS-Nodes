@@ -22,7 +22,7 @@ __SDXL__
 * SDXL BasicSettings 
 * SDXL AdditionalSettings
 
-  __MATH__
+__MATH__
 * Math ResolutionMultiply
 * Math LargestInt
 
