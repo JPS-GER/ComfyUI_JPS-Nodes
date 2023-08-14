@@ -18,16 +18,16 @@ You can also install the nodes using the following methods:
 # List of Custom Nodes
 
 __SDXL__
-* SDXL_Resolutions - optimized for a small size with only one dropdown input and width + height outputs
-* SDXL BasicSettings - SDXL_Resolutions and some other values you need most of the time in a single node
-* SDXL AdditionalSettings - additional settings used in my workflows (upscaler, face fix, etc.) 
+* SDXL - Resolutions: optimized for a small size with only one dropdown input and width + height outputs
+* SDXL - Basic Settings: SDXL_Resolutions and some other values you need most of the time in a single node
+* SDXL - Additional Settings: additional settings used in my workflows (upscaler, face fix, etc.) 
 
 __MATH__
-* Math ResolutionMultiply - multiply width and height values by a defined factor (useful for SDXL workflows, try factor 2x)
-* Math LargestInt - input two INT values, get the higher one - useful to find larger size of an image
+* Math - Resolution Multiply: multiply width and height values by a defined factor (useful for SDXL workflows, try factor 2x)
+* Math - Largest Integer: input two INT values, get the higher one - useful to find larger size of an image
 
 __SWITCH__
-* Switch GenerationMode - switch between TXT2IMG and IMG2IMG - useful in combiantion with latent image switch nodes
+* Switch - Generation Mode: switch between TXT2IMG and IMG2IMG - useful in combiantion with latent image switch nodes
 
 # Credits
 
