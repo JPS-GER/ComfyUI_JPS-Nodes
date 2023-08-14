@@ -26,7 +26,7 @@ __MATH__
 * Math - Resolution Multiply: Multiply width and height values by a defined factor (useful for SDXL workflows, it's recommended to use factor 2 for CLIPTextEncodeSDXL nodes)
 * Math - Largest Integer: Input two INT values, get the higher one - useful to find larger size of an image
 
-__SWITCH__
+__SWITCHES__
 * Switch - Generation Mode: Switch between TXT2IMG and IMG2IMG - useful in combiantion with latent image switch nodes, TXT2IMG will automatically set the image strength to zero.
 
 # Credits
