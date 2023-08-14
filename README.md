@@ -27,7 +27,7 @@ __MATH__
 * Math LargestInt
 
 __SWITCH__
-Switch GenerationMode
+* Switch GenerationMode
 
 # Credits
 
