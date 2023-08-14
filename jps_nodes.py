@@ -1,5 +1,5 @@
 #------------------------------------------------------------------------#
-# JPS CustomNodes           https://github.com/JPS-GER/ComfyUI_JPS-Nodes #
+# JPS Custom Nodes          https://github.com/JPS-GER/ComfyUI_JPS-Nodes #
 # for ComfyUI               https://github.com/comfyanonymous/ComfyUI    #
 #------------------------------------------------------------------------#
 
