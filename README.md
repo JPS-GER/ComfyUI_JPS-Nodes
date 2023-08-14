@@ -18,8 +18,16 @@ You can also install the nodes using the following methods:
 # List of Custom Nodes
 
 __SDXL__
-* JPS SDXL_Resolutions
+* SDXL_Resolutions
+* SDXL BasicSettings 
+* SDXL AdditionalSettings
 
+  __MATH__
+* Math ResolutionMultiply
+* Math LargestInt
+
+__SWITCH__
+Switch GenerationMode
 
 # Credits
 
