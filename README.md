@@ -18,7 +18,7 @@ You can also install the nodes using the following methods:
 # List of Custom Nodes
 
 __SDXL__
-* SDXL_Resolutions - optimized for a small size with only one dropdown input and width + heigt output
+* SDXL_Resolutions - optimized for a small size with only one dropdown input and width + height outputs
 * SDXL BasicSettings - SDXL_Resolutions and some other values you need most of the time in a single node
 * SDXL AdditionalSettings - additional settings used in my workflows (upscaler, face fix, etc.) 
 
