@@ -72,8 +72,8 @@ class SDXL_Basic_Settings:
                 "resolution": (s.resolution,),
                 "steps_total": ("INT", {"default": 60, "min": 20, "max": 250, "step": 5}),
                 "base_percentage": ("INT", {"default": 80, "min": 5, "max": 100, "step": 5}),
-                "cfg_base": ("FLOAT", {"default": 6, "min": 1, "max": 10, "step": 0.1}),
-                "cfg_refiner": ("FLOAT", {"default": 0, "min": 0, "max": 10, "step": 0.1}),
+                "cfg_base": ("FLOAT", {"default": 7, "min": 1, "max": 20, "step": 0.1}),
+                "cfg_refiner": ("FLOAT", {"default": 0, "min": 0, "max": 20, "step": 0.1}),
                 "ascore_refiner": ("FLOAT", {"default": 6, "min": 1, "max": 10, "step": 0.1}),
                 "seed": ("INT", {"default": 0, "min": 0, "max": 0xffffffffffffffff}),
         }}
@@ -138,8 +138,8 @@ class SDXL_Additional_Settings:
         return {
             "required": {
                 "offset_percentage": ("INT", {"default": 50, "min": -200, "max": 200, "step": 10}),
-                "upscale_total_steps": ("INT", {"default": 30, "min": 10, "max": 100, "step": 5}),
-                "upscale_percentage": ("INT", {"default": 32, "min": 0, "max": 100, "step": 1}),
+                "upscale_total_steps": ("INT", {"default": 50, "min": 10, "max": 100, "step": 5}),
+                "upscale_percentage": ("INT", {"default": 33, "min": 0, "max": 100, "step": 1}),
                 "facefix_percentage": ("INT", {"default": 15, "min": 0, "max": 100, "step": 1}),
                 "filename_prefix": ("STRING", {"default": "JPS"}),
         }}
@@ -169,8 +169,8 @@ class Math_Resolution_Multiply:
     def INPUT_TYPES(s):
         return {
             "required": {
-                "width": ("INT", {"default": 1024, "min": 256, "max": 4096, "step": 16}),
-                "height": ("INT", {"default": 1024, "min": 256, "max": 4096, "step": 16}),
+                "width": ("INT", {"default": 1024, "min": 256, "max": 8192, "step": 16}),
+                "height": ("INT", {"default": 1024, "min": 256, "max": 8192, "step": 16}),
                 "factor": ("INT", {"default": 2, "min": 1, "max": 4, "step": 1}),
         }}
     RETURN_TYPES = ("INT","INT")
