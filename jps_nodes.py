@@ -253,6 +253,75 @@ class Switch_Generation_Mode:
 
 #---------------------------------------------------------------------------------------------------------------------------------------------------#
 
+class Switch_Generation_Mode_4in1:
+    mode = ["1 - TXT2IMG","2 - IMG2IMG", "3 - Candy", "4 - Depth"]
+    
+    def __init__(self):
+        pass
+
+    @classmethod
+    def INPUT_TYPES(s):
+        return {
+            "required": {
+                "mode": (s.mode,),
+                "strength_percent": ("INT", {"default": 50, "min": 0, "max": 100, "step": 1}),
+                "ctrl_start_percent": ("INT", {"default": 0, "min": 0, "max": 100, "step": 5}),
+                "ctrl_stop_percent": ("INT", {"default": 100, "min": 0, "max": 100, "step": 5}),
+                "ctrl_low_threshold": ("INT", {"default": 100, "min": 0, "max": 255, "step": 5}),
+                "ctrl_high_threshold": ("INT", {"default": 200, "min": 0, "max": 255, "step": 5}),
+            }   
+        }
+    RETURN_TYPES = ("INT","FLOAT","FLOAT","FLOAT","FLOAT","INT","INT")
+    RETURN_NAMES = ("gen_mode", "img_strength", "ctrl_strength", "ctrl_start", "ctrl_stop", "ctrl_low", "ctrl_high")
+    FUNCTION = "get_genmodefour"
+
+    CATEGORY="JPS Nodes/Switches"
+
+    def get_genmodefour(self,mode,strength_percent, ctrl_start_percent, ctrl_stop_percent, ctrl_low_threshold, ctrl_high_threshold):
+        gen_mode = 1
+        img_strength = 0
+        ctrl_strength = 0
+        ctrl_start = 0
+        ctrl_stop = 0
+        ctrl_low = 0
+        ctrl_high = 0
+        if(mode == "1 - TXT2IMG"):
+            gen_mode = int(1)
+            img_strength = 0.001
+            ctrl_strength = 0
+            ctrl_start = 0
+            ctrl_stop = 0
+            ctrl_low = 0
+            ctrl_high = 0
+        if(mode == "2 - IMG2IMG"):
+            gen_mode = int(2)
+            img_strength = strength_percent / 100
+            ctrl_strength = 0
+            ctrl_start = 0
+            ctrl_stop = 0
+            ctrl_low = 0
+            ctrl_high = 0
+        if(mode == "3 - Candy"):
+            gen_mode = int(3)
+            img_strength = 0.001
+            ctrl_strength = strength_percent / 100
+            ctrl_start = ctrl_start_percent / 100
+            ctrl_stop = ctrl_stop_percent / 100
+            ctrl_low = ctrl_low_threshold
+            ctrl_high = ctrl_high_threshold
+        if(mode == "4 - Depth"):
+            gen_mode = int(4)
+            img_strength = 0.001
+            ctrl_strength = strength_percent / 100
+            ctrl_start = ctrl_start_percent / 100
+            ctrl_stop = ctrl_stop_percent / 100
+            ctrl_low = ctrl_low_threshold
+            ctrl_high = ctrl_high_threshold
+            
+        return(int(gen_mode),float(img_strength),float(ctrl_strength),float(ctrl_start),float(ctrl_stop),int(ctrl_low),int(ctrl_high))
+
+#---------------------------------------------------------------------------------------------------------------------------------------------------#
+
 NODE_CLASS_MAPPINGS = {
     "SDXL Resolutions (JPS)": SDXL_Resolutions,
     "SDXL Basic Settings (JPS)": SDXL_Basic_Settings,
@@ -260,5 +329,6 @@ NODE_CLASS_MAPPINGS = {
     "Math Resolution Multiply (JPS)": Math_Resolution_Multiply,
     "Math Largest Int (JPS)": Math_Largest_Integer,
     "Switch Generation Mode (JPS)": Switch_Generation_Mode,
+    "Switch Generation Mode 4in1 (JPS)": Switch_Generation_Mode_4in1,
 }
 
