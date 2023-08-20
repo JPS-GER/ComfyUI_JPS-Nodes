@@ -322,6 +322,42 @@ class Switch_Generation_Mode_4in1:
 
 #---------------------------------------------------------------------------------------------------------------------------------------------------#
 
+class Switch_Revision_Mode:
+    revmode = ["TXT Prompt","IMG Prompt"]
+    
+    def __init__(self):
+        pass
+
+    @classmethod
+    def INPUT_TYPES(s):
+        return {
+            "required": {
+                "revmode": (s.revmode,),
+                "rev_strength": ("FLOAT", {"default": 1, "min": 0, "max": 10, "step": 0.1}),
+                "rev_noise_aug": ("FLOAT", {"default": 0, "min": 0, "max": 1, "step": 0.1}),
+            }
+        }
+    RETURN_TYPES = ("INT","FLOAT","FLOAT")
+    RETURN_NAMES = ("rev_mode", "rev_strength", "rev_noise_aug")
+    FUNCTION = "get_revmode"
+
+    CATEGORY="JPS Nodes/Switches"
+
+    def get_revmode(self,revmode,rev_strength,rev_noise_aug):
+        rev_mode = int(1)
+        if(revmode == "TXT Prompt"):
+            rev_mode = int(1)
+            rev_strength = 0
+            rev_noise_aug = 0
+        if(revmode == "IMG Prompt"):
+            rev_mode = int(0)
+            rev_strength = rev_strength
+            rev_noise_aug = rev_noise_aug
+ 
+        return(int(rev_mode),float(rev_strength),float(rev_noise_aug))
+
+#---------------------------------------------------------------------------------------------------------------------------------------------------#
+
 NODE_CLASS_MAPPINGS = {
     "SDXL Resolutions (JPS)": SDXL_Resolutions,
     "SDXL Basic Settings (JPS)": SDXL_Basic_Settings,
@@ -330,5 +366,5 @@ NODE_CLASS_MAPPINGS = {
     "Math Largest Int (JPS)": Math_Largest_Integer,
     "Switch Generation Mode (JPS)": Switch_Generation_Mode,
     "Switch Generation Mode 4in1 (JPS)": Switch_Generation_Mode_4in1,
+    "Switch Revision Mode (JPS)": Switch_Revision_Mode,
 }
-
