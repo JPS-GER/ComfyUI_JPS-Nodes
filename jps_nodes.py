@@ -254,7 +254,7 @@ class Switch_Generation_Mode:
 #---------------------------------------------------------------------------------------------------------------------------------------------------#
 
 class Switch_Generation_Mode_4in1:
-    mode = ["1 - TXT2IMG","2 - IMG2IMG", "3 - Candy", "4 - Depth"]
+    mode = ["1 - TXT2IMG","2 - IMG2IMG", "3 - Canny", "4 - Depth"]
     
     def __init__(self):
         pass
@@ -301,7 +301,7 @@ class Switch_Generation_Mode_4in1:
             ctrl_stop = 0
             ctrl_low = 0
             ctrl_high = 0
-        if(mode == "3 - Candy"):
+        if(mode == "3 - Canny"):
             gen_mode = int(3)
             img_strength = 0.001
             ctrl_strength = strength_percent / 100
