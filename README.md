@@ -28,7 +28,7 @@ __MATH__
 
 __SWITCHES__
 * Switch - Generation Mode: Switch between TXT2IMG and IMG2IMG - useful in combiantion with latent image switch nodes, TXT2IMG will automatically set the image strength to zero.
-* Switch - Generation Mode 4in1: Switch between TXT2IMG, IMG2IMG, Candy and Depth - adds Control Net Candy and Control Net Depth to the 2in1 switch.
+* Switch - Generation Mode 4in1: Switch between TXT2IMG, IMG2IMG, Canny and Depth - adds Control Net Canny and Control Net Depth to the 2in1 switch.
 
 # Credits
 
