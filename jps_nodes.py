@@ -323,8 +323,10 @@ class Switch_Generation_Mode_4in1:
 #---------------------------------------------------------------------------------------------------------------------------------------------------#
 
 class Switch_Revision_Mode:
-    revmode = ["TXT Prompt","IMG Prompt"]
-    
+    revmode = ["Revision Mode OFF","Revision Mode ON"]
+    posprompt = ["Pos. Prompt OFF","Pos. Prompt ON"]    
+    negprompt = ["Neg. Prompt OFF","Neg. Prompt ON"]    
+
     def __init__(self):
         pass
 
@@ -333,28 +335,44 @@ class Switch_Revision_Mode:
         return {
             "required": {
                 "revmode": (s.revmode,),
-                "rev_strength": ("FLOAT", {"default": 1, "min": 0, "max": 10, "step": 0.1}),
-                "rev_noise_aug": ("FLOAT", {"default": 0, "min": 0, "max": 1, "step": 0.1}),
+                "posprompt": (s.posprompt,),                
+                "negprompt": (s.negprompt,),
+                "rev_strength1": ("FLOAT", {"default": 1, "min": 0, "max": 10, "step": 0.05}),
+                "rev_noise_aug1": ("FLOAT", {"default": 0, "min": 0, "max": 1, "step": 0.1}),
+                "rev_strength2": ("FLOAT", {"default": 1, "min": 0, "max": 10, "step": 0.05}),
+                "rev_noise_aug2": ("FLOAT", {"default": 0, "min": 0, "max": 1, "step": 0.1}),
             }
         }
-    RETURN_TYPES = ("INT","FLOAT","FLOAT")
-    RETURN_NAMES = ("rev_mode", "rev_strength", "rev_noise_aug")
+    RETURN_TYPES = ("INT","INT","INT","FLOAT","FLOAT","FLOAT","FLOAT")
+    RETURN_NAMES = ("rev_mode", "pos_prompt", "neg_prompt", "rev_strength1", "rev_noise_aug1","rev_strength2", "rev_noise_aug2")
     FUNCTION = "get_revmode"
 
     CATEGORY="JPS Nodes/Switches"
 
-    def get_revmode(self,revmode,rev_strength,rev_noise_aug):
+    def get_revmode(self,revmode,posprompt,negprompt,rev_strength1,rev_noise_aug1,rev_strength2,rev_noise_aug2):
         rev_mode = int(1)
-        if(revmode == "TXT Prompt"):
+        if(revmode == "Revision Mode OFF"):
             rev_mode = int(1)
-            rev_strength = 0
-            rev_noise_aug = 0
-        if(revmode == "IMG Prompt"):
+            rev_strength1 = 0
+            rev_noise_aug1 = 0
+            rev_strength2 = 0
+            rev_noise_aug2 = 0
+        if(revmode == "Revision Mode ON"):
             rev_mode = int(0)
-            rev_strength = rev_strength
-            rev_noise_aug = rev_noise_aug
- 
-        return(int(rev_mode),float(rev_strength),float(rev_noise_aug))
+            rev_strength1 = rev_strength1
+            rev_noise_aug1 = rev_noise_aug1
+            rev_strength2 = rev_strength2
+            rev_noise_aug2 = rev_noise_aug2
+        if(posprompt == "Pos. Prompt OFF"):
+            pos_prompt = int(1)
+        if(posprompt == "Pos. Prompt ON"):
+            pos_prompt = int(0)
+        if(negprompt == "Neg. Prompt OFF"):
+            neg_prompt = int(1)
+        if(negprompt == "Neg. Prompt ON"):
+            neg_prompt = int(0)
+
+        return(int(rev_mode),int(pos_prompt),int(neg_prompt),float(rev_strength1),float(rev_noise_aug1),float(rev_strength2),float(rev_noise_aug2))
 
 #---------------------------------------------------------------------------------------------------------------------------------------------------#
 
