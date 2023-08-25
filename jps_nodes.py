@@ -350,29 +350,62 @@ class Switch_Revision_Mode:
     CATEGORY="JPS Nodes/Switches"
 
     def get_revmode(self,revmode,posprompt,negprompt,rev_strength1,rev_noise_aug1,rev_strength2,rev_noise_aug2):
-        rev_mode = int(1)
+        rev_mode = int(0)
         if(revmode == "Revision Mode OFF"):
-            rev_mode = int(1)
+            rev_mode = int(0)
             rev_strength1 = 0
             rev_noise_aug1 = 0
             rev_strength2 = 0
             rev_noise_aug2 = 0
         if(revmode == "Revision Mode ON"):
-            rev_mode = int(0)
+            rev_mode = int(1)
             rev_strength1 = rev_strength1
             rev_noise_aug1 = rev_noise_aug1
             rev_strength2 = rev_strength2
             rev_noise_aug2 = rev_noise_aug2
         if(posprompt == "Pos. Prompt OFF"):
-            pos_prompt = int(1)
-        if(posprompt == "Pos. Prompt ON"):
             pos_prompt = int(0)
+        if(posprompt == "Pos. Prompt ON"):
+            pos_prompt = int(1)
         if(negprompt == "Neg. Prompt OFF"):
-            neg_prompt = int(1)
-        if(negprompt == "Neg. Prompt ON"):
             neg_prompt = int(0)
+        if(negprompt == "Neg. Prompt ON"):
+            neg_prompt = int(1)
 
         return(int(rev_mode),int(pos_prompt),int(neg_prompt),float(rev_strength1),float(rev_noise_aug1),float(rev_strength2),float(rev_noise_aug2))
+
+#---------------------------------------------------------------------------------------------------------------------------------------------------#
+
+class Switch_IP_Adapter_Mode:
+    ipamode = ["IP Adapter Mode OFF","IP Adapter Mode ON"]
+
+    def __init__(self):
+        pass
+
+    @classmethod
+    def INPUT_TYPES(s):
+        return {
+            "required": {
+                "ipamode": (s.ipamode,),
+                "ipa_weight": ("FLOAT", {"default": 1, "min": -1, "max": 3, "step": 0.05}),
+            }
+        }
+    RETURN_TYPES = ("INT","FLOAT")
+    RETURN_NAMES = ("ipa_mode", "ipa_weight")
+    FUNCTION = "get_ipamode"
+
+    CATEGORY="JPS Nodes/Switches"
+
+    def get_ipamode(self,ipamode,ipa_weight):
+        ipa_mode = int(0)
+        if(ipamode == "IP Adapter Mode OFF"):
+            ipa_mode = int(0)
+            ipa_weight = 0
+        if(ipamode == "IP Adapter Mode ON"):
+            ipa_mode = int(1)
+            ipa_weight = ipa_weight
+
+        return(int(ipa_mode),float(ipa_weight))
 
 #---------------------------------------------------------------------------------------------------------------------------------------------------#
 
@@ -385,4 +418,5 @@ NODE_CLASS_MAPPINGS = {
     "Switch Generation Mode (JPS)": Switch_Generation_Mode,
     "Switch Generation Mode 4in1 (JPS)": Switch_Generation_Mode_4in1,
     "Switch Revision Mode (JPS)": Switch_Revision_Mode,
+    "Switch IP Adapter Mode (JPS)": Switch_IP_Adapter_Mode,
 }
