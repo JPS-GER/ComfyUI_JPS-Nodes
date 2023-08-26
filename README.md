@@ -20,7 +20,7 @@ You can also install the nodes using the following methods:
 __SDXL__
 * SDXL - Resolutions: Optimized for a small node size with only one dropdown input and width + height outputs - AFAIK the smallest node that allows you to pick the resolutions recommended for SDXL.
 * SDXL - Basic Settings: Includes "SDXL - Resolutions" and some other values you need for most SDXL workflows in a single node.
-* SDXL - Additional Settings: Additional settings used in my workflows (upscaler, face fix, etc.) 
+* SDXL - Additional Settings: Additional settings used in some of my workflows (upscaler, face fix, etc.) 
 
 __MATH__
 * Math - Resolution Multiply: Multiply width and height values by a defined factor (useful for SDXL workflows, it's recommended to use factor 2 for CLIPTextEncodeSDXL nodes)
