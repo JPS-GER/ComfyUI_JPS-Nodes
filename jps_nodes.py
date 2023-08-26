@@ -137,10 +137,10 @@ class SDXL_Additional_Settings:
     def INPUT_TYPES(s):
         return {
             "required": {
-                "offset_percentage": ("INT", {"default": 50, "min": -200, "max": 200, "step": 10}),
+                "offset_percentage": ("INT", {"default": 50, "min": -200, "max": 200, "step": 5}),
                 "upscale_total_steps": ("INT", {"default": 50, "min": 10, "max": 100, "step": 5}),
-                "upscale_percentage": ("INT", {"default": 33, "min": 0, "max": 100, "step": 1}),
-                "facefix_percentage": ("INT", {"default": 15, "min": 0, "max": 100, "step": 1}),
+                "upscale_percentage": ("INT", {"default": 33, "min": 0, "max": 100, "step": 5}),
+                "facefix_percentage": ("INT", {"default": 15, "min": 0, "max": 100, "step": 5}),
                 "filename_prefix": ("STRING", {"default": "JPS"}),
         }}
     RETURN_TYPES = ("FLOAT","INT","INT","FLOAT","STRING")
@@ -230,7 +230,7 @@ class Switch_Generation_Mode:
         return {
             "required": {
                 "mode": (s.mode,),
-                "img_percentage": ("INT", {"default": 50, "min": 0, "max": 100, "step": 1}),
+                "img_percentage": ("INT", {"default": 50, "min": 0, "max": 100, "step": 5}),
             }
         }
     RETURN_TYPES = ("INT","FLOAT",)
@@ -264,7 +264,7 @@ class Switch_Generation_Mode_4in1:
         return {
             "required": {
                 "mode": (s.mode,),
-                "strength_percent": ("INT", {"default": 50, "min": 0, "max": 100, "step": 1}),
+                "strength_percent": ("INT", {"default": 50, "min": 0, "max": 100, "step": 5}),
                 "ctrl_start_percent": ("INT", {"default": 0, "min": 0, "max": 100, "step": 5}),
                 "ctrl_stop_percent": ("INT", {"default": 100, "min": 0, "max": 100, "step": 5}),
                 "ctrl_low_threshold": ("INT", {"default": 100, "min": 0, "max": 255, "step": 5}),
@@ -337,9 +337,9 @@ class Switch_Revision_Mode:
                 "revmode": (s.revmode,),
                 "posprompt": (s.posprompt,),                
                 "negprompt": (s.negprompt,),
-                "rev_strength1": ("FLOAT", {"default": 1, "min": 0, "max": 10, "step": 0.05}),
+                "rev_strength1": ("FLOAT", {"default": 1, "min": 0, "max": 10, "step": 0.1}),
                 "rev_noise_aug1": ("FLOAT", {"default": 0, "min": 0, "max": 1, "step": 0.1}),
-                "rev_strength2": ("FLOAT", {"default": 1, "min": 0, "max": 10, "step": 0.05}),
+                "rev_strength2": ("FLOAT", {"default": 1, "min": 0, "max": 10, "step": 0.1}),
                 "rev_noise_aug2": ("FLOAT", {"default": 0, "min": 0, "max": 1, "step": 0.1}),
             }
         }
@@ -387,7 +387,7 @@ class Switch_IP_Adapter_Mode:
         return {
             "required": {
                 "ipamode": (s.ipamode,),
-                "ipa_weight": ("FLOAT", {"default": 1, "min": -1, "max": 3, "step": 0.05}),
+                "ipa_weight": ("FLOAT", {"default": 1, "min": -1, "max": 3, "step": 0.1}),
             }
         }
     RETURN_TYPES = ("INT","FLOAT")
