@@ -3,6 +3,29 @@
 # for ComfyUI               https://github.com/comfyanonymous/ComfyUI    #
 #------------------------------------------------------------------------#
 
+import comfy.sd
+
+accepted_ratios_horizontal = {
+    "12:5": (1536, 640, 2.400000000),
+    "7:4": (1344, 768, 1.750000000),
+    "19:13": (1216, 832, 1.461538462),
+    "9:7": (1152, 896, 1.285714286)
+}
+
+# Vertical aspect ratio
+accepted_ratios_vertical = {
+    "7:9": (896, 1152, 0.777777778),
+    "13:19": (832, 1216, 0.684210526),
+    "4:7": (768, 1344, 0.571428571),
+    "5:12": (640, 1536, 0.416666667)
+}
+    
+# Square aspect ratio
+accepted_ratios_square = {
+    "1:1": (1024, 1024, 1.00000000)
+}
+
+
 class SDXL_Resolutions:
     resolution = ["square - 1024x1024 (1:1)","landscape - 1152x896 (4:3)","landscape - 1216x832 (3:2)","landscape - 1344x768 (16:9)","landscape - 1536x640 (21:9)", "portrait - 896x1152 (3:4)","portrait - 832x1216 (2:3)","portrait - 768x1344 (9:16)","portrait - 640x1536 (9:21)"]
     
@@ -70,20 +93,23 @@ class SDXL_Basic_Settings:
         return {
             "required": {
                 "resolution": (s.resolution,),
+                "sampler_name": (comfy.samplers.KSampler.SAMPLERS,),
+                "scheduler": (comfy.samplers.KSampler.SCHEDULERS,),
                 "steps_total": ("INT", {"default": 60, "min": 20, "max": 250, "step": 5}),
                 "base_percentage": ("INT", {"default": 80, "min": 5, "max": 100, "step": 5}),
                 "cfg_base": ("FLOAT", {"default": 7, "min": 1, "max": 20, "step": 0.1}),
                 "cfg_refiner": ("FLOAT", {"default": 0, "min": 0, "max": 20, "step": 0.1}),
                 "ascore_refiner": ("FLOAT", {"default": 6, "min": 1, "max": 10, "step": 0.1}),
                 "seed": ("INT", {"default": 0, "min": 0, "max": 0xffffffffffffffff}),
+                "filename_prefix": ("STRING", {"default": "JPS"}),
         }}
-    RETURN_TYPES = ("INT","INT","INT","INT","FLOAT","FLOAT","FLOAT","INT")
-    RETURN_NAMES = ("width", "height", "steps_total", "step_split","cfg_base","cfg_refiner","ascore_refiner","seed")
+    RETURN_TYPES = ("INT","INT",comfy.samplers.KSampler.SAMPLERS,comfy.samplers.KSampler.SCHEDULERS,"INT","INT","FLOAT","FLOAT","FLOAT","INT","STRING")
+    RETURN_NAMES = ("width", "height", "sampler_name", "scheduler", "steps_total", "step_split","cfg_base","cfg_refiner","ascore_refiner","seed","filename_prefix")
     FUNCTION = "get_values"
 
     CATEGORY="JPS Nodes/SDXL"
 
-    def get_values(self,resolution,steps_total,base_percentage,cfg_base,cfg_refiner,ascore_refiner,seed):
+    def get_values(self,resolution,sampler_name,scheduler,steps_total,base_percentage,cfg_base,cfg_refiner,ascore_refiner,seed,filename_prefix):
         width = 1024
         height = 1024
         width = int(width)
@@ -124,7 +150,7 @@ class SDXL_Basic_Settings:
         if(cfg_refiner == 0):
             cfg_refiner = cfg_base
             
-        return(int(width),int(height),int(steps_total),int(step_split),float(cfg_base),float(cfg_refiner),float(ascore_refiner),int(seed))
+        return(int(width),int(height),sampler_name,scheduler,int(steps_total),int(step_split),float(cfg_base),float(cfg_refiner),float(ascore_refiner),int(seed),str(filename_prefix))
 
 #---------------------------------------------------------------------------------------------------------------------------------------------------#
 
@@ -141,22 +167,20 @@ class SDXL_Additional_Settings:
                 "upscale_total_steps": ("INT", {"default": 50, "min": 10, "max": 100, "step": 5}),
                 "upscale_percentage": ("INT", {"default": 33, "min": 0, "max": 100, "step": 5}),
                 "facefix_percentage": ("INT", {"default": 15, "min": 0, "max": 100, "step": 5}),
-                "filename_prefix": ("STRING", {"default": "JPS"}),
         }}
-    RETURN_TYPES = ("FLOAT","INT","INT","FLOAT","STRING")
-    RETURN_NAMES = ("offset_strength", "upscale_total_steps", "upscale_start_step", "facefix_strength","filename_prefix")
+    RETURN_TYPES = ("FLOAT","INT","INT","FLOAT")
+    RETURN_NAMES = ("offset_strength", "upscale_total_steps", "upscale_start_step", "facefix_strength")
     FUNCTION = "get_addvalues"
 
     CATEGORY="JPS Nodes/SDXL"
 
-    def get_addvalues(self,offset_percentage,upscale_total_steps,upscale_percentage,facefix_percentage,filename_prefix):
+    def get_addvalues(self,offset_percentage,upscale_total_steps,upscale_percentage,facefix_percentage):
         offset_strength = int(offset_percentage) / 100
         upscale_total_steps = int(upscale_total_steps)
         upscale_start_step = int(upscale_total_steps) * (100 - upscale_percentage) / 100 
         facefix_strength = int(facefix_percentage) / 100
-        filename_prefix = str(filename_prefix)
             
-        return(float(offset_strength),int(upscale_total_steps),int(upscale_start_step),float(facefix_strength),str(filename_prefix))
+        return(float(offset_strength),int(upscale_total_steps),int(upscale_start_step),float(facefix_strength))
 
 #---------------------------------------------------------------------------------------------------------------------------------------------------#
 
@@ -203,24 +227,177 @@ class Math_Largest_Integer:
                 "int_b": ("INT", {"default": 1,}),
             }
         }
-    RETURN_TYPES = ("INT", )
-    RETURN_NAMES = ("largest_int", )
+
+    RETURN_TYPES = ("INT","INT","INT")
+    RETURN_NAMES = ("larger_int","smaller_int","is_a_larger")
     FUNCTION = "get_lrg"
 
     CATEGORY="JPS Nodes/Math"
 
     def get_lrg(self,int_a,int_b):
-        largest_int = int(int_b)
+        larger_int = int(int_b)
+        smaller_int = int(int_a)
+        is_a_larger = int(0)
+        if int_a > int_b:
+            larger_int = int(int_a)
+            smaller_int = int(int_b)
+            is_a_larger = int(1)
 
-        if int_a >= int_b:
-            largest_int = int(int_a)
+        return(int(larger_int),int(smaller_int),int(is_a_larger))
 
-        return(int(largest_int), )
+#---------------------------------------------------------------------------------------------------------------------------------------------------#
+
+class Math_Multiply_INT_INT:
+
+    def init(self):
+        pass
+
+    @classmethod
+    def INPUT_TYPES(cls):
+        return {
+            "required": {
+                "int_a": ("INT", {"default": 1,}),
+                "int_b": ("INT", {"default": 1,}),
+            }
+        }
+
+    RETURN_TYPES = ("INT","FLOAT")
+    RETURN_NAMES = ("int_multiply","float_multiply")
+    FUNCTION = "get_multiply_int_int"
+
+    CATEGORY="JPS Nodes/Math"
+
+    def get_multiply_int_int(self,int_a,int_b):
+        int_multiply = int(int_a) * int(int_b)
+        float_multiply = int(int_a) * int(int_b)
+
+        return(int(int_multiply),float(float_multiply))
+
+#---------------------------------------------------------------------------------------------------------------------------------------------------#
+
+class Math_Multiply_INT_FLOAT:
+
+    def init(self):
+        pass
+
+    @classmethod
+    def INPUT_TYPES(cls):
+        return {
+            "required": {
+                "int_a": ("INT", {"default": 1,}),
+                "float_b": ("FLOAT", {"default": 1,}),
+            }
+        }
+
+    RETURN_TYPES = ("INT","FLOAT")
+    RETURN_NAMES = ("int_multiply","float_multiply")
+    FUNCTION = "get_multiply_int_float"
+
+    CATEGORY="JPS Nodes/Math"
+
+    def get_multiply_int_float(self,int_a,float_b):
+        int_multiply = int(int_a) * float(float_b)
+        float_multiply = int(int_a) * float(float_b)
+
+        return(int(int_multiply),float(float_multiply))
+
+#---------------------------------------------------------------------------------------------------------------------------------------------------#
+
+class Math_Multiply_FLOAT_FLOAT:
+
+    def init(self):
+        pass
+
+    @classmethod
+    def INPUT_TYPES(cls):
+        return {
+            "required": {
+                "float_a": ("FLOAT", {"default": 1,}),
+                "float_b": ("FLOAT", {"default": 1,}),
+            }
+        }
+
+    RETURN_TYPES = ("INT","FLOAT")
+    RETURN_NAMES = ("int_multiply","float_multiply")
+    FUNCTION = "get_multiply_float_float"
+
+    CATEGORY="JPS Nodes/Math"
+
+    def get_multiply_float_float(self,float_a,float_b):
+        int_multiply = float(float_a) * float(float_b)
+        float_multiply = float(float_a) * float(float_b)
+
+        return(int(int_multiply),float(float_multiply))
+
+#---------------------------------------------------------------------------------------------------------------------------------------------------#
+
+class SDXL_Recommended_Resolution_Calc:
+
+    def __init__(self):
+        pass
+
+    @classmethod
+    def INPUT_TYPES(s):
+        return {
+            "required": {
+                "target_width": ("INT", {
+                    "default": 1024, 
+                    "min": 0, 
+                    "max": 8192, 
+                    "step": 2 
+                }),
+                "target_height": ("INT", {
+                    "default": 1024, 
+                    "min": 0, 
+                    "max": 8192, 
+                    "step": 2 
+                }),
+            },
+        }
+
+    RETURN_TYPES = ("INT","INT",)
+    RETURN_NAMES = ("SDXL_width","SDXL_height",)
+    FUNCTION = "calcSDXLres"
+
+    CATEGORY = "JPS Nodes/SDXL"
+
+    def calcSDXLres(self, target_width, target_height):
+        target_ratio = target_width / target_height
+        
+        closest_ratio = None
+        closest_diff = float('inf')
+        
+        for ratio, (x_size, y_size, num_ratio) in accepted_ratios_horizontal.items():
+            diff = abs(num_ratio - target_ratio)
+            if diff < closest_diff:
+                closest_ratio = ratio
+                closest_diff = diff
+        
+        for ratio, (x_size, y_size, num_ratio) in accepted_ratios_vertical.items():
+            diff = abs(num_ratio - target_ratio)
+            if diff < closest_diff:
+                closest_ratio = ratio
+                closest_diff = diff
+        
+        # Compare with square aspect ratio
+        x_size, y_size, num_ratio = accepted_ratios_square["1:1"]
+        diff = abs(num_ratio - target_ratio)
+        if diff < closest_diff:
+            closest_ratio = "1:1"
+
+        if closest_ratio in accepted_ratios_horizontal:
+            SDXL_width, SDXL_height, _ = accepted_ratios_horizontal[closest_ratio]
+        elif closest_ratio in accepted_ratios_vertical:
+            SDXL_width, SDXL_height, _ = accepted_ratios_vertical[closest_ratio]
+        else:
+            SDXL_width, SDXL_height, _ = accepted_ratios_square[closest_ratio]
+        
+        return (SDXL_width, SDXL_height)
 
 #---------------------------------------------------------------------------------------------------------------------------------------------------#
 
 class Switch_Generation_Mode:
-    mode = ["1 - TXT2IMG","2 - IMG2IMG"]
+    mode = ["Txt2Img","Img2Img"]
     
     def __init__(self):
         pass
@@ -242,10 +419,10 @@ class Switch_Generation_Mode:
     def get_genmode(self,mode,img_percentage):
         gen_mode = 1
         img_strength = 0
-        if(mode == "1 - TXT2IMG"):
+        if(mode == "Txt2Img"):
             gen_mode = int(1)
             img_strength = 0.001
-        if(mode == "2 - IMG2IMG"):
+        if(mode == "Img2Img"):
             gen_mode = int(2)
             img_strength = img_percentage / 100
             
@@ -254,7 +431,8 @@ class Switch_Generation_Mode:
 #---------------------------------------------------------------------------------------------------------------------------------------------------#
 
 class Switch_Generation_Mode_4in1:
-    mode = ["1 - TXT2IMG","2 - IMG2IMG", "3 - Canny", "4 - Depth"]
+    mode = ["Text Prompt","Image to Image", "Canny", "Depth"]
+    resfrom = ["Use Settings Resolution", "Use Image Resolution"]
     
     def __init__(self):
         pass
@@ -264,6 +442,7 @@ class Switch_Generation_Mode_4in1:
         return {
             "required": {
                 "mode": (s.mode,),
+                "resfrom": (s.resfrom,),
                 "strength_percent": ("INT", {"default": 50, "min": 0, "max": 100, "step": 5}),
                 "ctrl_start_percent": ("INT", {"default": 0, "min": 0, "max": 100, "step": 5}),
                 "ctrl_stop_percent": ("INT", {"default": 100, "min": 0, "max": 100, "step": 5}),
@@ -271,21 +450,22 @@ class Switch_Generation_Mode_4in1:
                 "ctrl_high_threshold": ("INT", {"default": 200, "min": 0, "max": 255, "step": 5}),
             }   
         }
-    RETURN_TYPES = ("INT","FLOAT","FLOAT","FLOAT","FLOAT","INT","INT")
-    RETURN_NAMES = ("gen_mode", "img_strength", "ctrl_strength", "ctrl_start", "ctrl_stop", "ctrl_low", "ctrl_high")
+    RETURN_TYPES = ("INT","INT","FLOAT","FLOAT","FLOAT","FLOAT","INT","INT")
+    RETURN_NAMES = ("gen_mode", "res_from", "img_strength", "ctrl_strength", "ctrl_start", "ctrl_stop", "ctrl_low", "ctrl_high")
     FUNCTION = "get_genmodefour"
 
     CATEGORY="JPS Nodes/Switches"
 
-    def get_genmodefour(self,mode,strength_percent, ctrl_start_percent, ctrl_stop_percent, ctrl_low_threshold, ctrl_high_threshold):
+    def get_genmodefour(self, mode, resfrom, strength_percent, ctrl_start_percent, ctrl_stop_percent, ctrl_low_threshold, ctrl_high_threshold):
         gen_mode = 1
+        res_from = 1
         img_strength = 0
         ctrl_strength = 0
         ctrl_start = 0
         ctrl_stop = 0
         ctrl_low = 0
         ctrl_high = 0
-        if(mode == "1 - TXT2IMG"):
+        if(mode == "Text Prompt"):
             gen_mode = int(1)
             img_strength = 0.001
             ctrl_strength = 0
@@ -293,7 +473,7 @@ class Switch_Generation_Mode_4in1:
             ctrl_stop = 0
             ctrl_low = 0
             ctrl_high = 0
-        if(mode == "2 - IMG2IMG"):
+        if(mode == "Image to Image"):
             gen_mode = int(2)
             img_strength = strength_percent / 100
             ctrl_strength = 0
@@ -301,7 +481,7 @@ class Switch_Generation_Mode_4in1:
             ctrl_stop = 0
             ctrl_low = 0
             ctrl_high = 0
-        if(mode == "3 - Canny"):
+        if(mode == "Canny"):
             gen_mode = int(3)
             img_strength = 0.001
             ctrl_strength = strength_percent / 100
@@ -309,7 +489,7 @@ class Switch_Generation_Mode_4in1:
             ctrl_stop = ctrl_stop_percent / 100
             ctrl_low = ctrl_low_threshold
             ctrl_high = ctrl_high_threshold
-        if(mode == "4 - Depth"):
+        if(mode == "Depth"):
             gen_mode = int(4)
             img_strength = 0.001
             ctrl_strength = strength_percent / 100
@@ -317,8 +497,12 @@ class Switch_Generation_Mode_4in1:
             ctrl_stop = ctrl_stop_percent / 100
             ctrl_low = ctrl_low_threshold
             ctrl_high = ctrl_high_threshold
-            
-        return(int(gen_mode),float(img_strength),float(ctrl_strength),float(ctrl_start),float(ctrl_stop),int(ctrl_low),int(ctrl_high))
+        if(resfrom == "Use Settings Resolution"):
+            res_from = int(1)
+        if(resfrom == "Use Image Resolution"):
+            res_from = int(2)
+        
+        return(int(gen_mode),int(res_from),float(img_strength),float(ctrl_strength),float(ctrl_start),float(ctrl_stop),int(ctrl_low),int(ctrl_high))
 
 #---------------------------------------------------------------------------------------------------------------------------------------------------#
 
@@ -409,14 +593,34 @@ class Switch_IP_Adapter_Mode:
 
 #---------------------------------------------------------------------------------------------------------------------------------------------------#
 
+class Menu_Sampler_Scheduler:
+    CATEGORY = 'JPS Nodes/Menu Items'
+    RETURN_TYPES = (comfy.samplers.KSampler.SAMPLERS,comfy.samplers.KSampler.SCHEDULERS,)
+    RETURN_NAMES = ("sampler_name","scheduler",)
+    FUNCTION = "get_samsched"
+
+    @classmethod
+    def INPUT_TYPES(cls):
+        return {"required": {"sampler_name": (comfy.samplers.KSampler.SAMPLERS,),"scheduler": (comfy.samplers.KSampler.SCHEDULERS,)}}
+
+    def get_samsched(self, sampler_name, scheduler):
+        return (sampler_name, scheduler, )
+            
+#---------------------------------------------------------------------------------------------------------------------------------------------------#
+
 NODE_CLASS_MAPPINGS = {
     "SDXL Resolutions (JPS)": SDXL_Resolutions,
     "SDXL Basic Settings (JPS)": SDXL_Basic_Settings,
     "SDXL Additional Settings (JPS)": SDXL_Additional_Settings,
+    "SDXL Recommended Resolution Calc (JPS)":SDXL_Recommended_Resolution_Calc,
     "Math Resolution Multiply (JPS)": Math_Resolution_Multiply,
     "Math Largest Int (JPS)": Math_Largest_Integer,
+    "Math Multiply Int Int (JPS)":Math_Multiply_INT_INT,
+    "Math Multiply Int Float (JPS)":Math_Multiply_INT_FLOAT,
+    "Math Multiply Float Float (JPS)":Math_Multiply_FLOAT_FLOAT,
     "Switch Generation Mode (JPS)": Switch_Generation_Mode,
     "Switch Generation Mode 4in1 (JPS)": Switch_Generation_Mode_4in1,
     "Switch Revision Mode (JPS)": Switch_Revision_Mode,
     "Switch IP Adapter Mode (JPS)": Switch_IP_Adapter_Mode,
+    "Menu Sampler Scheduler (JPS)":Menu_Sampler_Scheduler,
 }
