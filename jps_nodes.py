@@ -431,7 +431,7 @@ class Switch_Generation_Mode:
 #---------------------------------------------------------------------------------------------------------------------------------------------------#
 
 class Switch_Generation_Mode_4in1:
-    mode = ["Text Prompt","Image to Image", "Canny", "Depth"]
+    mode = ["Text Prompt","Image to Image", "Canny", "Depth", "Inpainting"]
     resfrom = ["Use Settings Resolution", "Use Image Resolution"]
     
     def __init__(self):
@@ -497,6 +497,14 @@ class Switch_Generation_Mode_4in1:
             ctrl_stop = ctrl_stop_percent / 100
             ctrl_low = ctrl_low_threshold
             ctrl_high = ctrl_high_threshold
+        if(mode == "Inpainting"):
+            gen_mode = int(5)
+            img_strength = (100 - strength_percent + 0.001) / 100
+            ctrl_strength = 0
+            ctrl_start = 0
+            ctrl_stop = 0
+            ctrl_low = 0
+            ctrl_high = 0
         if(resfrom == "Use Settings Resolution"):
             res_from = int(1)
         if(resfrom == "Use Image Resolution"):
@@ -608,19 +616,87 @@ class Menu_Sampler_Scheduler:
             
 #---------------------------------------------------------------------------------------------------------------------------------------------------#
 
+class Menu_Disable_Enable:
+    match = ["Set to Disable","Set to Enable"]
+
+    CATEGORY = 'JPS Nodes/Menu Items'
+    RETURN_TYPES = (["disable","enable"],)
+    RETURN_NAMES = ("disable_enable",)
+    FUNCTION = "get_disenable"
+
+    @classmethod
+    def INPUT_TYPES(s):    
+        return {
+            "required": {
+                "select": ("INT", {"default": 1, "min": 1, "max": 9, "step": 1}),
+                "compare": ("INT", {"default": 1, "min": 1, "max": 9, "step": 1}),
+                "match": (s.match,),
+            }
+        }
+
+    def get_disenable(self,select,compare,match):
+        disable_enable = "disable"
+        if match == "Set to Enable" and (int(select) == int(compare)):
+            disable_enable = "enable"
+        elif match == "Set to Disable" and (int(select) == int(compare)):
+            disable_enable = "disable"
+        elif match == "Set to Enable" and (int(select) != int(compare)):
+            disable_enable = "disable"
+        elif match == "Set to Disable" and (int(select) != int(compare)):
+            disable_enable = "enable"
+        
+        return (disable_enable, )
+            
+#---------------------------------------------------------------------------------------------------------------------------------------------------#
+
+class Menu_Enable_Disable:
+    match = ["Set to Enable","Set to Disable"]
+
+    CATEGORY = 'JPS Nodes/Menu Items'
+    RETURN_TYPES = (["enable","disable"],)
+    RETURN_NAMES = ("enable_disable",)
+    FUNCTION = "get_endisable"
+
+    @classmethod
+    def INPUT_TYPES(s):    
+        return {
+            "required": {
+                "select": ("INT", {"default": 1, "min": 1, "max": 9, "step": 1}),
+                "compare": ("INT", {"default": 1, "min": 1, "max": 9, "step": 1}),
+                "match": (s.match,),
+            }
+        }
+
+    def get_endisable(self,select,compare,match):
+        enable_disable = "disable"
+        if match == "Set to Enable" and (int(select) == int(compare)):
+            enable_disable = "enable"
+        elif match == "Set to Disable" and (int(select) == int(compare)):
+            enable_disable = "disable"
+        elif match == "Set to Enable" and (int(select) != int(compare)):
+            enable_disable = "disable"
+        elif match == "Set to Disable" and (int(select) != int(compare)):
+            enable_disable = "enable"
+        
+        return (enable_disable, )
+            
+#---------------------------------------------------------------------------------------------------------------------------------------------------#
+
 NODE_CLASS_MAPPINGS = {
     "SDXL Resolutions (JPS)": SDXL_Resolutions,
     "SDXL Basic Settings (JPS)": SDXL_Basic_Settings,
     "SDXL Additional Settings (JPS)": SDXL_Additional_Settings,
-    "SDXL Recommended Resolution Calc (JPS)":SDXL_Recommended_Resolution_Calc,
+    "SDXL Recommended Resolution Calc (JPS)": SDXL_Recommended_Resolution_Calc,
     "Math Resolution Multiply (JPS)": Math_Resolution_Multiply,
     "Math Largest Int (JPS)": Math_Largest_Integer,
-    "Math Multiply Int Int (JPS)":Math_Multiply_INT_INT,
-    "Math Multiply Int Float (JPS)":Math_Multiply_INT_FLOAT,
-    "Math Multiply Float Float (JPS)":Math_Multiply_FLOAT_FLOAT,
+    "Math Multiply Int Int (JPS)": Math_Multiply_INT_INT,
+    "Math Multiply Int Float (JPS)": Math_Multiply_INT_FLOAT,
+    "Math Multiply Float Float (JPS)": Math_Multiply_FLOAT_FLOAT,
     "Switch Generation Mode (JPS)": Switch_Generation_Mode,
     "Switch Generation Mode 4in1 (JPS)": Switch_Generation_Mode_4in1,
     "Switch Revision Mode (JPS)": Switch_Revision_Mode,
     "Switch IP Adapter Mode (JPS)": Switch_IP_Adapter_Mode,
-    "Menu Sampler Scheduler (JPS)":Menu_Sampler_Scheduler,
+    "Menu Sampler Scheduler (JPS)": Menu_Sampler_Scheduler,
+    "Menu Disable Enable Switch (JPS)": Menu_Disable_Enable,
+    "Menu Enable Disable Switch (JPS)": Menu_Enable_Disable,
 }
