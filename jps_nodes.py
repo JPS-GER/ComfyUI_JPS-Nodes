@@ -331,6 +331,34 @@ class Math_Multiply_FLOAT_FLOAT:
 
 #---------------------------------------------------------------------------------------------------------------------------------------------------#
 
+class Math_Substract_INT_INT:
+
+    def init(self):
+        pass
+
+    @classmethod
+    def INPUT_TYPES(cls):
+        return {
+            "required": {
+                "int_a": ("INT", {"default": 1,}),
+                "int_b": ("INT", {"default": 1,}),
+            }
+        }
+
+    RETURN_TYPES = ("INT","FLOAT")
+    RETURN_NAMES = ("int_substract","float_substract")
+    FUNCTION = "get_substract_int_int"
+
+    CATEGORY="JPS Nodes/Math"
+
+    def get_substract_int_int(self,int_a,int_b):
+        int_substract = int(int_a) - int(int_b)
+        float_substract = int(int_a) - int(int_b)
+
+        return(int(int_substract),float(float_substract))
+
+#---------------------------------------------------------------------------------------------------------------------------------------------------#
+
 class SDXL_Recommended_Resolution_Calc:
 
     def __init__(self):
@@ -692,6 +720,7 @@ NODE_CLASS_MAPPINGS = {
     "Math Multiply Int Int (JPS)": Math_Multiply_INT_INT,
     "Math Multiply Int Float (JPS)": Math_Multiply_INT_FLOAT,
     "Math Multiply Float Float (JPS)": Math_Multiply_FLOAT_FLOAT,
+    "Math Substract Int Int (JPS)": Math_Substract_INT_INT,
     "Switch Generation Mode (JPS)": Switch_Generation_Mode,
     "Switch Generation Mode 4in1 (JPS)": Switch_Generation_Mode_4in1,
     "Switch Revision Mode (JPS)": Switch_Revision_Mode,
