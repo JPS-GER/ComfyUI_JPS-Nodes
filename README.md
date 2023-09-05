@@ -16,10 +16,7 @@ You can also install the nodes using the following methods:
 * install using [ComfyUI Manager](https://github.com/ltdrdata/ComfyUI-Manager)
 
 # List of Custom Nodes
-    "Menu Disable Enable Switch (JPS)": Menu_Disable_Enable,
-    "Menu Enable Disable Switch (JPS)": Menu_Enable_Disable,
-    "Filename Get Date Time String (JPS)": Get_Date_Time_String,
-}
+
 __SDXL__
 * SDXL - Resolutions: Optimized for a small node size with only one dropdown input and width + height outputs - AFAIK the smallest node that allows you to pick the resolutions recommended for SDXL.
 * SDXL - Basic Settings: Includes "SDXL - Resolutions" and some other values you need for most SDXL workflows in a single node.
