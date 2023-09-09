@@ -4,6 +4,7 @@
 #------------------------------------------------------------------------#
 
 import comfy.sd
+import folder_paths
 from datetime import datetime
 
 accepted_ratios_horizontal = {
@@ -341,6 +342,69 @@ class Math_Substract_INT_INT:
 
 #---------------------------------------------------------------------------------------------------------------------------------------------------#
 
+class Text_Concatenate:
+    @classmethod
+    def INPUT_TYPES(s):
+        return {
+            "required": {
+                "delimiter": (["none", "space", "comma"],),
+            },
+            "optional": {
+                "text1": ("STRING", {"forceInput": True}),
+                "text2": ("STRING", {"forceInput": True}),      
+                "text3": ("STRING", {"forceInput": True}),      
+                "text4": ("STRING", {"forceInput": True}),      
+                "text5": ("STRING", {"forceInput": True}),       
+            }
+        }
+    
+    RETURN_TYPES = ("STRING",)
+    RETURN_NAMES = ("text",)
+    FUNCTION = "get_contxt"
+    CATEGORY = "JPS Nodes/Text"
+
+    def get_contxt(self, delimiter, text1=None, text2=None, text3=None, text4=None, text5=None):
+        needdelim = False
+        delim = ""
+        if delimiter == "space":
+            delim = " "
+        if delimiter == "comma":
+            delim = ", "
+
+        concatenated = ""
+
+        if text1:
+            concatenated = text1
+            needdelim = True
+        
+        if text2:
+            if needdelim:
+                concatenated += delim
+            concatenated += text2
+            needdelim = True
+        
+        if text3:
+            if needdelim:
+                concatenated += delim
+            concatenated += text3
+            needdelim = True
+
+        if text4:
+            if needdelim:
+                concatenated += delim
+            concatenated += text4
+            needdelim = True
+
+        if text5:
+            if needdelim:
+                concatenated += delim
+            concatenated += text5
+            needdelim = True
+
+        return (concatenated,)
+
+#---------------------------------------------------------------------------------------------------------------------------------------------------#
+
 class Get_Date_Time_String:
     time_format = ["%Y%m%d%H%M%S","%Y%m%d%H%M","%Y%m%d","%Y-%m-%d-%H_%M_%S","%Y-%m-%d-%H_%M","%Y-%m-%d","%Y-%m-%d %H_%M_%S","%Y-%m-%d %H_%M","%Y-%m-%d"]
     def __init__(self):
@@ -439,7 +503,7 @@ class SDXL_Recommended_Resolution_Calc:
 
 #---------------------------------------------------------------------------------------------------------------------------------------------------#
 
-class Switch_Generation_Mode:
+class Switch_Generation_Mode_TXT_IMG:
     mode = ["Txt2Img","Img2Img"]
     
     def __init__(self):
@@ -473,7 +537,7 @@ class Switch_Generation_Mode:
 
 #---------------------------------------------------------------------------------------------------------------------------------------------------#
 
-class Switch_Generation_Mode_4in1:
+class Switch_Generation_Mode:
     mode = ["Text Prompt","Image to Image", "Canny", "Depth", "Inpainting"]
     resfrom = ["Use Settings Resolution", "Use Image Resolution"]
     
@@ -585,27 +649,27 @@ class Switch_Revision_Mode:
     CATEGORY="JPS Nodes/Switches"
 
     def get_revmode(self,revmode,posprompt,negprompt,rev_strength1,rev_noise_aug1,rev_strength2,rev_noise_aug2):
-        rev_mode = int(0)
+        rev_mode = int(1)
         if(revmode == "Revision Mode OFF"):
-            rev_mode = int(0)
+            rev_mode = int(1)
             rev_strength1 = 0
             rev_noise_aug1 = 0
             rev_strength2 = 0
             rev_noise_aug2 = 0
         if(revmode == "Revision Mode ON"):
-            rev_mode = int(1)
+            rev_mode = int(2)
             rev_strength1 = rev_strength1
             rev_noise_aug1 = rev_noise_aug1
             rev_strength2 = rev_strength2
             rev_noise_aug2 = rev_noise_aug2
         if(posprompt == "Pos. Prompt OFF"):
-            pos_prompt = int(0)
-        if(posprompt == "Pos. Prompt ON"):
             pos_prompt = int(1)
+        if(posprompt == "Pos. Prompt ON"):
+            pos_prompt = int(2)
         if(negprompt == "Neg. Prompt OFF"):
-            neg_prompt = int(0)
-        if(negprompt == "Neg. Prompt ON"):
             neg_prompt = int(1)
+        if(negprompt == "Neg. Prompt ON"):
+            neg_prompt = int(2)
 
         return(int(rev_mode),int(pos_prompt),int(neg_prompt),float(rev_strength1),float(rev_noise_aug1),float(rev_strength2),float(rev_noise_aug2))
 
@@ -632,12 +696,12 @@ class Switch_IP_Adapter_Mode:
     CATEGORY="JPS Nodes/Switches"
 
     def get_ipamode(self,ipamode,ipa_weight):
-        ipa_mode = int(0)
+        ipa_mode = int(1)
         if(ipamode == "IP Adapter Mode OFF"):
-            ipa_mode = int(0)
+            ipa_mode = int(1)
             ipa_weight = 0
         if(ipamode == "IP Adapter Mode ON"):
-            ipa_mode = int(1)
+            ipa_mode = int(2)
             ipa_weight = ipa_weight
 
         return(int(ipa_mode),float(ipa_weight))
@@ -724,23 +788,99 @@ class Menu_Enable_Disable:
         return (enable_disable, )
             
 #---------------------------------------------------------------------------------------------------------------------------------------------------#
+       
+class IO_Lora_Loader:
+    def __init__(self):
+        self.loaded_lora = None
+
+    @classmethod
+    def INPUT_TYPES(s):
+        file_list = folder_paths.get_filename_list("loras")
+        file_list.insert(0, "None")
+        return {"required": { "model": ("MODEL",),
+                              "clip": ("CLIP", ),
+                              "switch": ([
+                                "Off",
+                                "On"],),
+                              "lora_name": (file_list, ),
+                              "strength_model": ("FLOAT", {"default": 1.0, "min": -10.0, "max": 10.0, "step": 0.1}),
+                              "strength_clip": ("FLOAT", {"default": 1.0, "min": -10.0, "max": 10.0, "step": 0.1}),
+                              }}
+    RETURN_TYPES = ("MODEL", "CLIP")
+    FUNCTION = "load_lora"
+
+    CATEGORY = "JPS Nodes/IO"
+
+    def load_lora(self, model, clip, switch, lora_name, strength_model, strength_clip):
+        if strength_model == 0 and strength_clip == 0:
+            return (model, clip)
+
+        if switch == "Off" or  lora_name == "None":
+            return (model, clip)
+
+        lora_path = folder_paths.get_full_path("loras", lora_name)
+        lora = None
+        if self.loaded_lora is not None:
+            if self.loaded_lora[0] == lora_path:
+                lora = self.loaded_lora[1]
+            else:
+                del self.loaded_lora
+
+        if lora is None:
+            lora = comfy.utils.load_torch_file(lora_path, safe_load=True)
+            self.loaded_lora = (lora_path, lora)
+
+        model_lora, clip_lora = comfy.sd.load_lora_for_models(model, clip, lora, strength_model, strength_clip)
+        return (model_lora, clip_lora)
+
+#---------------------------------------------------------------------------------------------------------------------------------------------------#                       
+
+class Image_Get_Image_Size:
+    def __init__(self) -> None:
+        pass
+
+    @classmethod
+    def INPUT_TYPES(cls):
+        return {
+            "required": {
+                "image": ("IMAGE",),
+            }
+        }
+
+    RETURN_TYPES = ("INT", "INT",)
+    RETURN_NAMES = ("width", "height",)
+    CATEGORY = "JPS Nodes/Image"
+
+    FUNCTION = 'get_imagesize'
+
+    def get_imagesize(self, image):
+        samples = image.movedim(-1,1)
+        size_w = samples.shape[3]
+        size_h = samples.shape[2]
+
+        return (size_w, size_h, )
+
+#---------------------------------------------------------------------------------------------------------------------------------------------------#                       
 
 NODE_CLASS_MAPPINGS = {
+    "Lora Loader (JPS)": IO_Lora_Loader,
     "SDXL Resolutions (JPS)": SDXL_Resolutions,
     "SDXL Basic Settings (JPS)": SDXL_Basic_Settings,
     "SDXL Recommended Resolution Calc (JPS)": SDXL_Recommended_Resolution_Calc,
-    "Math Resolution Multiply (JPS)": Math_Resolution_Multiply,
-    "Math Largest Int (JPS)": Math_Largest_Integer,
-    "Math Multiply Int Int (JPS)": Math_Multiply_INT_INT,
-    "Math Multiply Int Float (JPS)": Math_Multiply_INT_FLOAT,
-    "Math Multiply Float Float (JPS)": Math_Multiply_FLOAT_FLOAT,
-    "Math Substract Int Int (JPS)": Math_Substract_INT_INT,
-    "Switch Generation Mode (JPS)": Switch_Generation_Mode,
-    "Switch Generation Mode 4in1 (JPS)": Switch_Generation_Mode_4in1,
-    "Switch Revision Mode (JPS)": Switch_Revision_Mode,
-    "Switch IP Adapter Mode (JPS)": Switch_IP_Adapter_Mode,
-    "Menu Sampler Scheduler (JPS)": Menu_Sampler_Scheduler,
-    "Menu Disable Enable Switch (JPS)": Menu_Disable_Enable,
-    "Menu Enable Disable Switch (JPS)": Menu_Enable_Disable,
-    "Filename Get Date Time String (JPS)": Get_Date_Time_String,
+    "Resolution Multiply (JPS)": Math_Resolution_Multiply,
+    "Largest Int (JPS)": Math_Largest_Integer,
+    "Multiply Int Int (JPS)": Math_Multiply_INT_INT,
+    "Multiply Int Float (JPS)": Math_Multiply_INT_FLOAT,
+    "Multiply Float Float (JPS)": Math_Multiply_FLOAT_FLOAT,
+    "Substract Int Int (JPS)": Math_Substract_INT_INT,
+    "Text Concatenate (JPS)": Text_Concatenate,
+    "Generation Mode TXT IMG (JPS)": Switch_Generation_Mode_TXT_IMG,
+    "Generation Mode (JPS)": Switch_Generation_Mode,
+    "Revision Mode (JPS)": Switch_Revision_Mode,
+    "IP Adapter Mode (JPS)": Switch_IP_Adapter_Mode,
+    "Sampler Scheduler (JPS)": Menu_Sampler_Scheduler,
+    "Disable Enable Switch (JPS)": Menu_Disable_Enable,
+    "Enable Disable Switch (JPS)": Menu_Enable_Disable,
+    "Get Date Time String (JPS)": Get_Date_Time_String,
+    "Get Image Size (JPS)": Image_Get_Image_Size,
 }
