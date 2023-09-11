@@ -17,35 +17,53 @@ You can also install the nodes using the following methods:
 
 # List of Custom Nodes
 
-__SDXL__
-* SDXL - Resolutions: Optimized for a small node size with only one dropdown input and width + height outputs - AFAIK the smallest node that allows you to pick the resolutions recommended for SDXL.
-* SDXL - Basic Settings: Includes "SDXL - Resolutions" and some other values you need for most SDXL workflows in a single node.
-* SDXL - Recommended Resolution Calc: Changes Resolution values to the closest recommended SDXL resolution.
+__IO__
+* Lora Loader
 
-__MATH__
-* Math - Resolution Multiply: Multiply width and height values by a defined factor (useful for SDXL workflows, it's recommended to use factor 2 for CLIPTextEncodeSDXL nodes)
-* Math - Largest Integer: Input two INT values, get the higher one - useful to find larger size of an image
-* Math - Multiply Int Int: Multiply two integer values, output as Integer and Float
-* Math - Multiply Int Float: Multiply integer and float value, output as Integer and Float
-* Math - Multiply Float Float: Multiply two float values, output as Integer and Float
-* Math - Substract INT INT: Stubstract two integer values, output as Integer and Float
+__Settings__
+* SDXL Resolutions
+* SDXL Basic Settings
+* Generation TXT IMG Settings 
+* Generation Settings
+* Revision Settings
+* IP Adapter Settings
+* Sampler Scheduler Settings
+
+__Switches__
+* Integer Switch
+* Image Switch
+* Latent Switch
+* Conditioning Switch
+* Model Switch
+* VAE Switch
+* ControlNet Switch
+* Disable Enable Switch
+* Enable Disable Switch
+
+__Pipes__
+* SDXL Basic Settings Pipe
+* Generation Settings Pipe
+* IP Adapter Settings Pipe
+* Revision Settings Pipe
+* SDXL Fundamentals MultiPipe
+* Images Masks MultiPipe
+
+__Math__
+* SDXL Recommended Resolution Calc
+* Resolution Multiply
+* Largest Int
+* Multiply Int Int
+* Multiply Int Float
+* Multiply Float Float
+* Substract Int Int
+
+__Text__
+* Text Concatenate
+* Get Date Time String
+* SDXL Prompt Handling
   
-__SWITCHES__
-* Switch - Generation Mode: Switch between TXT2IMG and IMG2IMG - useful in combiantion with latent image switch nodes, TXT2IMG will automatically set the image strength to zero.
-* Switch - Generation Mode 4in1: Switch between TXT2IMG, IMG2IMG, Canny and Depth - adds Control Net Canny and Control Net Depth to the 2in1 switch. Now with inpainting (5in1).
-* Switch - Revision Mode: Turn ON/OFF and finetune Revision through a single node.
-* Switch - IP Adapter Mode: Turn ON/OFF and finetune IP Adapter through a single node.
+__Image__
+* Get Image Size
 
-__Menu__
-* Menu - Sampler Scheduler: Can be used as menu item, but also allows you to redirect sampler and scheduler, which is not possible with "reroute" nodes.
-* Menu - Disable Enable Switch: Use as input for Disable/Enable options
-* Menu - Enable Disbale Switch: Use as input for Enable/Disable options (yes, somehow both data types exist, even in stock nodes)
-
-__Filename__
-* Filename - Get Date Time String: Get current date and time to contruct filenames - this one works, some similar nodes I found don't update without a browser refresh
-
-
-# Credits
-
-comfyanonymous/[ComfyUI](https://github.com/comfyanonymous/ComfyUI) - A powerful and modular stable diffusion GUI.
-
+__Style__
+* SDXL Prompt Styler
