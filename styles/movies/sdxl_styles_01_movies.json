@@ -1,17 +1,7 @@
 [
     {
-        "name": "Blade Runner",
-        "prompt": "{prompt} in the style of 'Blade Runner' by Ridley Scott, cinematography by Jordan Cronenweth",
-        "negative_prompt": ""
-    },
-    {
-        "name": "The Grand Budapest Hotel",
-        "prompt": "{prompt} in the style of 'The Grand Budapest Hotel' by Wes Anderson, cinematography by Robert D. Yeoman",
-        "negative_prompt": ""
-    },
-    {
-        "name": "Pan's Labyrinth",
-        "prompt": "{prompt} in the style of 'Pan's Labyrinth' by Guillermo del Toro, cinematography by Guillermo Navarro",
+        "name": "2001: A Space Odyssey",
+        "prompt": "{prompt} in the style of '2001: A Space Odyssey' by Stanley Kubrick, cinematography by Geoffrey Unsworth",
         "negative_prompt": ""
     },
     {
@@ -20,13 +10,8 @@
         "negative_prompt": ""
     },
     {
-        "name": "Spirited Away",
-        "prompt": "{prompt} in the style of 'Spirited Away' by Hayao Miyazaki, cinematography by Atsushi Okui",
-        "negative_prompt": ""
-    },
-    {
-        "name": "The Shining",
-        "prompt": "{prompt} in the style of 'The Shining' by Stanley Kubrick, cinematography by John Alcott",
+        "name": "Akira",
+        "prompt": "{prompt} in the style of 'Akira' by Katsuhiro Otomo, animation direction by Katsuhiro Otomo",
         "negative_prompt": ""
     },
     {
@@ -35,28 +20,18 @@
         "negative_prompt": ""
     },
     {
-        "name": "2001: A Space Odyssey",
-        "prompt": "{prompt} in the style of '2001: A Space Odyssey' by Stanley Kubrick, cinematography by Geoffrey Unsworth",
+        "name": "Avatar",
+        "prompt": "{prompt} in the style of 'Avatar' by James Cameron, cinematography by Mauro Fiore",
         "negative_prompt": ""
     },
     {
-        "name": "The Grandmaster",
-        "prompt": "{prompt} in the style of 'The Grandmaster' by Wong Kar-wai, cinematography by Philippe Le Sourd",
+        "name": "Baraka",
+        "prompt": "{prompt} in the style of 'Baraka' by Ron Fricke, cinematography by Ron Fricke",
         "negative_prompt": ""
     },
     {
-        "name": "Eternal Sunshine of the Spotless Mind",
-        "prompt": "{prompt} in the style of 'Eternal Sunshine of the Spotless Mind' by Michel Gondry, cinematography by Ellen Kuras",
-        "negative_prompt": ""
-    },
-    {
-        "name": "Inception",
-        "prompt": "{prompt} in the style of 'Inception' by Christopher Nolan, cinematography by Wally Pfister",
-        "negative_prompt": ""
-    },
-    {
-        "name": "The Shape of Water",
-        "prompt": "{prompt} in the style of 'The Shape of Water' by Guillermo del Toro, cinematography by Dan Laustsen",
+        "name": "Birdman",
+        "prompt": "{prompt} in the style of 'Birdman' by Alejandro González Iñárritu, cinematography by Emmanuel Lubezki",
         "negative_prompt": ""
     },
     {
@@ -65,13 +40,278 @@
         "negative_prompt": ""
     },
     {
-        "name": "Amélie",
-        "prompt": "{prompt} in the style of 'Amélie' by Jean-Pierre Jeunet, cinematography by Bruno Delbonnel",
+        "name": "Brazil",
+        "prompt": "{prompt} in the style of 'Brazil' by Terry Gilliam, cinematography by Roger Pratt",
         "negative_prompt": ""
     },
     {
-        "name": "Birdman",
-        "prompt": "{prompt} in the style of 'Birdman' by Alejandro González Iñárritu, cinematography by Emmanuel Lubezki",
+        "name": "Children of Men",
+        "prompt": "{prompt} in the style of 'Children of Men' by Alfonso Cuarón, cinematography by Emmanuel Lubezki",
+        "negative_prompt": ""
+    },
+    {
+        "name": "Coraline",
+        "prompt": "{prompt} in the style of 'Coraline' by Henry Selick, animation direction by Henry Selick",
+        "negative_prompt": ""
+    },
+    {
+        "name": "Donnie Darko",
+        "prompt": "{prompt} in the style of 'Donnie Darko' by Richard Kelly, cinematography by Steven B. Poster",
+        "negative_prompt": ""
+    },
+    {
+        "name": "Drive",
+        "prompt": "{prompt} in the style of 'Drive' by Nicolas Winding Refn, cinematography by Newton Thomas Sigel",
+        "negative_prompt": ""
+    },
+    {
+        "name": "Eternal Sunshine of the Spotless Mind",
+        "prompt": "{prompt} in the style of 'Eternal Sunshine of the Spotless Mind' by Michel Gondry, cinematography by Ellen Kuras",
+        "negative_prompt": ""
+    },
+    {
+        "name": "Fantastic Mr. Fox",
+        "prompt": "{prompt} in the style of 'Fantastic Mr. Fox' by Wes Anderson, cinematography by Tristan Oliver",
+        "negative_prompt": ""
+    },
+    {
+        "name": "Fight Club",
+        "prompt": "{prompt} in the style of 'Fight Club' by David Fincher, cinematography by Jeff Cronenweth",
+        "negative_prompt": ""
+    },
+    {
+        "name": "Ghost in the Shell",
+        "prompt": "{prompt} in the style of 'Ghost in the Shell' by Mamoru Oshii, animation direction by Toshihiko Nishikubo",
+        "negative_prompt": ""
+    },
+    {
+        "name": "Hero",
+        "prompt": "{prompt} in the style of 'Hero' by Zhang Yimou, cinematography by Christopher Doyle",
+        "negative_prompt": ""
+    },
+    {
+        "name": "Inception",
+        "prompt": "{prompt} in the style of 'Inception' by Christopher Nolan, cinematography by Wally Pfister",
+        "negative_prompt": ""
+    },
+    {
+        "name": "In the Mood for Love",
+        "prompt": "{prompt} in the style of 'In the Mood for Love' by Wong Kar-wai, cinematography by Christopher Doyle",
+        "negative_prompt": ""
+    },
+    {
+        "name": "Interstellar",
+        "prompt": "{prompt} in the style of 'Interstellar' by Christopher Nolan, cinematography by Hoyte van Hoytema",
+        "negative_prompt": ""
+    },
+    {
+        "name": "La La Land",
+        "prompt": "{prompt} in the style of 'La La Land' by Damien Chazelle, cinematography by Linus Sandgren",
+        "negative_prompt": ""
+    },
+    {
+        "name": "Mad Max: Fury Road",
+        "prompt": "{prompt} in the style of 'Mad Max: Fury Road' by George Miller, cinematography by John Seale",
+        "negative_prompt": ""
+    },
+    {
+        "name": "Moonlight",
+        "prompt": "{prompt} in the style of 'Moonlight' by Barry Jenkins, cinematography by James Laxton",
+        "negative_prompt": ""
+    },
+    {
+        "name": "Mulholland Drive",
+        "prompt": "{prompt} in the style of 'Mulholland Drive' by David Lynch, cinematography by Peter Deming",
+        "negative_prompt": ""
+    },
+    {
+        "name": "No Country for Old Men",
+        "prompt": "{prompt} in the style of 'No Country for Old Men' by Joel and Ethan Coen, cinematography by Roger Deakins",
+        "negative_prompt": ""
+    },
+    {
+        "name": "Oldboy",
+        "prompt": "{prompt} in the style of 'Oldboy' by Park Chan-wook, cinematography by Chung Chung-hoon",
+        "negative_prompt": ""
+    },
+    {
+        "name": "Parasite",
+        "prompt": "{prompt} in the style of 'Parasite' by Bong Joon-ho, cinematography by Hong Kyung-pyo",
+        "negative_prompt": ""
+    },
+    {
+        "name": "Pulp Fiction",
+        "prompt": "{prompt} in the style of 'Pulp Fiction' by Quentin Tarantino, cinematography by Andrzej Sekuła",
+        "negative_prompt": ""
+    },
+    {
+        "name": "Requiem for a Dream",
+        "prompt": "{prompt} in the style of 'Requiem for a Dream' by Darren Aronofsky, cinematography by Matthew Libatique",
+        "negative_prompt": ""
+    },
+    {
+        "name": "Roma",
+        "prompt": "{prompt} in the style of 'Roma' by Alfonso Cuarón, cinematography by Alfonso Cuarón",
+        "negative_prompt": ""
+    },
+    {
+        "name": "Schindler's List",
+        "prompt": "{prompt} in the style of 'Schindler's List' by Steven Spielberg, cinematography by Janusz Kamiński",
+        "negative_prompt": ""
+    },
+    {
+        "name": "Scott Pilgrim vs. the World",
+        "prompt": "{prompt} in the style of 'Scott Pilgrim vs. the World' by Edgar Wright, cinematography by Bill Pope",
+        "negative_prompt": ""
+    },
+    {
+        "name": "Seven Samurai",
+        "prompt": "{prompt} in the style of 'Seven Samurai' by Akira Kurosawa, cinematography by Asakazu Nakai",
+        "negative_prompt": ""
+    },
+    {
+        "name": "Sin City",
+        "prompt": "{prompt} in the style of 'Sin City' by Frank Miller and Robert Rodriguez, cinematography by Robert Rodriguez",
+        "negative_prompt": ""
+    },
+    {
+        "name": "Spirited Away",
+        "prompt": "{prompt} in the style of 'Spirited Away' by Hayao Miyazaki, animation direction by Masashi Ando",
+        "negative_prompt": ""
+    },
+    {
+        "name": "The Big Lebowski",
+        "prompt": "{prompt} in the style of 'The Big Lebowski' by Joel and Ethan Coen, cinematography by Roger Deakins",
+        "negative_prompt": ""
+    },
+    {
+        "name": "The Dark Knight",
+        "prompt": "{prompt} in the style of 'The Dark Knight' by Christopher Nolan, cinematography by Wally Pfister",
+        "negative_prompt": ""
+    },
+    {
+        "name": "The Fall",
+        "prompt": "{prompt} in the style of 'The Fall' by Tarsem Singh, cinematography by Colin Watkinson",
+        "negative_prompt": ""
+    },
+    {
+        "name": "The Fountain",
+        "prompt": "{prompt} in the style of 'The Fountain' by Darren Aronofsky, cinematography by Matthew Libatique",
+        "negative_prompt": ""
+    },
+    {
+        "name": "The Godfather",
+        "prompt": "{prompt} in the style of 'The Godfather' by Francis Ford Coppola, cinematography by Gordon Willis",
+        "negative_prompt": ""
+    },
+    {
+        "name": "The Great Beauty",
+        "prompt": "{prompt} in the style of 'The Great Beauty' by Paolo Sorrentino, cinematography by Luca Bigazzi",
+        "negative_prompt": ""
+    },
+    {
+        "name": "The Matrix",
+        "prompt": "{prompt} in the style of 'The Matrix' by the Wachowskis, cinematography by Bill Pope",
+        "negative_prompt": ""
+    },
+    {
+        "name": "The Revenant",
+        "prompt": "{prompt} in the style of 'The Revenant' by Alejandro González Iñárritu, cinematography by Emmanuel Lubezki",
+        "negative_prompt": ""
+    },
+    {
+        "name": "The Royal Tenenbaums",
+        "prompt": "{prompt} in the style of 'The Royal Tenenbaums' by Wes Anderson, cinematography by Robert D. Yeoman",
+        "negative_prompt": ""
+    },
+    {
+        "name": "The Shape of Water",
+        "prompt": "{prompt} in the style of 'The Shape of Water' by Guillermo del Toro, cinematography by Dan Laustsen",
+        "negative_prompt": ""
+    },
+    {
+        "name": "The Shining",
+        "prompt": "{prompt} in the style of 'The Shining' by Stanley Kubrick, cinematography by John Alcott",
+        "negative_prompt": ""
+    },
+    {
+        "name": "The Social Network",
+        "prompt": "{prompt} in the style of 'The Social Network' by David Fincher, cinematography by Jeff Cronenweth",
+        "negative_prompt": ""
+    },
+    {
+        "name": "The Tree of Life",
+        "prompt": "{prompt} in the style of 'The Tree of Life' by Terrence Malick, cinematography by Emmanuel Lubezki",
+        "negative_prompt": ""
+    },
+    {
+        "name": "The Truman Show",
+        "prompt": "{prompt} in the style of 'The Truman Show' by Peter Weir, cinematography by Peter Biziou",
+        "negative_prompt": ""
+    },
+    {
+        "name": "The Witch",
+        "prompt": "{prompt} in the style of 'The Witch' by Robert Eggers, cinematography by Jarin Blaschke",
+        "negative_prompt": ""
+    },
+    {
+        "name": "There Will Be Blood",
+        "prompt": "{prompt} in the style of 'There Will Be Blood' by Paul Thomas Anderson, cinematography by Robert Elswit",
+        "negative_prompt": ""
+    },
+    {
+        "name": "Trainspotting",
+        "prompt": "{prompt} in the style of 'Trainspotting' by Danny Boyle, cinematography by Brian Tufano",
+        "negative_prompt": ""
+    },
+    {
+        "name": "Uncut Gems",
+        "prompt": "{prompt} in the style of 'Uncut Gems' by Safdie Brothers, cinematography by Darius Khondji",
+        "negative_prompt": ""
+    },
+    {
+        "name": "V for Vendetta",
+        "prompt": "{prompt} in the style of 'V for Vendetta' by James McTeigue, cinematography by Adrian Biddle",
+        "negative_prompt": ""
+    },
+    {
+        "name": "Vertigo",
+        "prompt": "{prompt} in the style of 'Vertigo' by Alfred Hitchcock, cinematography by Robert Burks",
+        "negative_prompt": ""
+    },
+    {
+        "name": "Waking Life",
+        "prompt": "{prompt} in the style of 'Waking Life' by Richard Linklater, animation direction by Bob Sabiston",
+        "negative_prompt": ""
+    },
+    {
+        "name": "Wall-E",
+        "prompt": "{prompt} in the style of 'Wall-E' by Andrew Stanton, animation direction by Andrew Stanton",
+        "negative_prompt": ""
+    },
+    {
+        "name": "Whiplash",
+        "prompt": "{prompt} in the style of 'Whiplash' by Damien Chazelle, cinematography by Sharone Meir",
+        "negative_prompt": ""
+    },
+    {
+        "name": "Wings of Desire",
+        "prompt": "{prompt} in the style of 'Wings of Desire' by Wim Wenders, cinematography by Henri Alekan",
+        "negative_prompt": ""
+    },
+    {
+        "name": "Y Tu Mamá También",
+        "prompt": "{prompt} in the style of 'Y Tu Mamá También' by Alfonso Cuarón, cinematography by Emmanuel Lubezki",
+        "negative_prompt": ""
+    },
+    {
+        "name": "Your Name",
+        "prompt": "{prompt} in the style of 'Your Name' by Makoto Shinkai, animation direction by Makoto Shinkai",
+        "negative_prompt": ""
+    },
+    {
+        "name": "Zodiac",
+        "prompt": "{prompt} in the style of 'Zodiac' by David Fincher, cinematography by Harris Savides",
         "negative_prompt": ""
     }
 ]
