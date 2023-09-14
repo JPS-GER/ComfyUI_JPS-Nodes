@@ -1,0 +1,77 @@
+[
+    {
+        "name": "Blade Runner",
+        "prompt": "{prompt} in the style of 'Blade Runner' by Ridley Scott, cinematography by Jordan Cronenweth",
+        "negative_prompt": ""
+    },
+    {
+        "name": "The Grand Budapest Hotel",
+        "prompt": "{prompt} in the style of 'The Grand Budapest Hotel' by Wes Anderson, cinematography by Robert D. Yeoman",
+        "negative_prompt": ""
+    },
+    {
+        "name": "Pan's Labyrinth",
+        "prompt": "{prompt} in the style of 'Pan's Labyrinth' by Guillermo del Toro, cinematography by Guillermo Navarro",
+        "negative_prompt": ""
+    },
+    {
+        "name": "A Clockwork Orange",
+        "prompt": "{prompt} in the style of 'A Clockwork Orange' by Stanley Kubrick, cinematography by John Alcott",
+        "negative_prompt": ""
+    },
+    {
+        "name": "Spirited Away",
+        "prompt": "{prompt} in the style of 'Spirited Away' by Hayao Miyazaki, cinematography by Atsushi Okui",
+        "negative_prompt": ""
+    },
+    {
+        "name": "The Shining",
+        "prompt": "{prompt} in the style of 'The Shining' by Stanley Kubrick, cinematography by John Alcott",
+        "negative_prompt": ""
+    },
+    {
+        "name": "Amélie",
+        "prompt": "{prompt} in the style of 'Amélie' by Jean-Pierre Jeunet, cinematography by Bruno Delbonnel",
+        "negative_prompt": ""
+    },
+    {
+        "name": "2001: A Space Odyssey",
+        "prompt": "{prompt} in the style of '2001: A Space Odyssey' by Stanley Kubrick, cinematography by Geoffrey Unsworth",
+        "negative_prompt": ""
+    },
+    {
+        "name": "The Grandmaster",
+        "prompt": "{prompt} in the style of 'The Grandmaster' by Wong Kar-wai, cinematography by Philippe Le Sourd",
+        "negative_prompt": ""
+    },
+    {
+        "name": "Eternal Sunshine of the Spotless Mind",
+        "prompt": "{prompt} in the style of 'Eternal Sunshine of the Spotless Mind' by Michel Gondry, cinematography by Ellen Kuras",
+        "negative_prompt": ""
+    },
+    {
+        "name": "Inception",
+        "prompt": "{prompt} in the style of 'Inception' by Christopher Nolan, cinematography by Wally Pfister",
+        "negative_prompt": ""
+    },
+    {
+        "name": "The Shape of Water",
+        "prompt": "{prompt} in the style of 'The Shape of Water' by Guillermo del Toro, cinematography by Dan Laustsen",
+        "negative_prompt": ""
+    },
+    {
+        "name": "Blade Runner 2049",
+        "prompt": "{prompt} in the style of 'Blade Runner 2049' by Denis Villeneuve, cinematography by Roger Deakins",
+        "negative_prompt": ""
+    },
+    {
+        "name": "Amélie",
+        "prompt": "{prompt} in the style of 'Amélie' by Jean-Pierre Jeunet, cinematography by Bruno Delbonnel",
+        "negative_prompt": ""
+    },
+    {
+        "name": "Birdman",
+        "prompt": "{prompt} in the style of 'Birdman' by Alejandro González Iñárritu, cinematography by Emmanuel Lubezki",
+        "negative_prompt": ""
+    }
+]
