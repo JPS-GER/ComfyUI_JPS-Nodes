@@ -67,3 +67,8 @@ __Image__
 
 __Style__
 * SDXL Prompt Styler
+
+#Credits
+
+SDXL Prompt Styler is based on work by twri - https://github.com/twri/sdxl_prompt_styler
+
