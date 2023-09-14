@@ -126,12 +126,10 @@ def replace_prompts_in_template(template, positive_prompt_g, positive_prompt_l, 
 
     text_l_positive = f"{template_prompt_l_template}, {positive_prompt_l}" if template_prompt_l_template and positive_prompt_l else template_prompt_l_template or positive_prompt_l
 
-    text_positive = f"{text_g_positive} . {text_l_positive}" if text_l_positive else text_g_positive
-
     json_negative_prompt = template.get('negative_prompt', "")
     text_negative = f"{json_negative_prompt}, {negative_prompt}" if json_negative_prompt and negative_prompt else json_negative_prompt or negative_prompt
 
-    return text_g_positive, text_l_positive, text_positive, text_negative
+    return text_g_positive, text_l_positive, text_negative
 
 
 def read_sdxl_templates_replace_and_combine(json_data, template_name, positive_prompt_g, positive_prompt_l, negative_prompt):
@@ -149,14 +147,14 @@ def read_sdxl_templates_replace_and_combine(json_data, template_name, positive_p
     - tuple: A tuple containing the replaced and combined main positive, auxiliary positive, combined positive and negative prompts.
     """
     if not validate_json_data(json_data):
-        return positive_prompt_g, positive_prompt_l, f"{positive_prompt_g} . {positive_prompt_l}", negative_prompt
+        return positive_prompt_g, positive_prompt_l, negative_prompt
 
     template = find_template_by_name(json_data, template_name)
 
     if template:
         return replace_prompts_in_template(template, positive_prompt_g, positive_prompt_l, negative_prompt)
     else:
-        return positive_prompt_g, positive_prompt_l, f"{positive_prompt_g} . {positive_prompt_l}", negative_prompt
+        return positive_prompt_g, positive_prompt_l, negative_prompt
 
 accepted_ratios_horizontal = {
     "12:5": (1536, 640, 2.400000000),
@@ -894,8 +892,8 @@ class IP_Adapter_Settings:
             "required": {
                 "ipa1_switch": (s.ipa1switch,),
                 "ipa2_switch": (s.ipa2switch,),
-                "ipa1_weight": ("FLOAT", {"default": 0.5, "min": -1, "max": 3, "step": 0.1}),
-                "ipa2_weight": ("FLOAT", {"default": 0.5, "min": -1, "max": 3, "step": 0.1}),
+                "ipa1_weight": ("FLOAT", {"default": 0.5, "min": -1, "max": 3, "step": 0.05}),
+                "ipa2_weight": ("FLOAT", {"default": 0.5, "min": -1, "max": 3, "step": 0.05}),
             }
         }
     RETURN_TYPES = ("BASIC_PIPE",)
@@ -1569,13 +1567,15 @@ class SDXL_Prompt_Styler:
     @classmethod
     def INPUT_TYPES(self):
         current_directory = os.path.dirname(os.path.realpath(__file__))
-        self.json_data, styles = load_styles_from_directory(current_directory)
+        self.json_data_movies, movies = load_styles_from_directory(current_directory + '\styles\movies')
+        self.json_data_styles, styles = load_styles_from_directory(current_directory + '\styles\main')
         
         return {
             "required": {
                 "text_positive_g": ("STRING", {"default": "", "multiline": True}),
                 "text_positive_l": ("STRING", {"default": "", "multiline": True}),
                 "text_negative": ("STRING", {"default": "", "multiline": True}),
+                "movie": ((movies), ),
                 "style": ((styles), ),
             },
         }
@@ -1585,22 +1585,77 @@ class SDXL_Prompt_Styler:
     FUNCTION = 'sdxlpromptstyler'
     CATEGORY = 'JPS Nodes/Style'
 
-    def sdxlpromptstyler(self, text_positive_g, text_positive_l, text_negative, style):
+    def sdxlpromptstyler(self, text_positive_g, text_positive_l, text_negative, movie, style):
         # Process and combine prompts in templates
         # The function replaces the positive prompt placeholder in the template,
         # and combines the negative prompt with the template's negative prompt, if they exist.
-        text_positive_g_styled, text_positive_l_styled, text_positive_styled, text_negative_styled = read_sdxl_templates_replace_and_combine(self.json_data, style, text_positive_g, text_positive_l, text_negative)
- 
-        print(f"style: {style}")
-        print(f"text_positive_g: {text_positive_g}")
-        print(f"text_positive_l: {text_positive_l}")
-        print(f"text_negative: {text_negative}")
-        print(f"text_positive_g_styled: {text_positive_g_styled}")
-        print(f"text_positive_l_styled: {text_positive_l_styled}")
-        print(f"text_positive_styled: {text_positive_styled}")
-        print(f"text_negative_styled: {text_negative_styled}")
 
-        return text_positive_g_styled, text_positive_l_styled, text_positive_styled, text_negative_styled
+        text_pos_g_style = ""
+        text_pos_l_style = ""
+        text_pos_style = ""
+        text_neg_style = ""
+
+        text_pos_g_movie, text_pos_l_movie, text_neg_movie = read_sdxl_templates_replace_and_combine(self.json_data_movies, movie, text_positive_g, text_positive_l, text_negative)
+
+        if(text_positive_g == text_positive_l):
+            print("pos_g is same as pos_l")
+            if(text_pos_l_movie != text_positive_l and text_pos_g_movie != text_positive_g):
+                print("and both changed")
+                text_positive_l = ""
+                text_pos_g_movie, text_pos_l_movie, text_neg_movie = read_sdxl_templates_replace_and_combine(self.json_data_movie, movie, text_positive_g, text_positive_l, text_negative) 
+            elif(text_pos_g_movie != text_positive_g):
+                print("and pos_g changed")
+                text_pos_l_movie = text_pos_g_movie
+            elif(text_pos_l_movie != text_positive_l):
+                print("and pos_l changed")
+                text_pos_g_movie = text_pos_l_movie
+        else:
+            print("pos_g_movie not same as pos_l_movie")
+            print(text_pos_g_movie)
+            print(text_pos_l_movie)
+
+        text_pos_g_style, text_pos_l_style, text_neg_style = read_sdxl_templates_replace_and_combine(self.json_data_styles, style, text_pos_g_movie, text_pos_l_movie, text_neg_movie)
+
+        if(text_pos_g_movie == text_pos_l_movie):
+            print("pos_g_movie is same as pos_l_movie")
+            if(text_pos_l_movie != text_pos_l_style and text_pos_g_movie != text_pos_g_style):
+                print("and both changed")
+                text_pos_l_movie = ""
+                text_pos_g_style, text_pos_l_style, text_neg_style = read_sdxl_templates_replace_and_combine(self.json_data_styles, style, text_pos_g_movie, text_pos_l_movie, text_neg_movie) 
+            elif(text_pos_g_movie != text_pos_g_style):
+                print("and pos_g changed")
+                text_pos_l_style = text_pos_g_style
+            elif(text_pos_l_movie != text_pos_l_style):
+                print("and pos_l changed")
+                text_pos_g_style = text_pos_l_style
+        else:
+            print("pos_g_movie not same as pos_l_movie")
+            print(text_pos_g_movie)
+            print(text_pos_l_movie)
+
+        if(text_pos_g_style != text_pos_l_style):
+            if(text_pos_l_style != ""):
+                text_pos_style = text_pos_g_style + ' . ' + text_pos_l_style
+            else:
+                text_pos_style = text_pos_g_style 
+        else:
+            text_pos_style = text_pos_g_style 
+
+        print(f"movie: {movie}")
+        print(f"style: {style}")
+        print(f"pos_g: {text_positive_g}")
+        print(f"pos_l: {text_positive_l}")
+        print(f"neg: {text_negative}")
+        if(movie != "none"):
+            print(f"pos_g_movie: {text_pos_g_movie}")
+            print(f"pos_l_movie: {text_pos_l_movie}")
+            print(f"neg_movie: {text_neg_movie}")
+        print(f"pos_g styled: {text_pos_g_style}")
+        print(f"pos_l styled: {text_pos_l_style}")
+        print(f"pos styled: {text_pos_style}")
+        print(f"neg styled: {text_neg_style}")
+
+        return text_pos_g_style, text_pos_l_style, text_pos_style, text_neg_style
 
 #---------------------------------------------------------------------------------------------------------------------------------------------------#                       
 
