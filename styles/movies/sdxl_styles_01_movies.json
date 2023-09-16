@@ -1,77 +1,82 @@
 [
     {
         "name": "2001 - A Space Odyssey",
-        "prompt": "{prompt} reminiscent of '2001 - A Space Odyssey' directed by Stanley Kubrick, futuristic aesthetics, minimalist design, monolithic structures, vivid contrast between darkness and light, sterile and clean environments, symbolic use of the monolith, abstract and surreal visuals, geometric compositions, HAL 9000's red eye, astronaut helmets and suits, space station interiors, space exploration vehicles, cosmic landscapes, spacecraft docking sequences, interstellar journey, otherworldly vistas",
+        "prompt": "{prompt} in style of '2001 - A Space Odyssey' directed by Stanley Kubrick, futuristic aesthetics, minimalist design, monolithic structures, vivid contrast between darkness and light, sterile and clean environments, symbolic use of the monolith, abstract and surreal visuals, geometric compositions, HAL 9000's red eye, astronaut helmets and suits, space station interiors, space exploration vehicles, cosmic landscapes, spacecraft docking sequences, interstellar journey, otherworldly vistas",
         "negative_prompt": "earthbound scenes, organic shapes, warm and cozy atmospheres, character-focused visuals"
     },
     {
+        "name": "Avatar",
+        "prompt": "{prompt} in the style of 'Avatar' directed by James Cameron, lush alien flora and fauna, bioluminescent forests, floating mountains, blue skin Na'vi, alien wildlife, tribal Na'vi culture, futuristic human technology, exotic Pandora landscapes, graceful movements, Avatar bodies, aerial battles with banshees and gunships, alien rituals and ceremonies",
+        "negative_prompt": ""
+    },
+    {
         "name": "Blade Runner 2049",
-        "prompt": "{prompt} reminiscent of 'Blade Runner 2049' directed by Denis Villeneuve, dystopian cityscape with artificial lighting, rain-soaked streets, neon-lit advertisements, futuristic architecture, holographic billboards, smoky atmospheric scenes, cyberpunk fashion, futuristic vehicles, dark and moody color palette, reflective surfaces, urban decay, cybernetic enhancements",
+        "prompt": "{prompt} in style of 'Blade Runner 2049' directed by Denis Villeneuve, dystopian cityscape with artificial lighting, rain-soaked streets, neon-lit advertisements, futuristic architecture, holographic billboards, smoky atmospheric scenes, cyberpunk fashion, futuristic vehicles, dark and moody color palette, reflective surfaces, urban decay, cybernetic enhancements",
         "negative_prompt": "minimalistic design, bright and cheerful color palette, rural landscapes, historical settings"
     },
     {
         "name": "The Cell",
-        "prompt": "{prompt} reminiscent of 'The Cell' directed by Tarsem Singh, ethereal silk textures with a floating quality, surreal dreamscapes, vibrant color palettes, intricate costume design, avant-garde architecture, otherworldly landscapes, abstract and symbolic visuals, surreal juxtapositions, intricate body art, mesmerizing lighting effects, kaleidoscopic patterns, psychological symbolism, visually stunning set pieces, mind-bending visuals, surreal transitions, breathtaking cinematography",
+        "prompt": "{prompt} in style of 'The Cell' directed by Tarsem Singh, ethereal silk textures with a floating quality, surreal dreamscapes, vibrant color palettes, intricate costume design, avant-garde architecture, otherworldly landscapes, abstract and symbolic visuals, surreal juxtapositions, intricate body art, mesmerizing lighting effects, kaleidoscopic patterns, psychological symbolism, visually stunning set pieces, mind-bending visuals, surreal transitions, breathtaking cinematography",
         "negative_prompt": "gritty realism, mundane everyday scenes, naturalistic color schemes"
     },
     {
+        "name": "Dark City",
+        "prompt": "{prompt} in style of 'Dark City' directed by Alex Proyas, surreal cityscape, dimly lit streets, spiraling architecture, highlighted pale faces, dark clothes, bald heads, noir-inspired lighting, mysterious strangers, perpetual nighttime, shadowy figures, clockwork aesthetics, dystopian urban landscape, haunting atmosphere, eerie cityscape, enigmatic symbols",
+        "negative_prompt": "futuristic technology, bright daylight, colorful visuals, natural landscapes, traditional architecture"
+    },
+    {
         "name": "Dune (2021)",
-        "prompt": "{prompt} reminiscent of 'Dune (2021)' directed by Denis Villeneuve, vast desert landscapes, intricate futuristic architecture, otherworldly desert creatures, ornate costumes and clothing, dramatic sandstorms, epic battles in the desert, futuristic technology, grandiose and imposing spacecraft, desert nomadic tribes, barren and unforgiving landscapes, mystical and ancient symbols, dramatic lighting and shadows, towering sand dunes, opulent palaces, intricate sandworm designs, alien flora and fauna, intricate hieroglyphic-like writing",
+        "prompt": "{prompt} in style of 'Dune (2021)' directed by Denis Villeneuve, vast desert landscapes, intricate futuristic architecture, otherworldly desert creatures, ornate costumes and clothing, dramatic sandstorms, epic battles in the desert, futuristic technology, grandiose and imposing spacecraft, desert nomadic tribes, barren and unforgiving landscapes, mystical and ancient symbols, dramatic lighting and shadows, towering sand dunes, opulent palaces, intricate sandworm designs, alien flora and fauna, intricate hieroglyphic-like writing",
         "negative_prompt": "vibrant and colorful scenes, urban cityscapes, scenes with modern technology, lush vegetation, underwater scenes, modern vehicles and infrastructure"
     },
     {
         "name": "The Fall",
-        "prompt": "{prompt} reminiscent of 'The Fall' directed by Tarsem Singh, lush natural landscapes, vivid color palette, vibrant and surreal colors, dreamlike imagery, ornate and fantastical costumes, wide-angle scenic shots, imaginative set designs, striking visual contrasts, surreal wildlife encounters, whimsical and mythical creatures, magical realism, ethereal atmosphere, fantastical architecture, visually stunning storytelling, breathtaking cinematography",
+        "prompt": "{prompt} in style of 'The Fall' directed by Tarsem Singh, lush natural landscapes, vivid color palette, vibrant and surreal colors, dreamlike imagery, ornate and fantastical costumes, wide-angle scenic shots, imaginative set designs, striking visual contrasts, surreal wildlife encounters, whimsical and mythical creatures, magical realism, ethereal atmosphere, fantastical architecture, visually stunning storytelling, breathtaking cinematography",
         "negative_prompt": "urban cityscapes, gritty realism"
     },
     {
         "name": "The Fountain",
-        "prompt": "{prompt} reminiscent of 'The Fountain' directed by Darren Aronofsky, cosmic vistas, surreal landscapes, ethereal lighting, intricate textures, organic motifs, otherworldly colors, merging of time and space, spiritual symbolism, emotional depth, celestial imagery, dreamlike textures, interplay of light and shadow, organic textures, mystical geometry, transcendental moments, visual poetry, cosmic journey",
+        "prompt": "{prompt} in style of 'The Fountain' directed by Darren Aronofsky, cosmic vistas, surreal landscapes, ethereal lighting, intricate textures, organic motifs, otherworldly colors, merging of time and space, spiritual symbolism, emotional depth, celestial imagery, dreamlike textures, interplay of light and shadow, organic textures, mystical geometry, transcendental moments, visual poetry, cosmic journey",
         "negative_prompt": "gritty realism, urban settings, modern technology"
     },
     {
-        "name": "Ghostbusters (1984)",
-        "prompt": "{prompt} reminiscent of 'Ghostbusters (1984)' directed by Ivan Reitman, iconic proton packs, eerie green glow, paranormal equipment, spooky ghostly apparitions, iconic Ecto-1 car, unique ghost traps, supernatural encounters, proton beam streams, distinct paranormal locations, spectral encounters, ghostly spectacles, eerie atmosphere, signature jumpsuits, supernatural busting tools, ghostly confrontations",
-        "negative_prompt": "disco-themed visual elements, neon colors, underwater scenes, romantic visuals"
+        "name": "Gattaca",
+        "prompt": "{prompt} in the style of 'Gattaca' directed by Andrew Niccol, futuristic architecture, dystopian landscapes, stark contrasts, futuristic technology, genetic sequencing, DNA helix, identity concealment, sleek and elegant aesthetics, high-contrast lighting, genetic discrimination, minimalistic design",
+        "negative_prompt": "fantasy elements, magic elements, supernatural elements"
     },
     {
         "name": "The Grand Budapest Hotel",
-        "prompt": "{prompt} reminiscent of 'The Grand Budapest Hotel' directed by Wes Anderson, vintage color palette, quirky characters, symmetrical and meticulously designed spaces, ornate architecture and decor, pastel aesthetics, a sense of nostalgia, whimsical props, charming lobby, retro typography, intricate set design, playful use of aspect ratio, whimsical fashion, meticulous detailing, cinematic pastry creations, zany hotel staff",
+        "prompt": "{prompt} in style of 'The Grand Budapest Hotel' directed by Wes Anderson, vintage color palette, quirky characters, symmetrical and meticulously designed spaces, ornate architecture and decor, pastel aesthetics, a sense of nostalgia, whimsical props, charming lobby, retro typography, intricate set design, playful use of aspect ratio, whimsical fashion, meticulous detailing, cinematic pastry creations, zany hotel staff",
         "negative_prompt": "loud, chaotic scenes, gritty realism, contemporary technology, modern urban settings, intense action sequences"
     },
     {
         "name": "Hero",
-        "prompt": "{prompt} reminiscent of 'Hero' directed by Zhang Yimou, visually stunning cinematography, vibrant color palette, graceful use of silk, aerial combat scenes, striking use of red, intricate costume design, unique weapon styles, breathtaking landscapes, poetic storytelling, symbolic use of water and fire, visual contrasts, silhouetted characters, masterful use of negative space, dream sequences",
+        "prompt": "{prompt} in style of 'Hero' directed by Zhang Yimou, visually stunning cinematography, vibrant color palette, graceful use of silk, aerial combat scenes, striking use of red, intricate costume design, unique weapon styles, breathtaking landscapes, poetic storytelling, symbolic use of water and fire, visual contrasts, silhouetted characters, masterful use of negative space, dream sequences",
         "negative_prompt": "gritty urban settings, modern technology, contemporary fashion"
     },
     {
         "name": "Life of Pi",
-        "prompt": "{prompt} reminiscent of 'Life of Pi' directed by Ang Lee, vibrant color palette, surrealistic visuals, mesmerizing ocean vistas, intricate water reflections, exotic wildlife, lush greenery, stunning sunset scenes, dramatic skyscapes, magical realism, bioluminescent aquatic life, mesmerizing underwater shots, isolated island settings, striking visual contrast, ethereal dream sequences, captivating use of light and shadow",
+        "prompt": "{prompt} in style of 'Life of Pi' directed by Ang Lee, vibrant color palette, surrealistic visuals, mesmerizing ocean vistas, intricate water reflections, exotic wildlife, lush greenery, stunning sunset scenes, dramatic skyscapes, magical realism, bioluminescent aquatic life, mesmerizing underwater shots, isolated island settings, striking visual contrast, ethereal dream sequences, captivating use of light and shadow",
         "negative_prompt": "gritty urban environments, monochromatic visuals, crowded and cluttered scenes, industrial landscapes"
     },
     {
         "name": "The Lord of the Rings",
-        "prompt": "{prompt} reminiscent of 'The Lord of the Rings' directed by Peter Jackson, epic landscapes, fantasy elements, detailed costumes, ancient architecture, scenic battles, mythical creatures, dramatic lighting, lush greenery, intricate weaponry, majestic kingdoms, mythical races, vast horizons, rugged terrains, enchanting forests, elaborate armor",
+        "prompt": "{prompt} in style of 'The Lord of the Rings' directed by Peter Jackson, epic landscapes, fantasy elements, detailed costumes, ancient architecture, scenic battles, mythical creatures, dramatic lighting, lush greenery, intricate weaponry, majestic kingdoms, mythical races, vast horizons, rugged terrains, enchanting forests, elaborate armor",
         "negative_prompt": "modern technology, futuristic elements, urban settings, contemporary fashion"
     },
     {
+        "name": "The Matrix",
+        "prompt": "{prompt} in the style of 'The Matrix' directed by the Wachowskis, cyberpunk aesthetics, green-tinted visual filter, high-tech leather outfits, futuristic cityscapes, computer code rain, reflective sunglasses, martial arts combat, dystopian atmosphere, hacker symbolism, glitch effects, bullet-time camera angles, surreal digital landscapes, virtual reality simulation, hacking terminals",
+        "negative_prompt": "fantasy elements, bright colors, historical settings"
+    },
+    {
         "name": "Spider-Man - Into the Spider-Verse",
-        "prompt": "{prompt} reminiscent of 'Spider-Man: Into the Spider-Verse', dynamic camera angles, comic book-style animation, vibrant color palette, kinetic action sequences, graffiti-inspired visuals, multiple art styles, exaggerated character expressions, urban landscapes, unique character designs, onomatopoeic comic book sound effects, motion blur, perspective shifts, pop-art elements",
-        "negative_prompt": "live-action sequences, realistic visuals, monotone color schemes"
-    },
-    {
-        "name": "Star Trek: The Next Generation",
-        "prompt": "{prompt} reminiscent of 'Star Trek: The Next Generation', Starfleet uniforms, iconic Starfleet emblem, futuristic technology, starship interiors, vibrant starship control panels, interstellar landscapes, alien species diversity (including Romulans and Vulcans with distinctive pointed ears), space exploration, sleek starship designs like USS Enterprise, ethereal nebulae, distinctive Klingon aesthetics, captivating alien worlds, dramatic planet surfaces, majestic starship exteriors, striking starship lighting",
-        "negative_prompt": "gritty post-apocalyptic settings, supernatural elements"
-    },
-    {
-        "name": "Star Wars",
-        "prompt": "{prompt} reminiscent of 'Star Wars' directed by George Lucas, intricate costume designs including Darth Vader's iconic black attire, stormtroopers, iconic lightsabers, futuristic technology, dramatic starship designs, alien species diversity, desert landscapes, lush forests, cityscape skylines, unique creature species, holographic displays, mysterious force powers, vivid color palette, droids of various shapes and sizes, epic space battles",
-        "negative_prompt": "contemporary fashion influences"
+        "prompt": "{prompt} in style of 'Spider-Man Into the Spider-Verse', hyper-realistic comic-book style, dynamic camera angles, vibrant color palette, exaggerated character expressions, urban landscapes, graffiti-inspired visuals, onomatopoeic comic book sound effects, motion blur",
+        "negative_prompt": "monotone color schemes"
     },
     {
         "name": "Tron Legacy",
-        "prompt": "{prompt} reminiscent of 'Tron Legacy' directed by Joseph Kosinski, vibrant neon color palette, neon-lit cityscape, sleek and luminous suits with distinctive lighting stripes, digital circuitry patterns, glowing helmets, stark contrast of light and dark, electrifying grid, holographic displays, futuristic motorcycles, cybernetic landscapes, pulsating light trails, minimalist design aesthetic, illuminated identity discs, high-tech vehicles, virtual reality and cyberpunk aesthetics",
+        "prompt": "{prompt} in style of 'Tron Legacy' directed by Joseph Kosinski, vibrant neon color palette, neon-lit cityscape, sleek and luminous suits with distinctive lighting stripes, digital circuitry patterns, glowing helmets, stark contrast of light and dark, electrifying grid, holographic displays, futuristic motorcycles, cybernetic landscapes, pulsating light trails, minimalist design aesthetic, illuminated identity discs, high-tech vehicles, virtual reality and cyberpunk aesthetics",
         "negative_prompt": "natural color palettes, organic textures, traditional architecture"
     }
 ]
