@@ -1,317 +1,77 @@
 [
     {
-        "name": "2001: A Space Odyssey",
-        "prompt": "{prompt} in the style of '2001: A Space Odyssey' by Stanley Kubrick, cinematography by Geoffrey Unsworth",
-        "negative_prompt": ""
-    },
-    {
-        "name": "A Clockwork Orange",
-        "prompt": "{prompt} in the style of 'A Clockwork Orange' by Stanley Kubrick, cinematography by John Alcott",
-        "negative_prompt": ""
-    },
-    {
-        "name": "Akira",
-        "prompt": "{prompt} in the style of 'Akira' by Katsuhiro Otomo, animation direction by Katsuhiro Otomo",
-        "negative_prompt": ""
-    },
-    {
-        "name": "Amélie",
-        "prompt": "{prompt} in the style of 'Amélie' by Jean-Pierre Jeunet, cinematography by Bruno Delbonnel",
-        "negative_prompt": ""
-    },
-    {
-        "name": "Avatar",
-        "prompt": "{prompt} in the style of 'Avatar' by James Cameron, cinematography by Mauro Fiore",
-        "negative_prompt": ""
-    },
-    {
-        "name": "Baraka",
-        "prompt": "{prompt} in the style of 'Baraka' by Ron Fricke, cinematography by Ron Fricke",
-        "negative_prompt": ""
-    },
-    {
-        "name": "Birdman",
-        "prompt": "{prompt} in the style of 'Birdman' by Alejandro González Iñárritu, cinematography by Emmanuel Lubezki",
-        "negative_prompt": ""
+        "name": "2001 - A Space Odyssey",
+        "prompt": "{prompt} reminiscent of '2001 - A Space Odyssey' directed by Stanley Kubrick, futuristic aesthetics, minimalist design, monolithic structures, vivid contrast between darkness and light, sterile and clean environments, symbolic use of the monolith, abstract and surreal visuals, geometric compositions, HAL 9000's red eye, astronaut helmets and suits, space station interiors, space exploration vehicles, cosmic landscapes, spacecraft docking sequences, interstellar journey, otherworldly vistas",
+        "negative_prompt": "earthbound scenes, organic shapes, warm and cozy atmospheres, character-focused visuals"
     },
     {
         "name": "Blade Runner 2049",
-        "prompt": "{prompt} in the style of 'Blade Runner 2049' by Denis Villeneuve, cinematography by Roger Deakins",
-        "negative_prompt": ""
+        "prompt": "{prompt} reminiscent of 'Blade Runner 2049' directed by Denis Villeneuve, dystopian cityscape with artificial lighting, rain-soaked streets, neon-lit advertisements, futuristic architecture, holographic billboards, smoky atmospheric scenes, cyberpunk fashion, futuristic vehicles, dark and moody color palette, reflective surfaces, urban decay, cybernetic enhancements",
+        "negative_prompt": "minimalistic design, bright and cheerful color palette, rural landscapes, historical settings"
     },
     {
-        "name": "Brazil",
-        "prompt": "{prompt} in the style of 'Brazil' by Terry Gilliam, cinematography by Roger Pratt",
-        "negative_prompt": ""
+        "name": "The Cell",
+        "prompt": "{prompt} reminiscent of 'The Cell' directed by Tarsem Singh, ethereal silk textures with a floating quality, surreal dreamscapes, vibrant color palettes, intricate costume design, avant-garde architecture, otherworldly landscapes, abstract and symbolic visuals, surreal juxtapositions, intricate body art, mesmerizing lighting effects, kaleidoscopic patterns, psychological symbolism, visually stunning set pieces, mind-bending visuals, surreal transitions, breathtaking cinematography",
+        "negative_prompt": "gritty realism, mundane everyday scenes, naturalistic color schemes"
     },
     {
-        "name": "Children of Men",
-        "prompt": "{prompt} in the style of 'Children of Men' by Alfonso Cuarón, cinematography by Emmanuel Lubezki",
-        "negative_prompt": ""
-    },
-    {
-        "name": "Coraline",
-        "prompt": "{prompt} in the style of 'Coraline' by Henry Selick, animation direction by Henry Selick",
-        "negative_prompt": ""
-    },
-    {
-        "name": "Donnie Darko",
-        "prompt": "{prompt} in the style of 'Donnie Darko' by Richard Kelly, cinematography by Steven B. Poster",
-        "negative_prompt": ""
-    },
-    {
-        "name": "Drive",
-        "prompt": "{prompt} in the style of 'Drive' by Nicolas Winding Refn, cinematography by Newton Thomas Sigel",
-        "negative_prompt": ""
-    },
-    {
-        "name": "Eternal Sunshine of the Spotless Mind",
-        "prompt": "{prompt} in the style of 'Eternal Sunshine of the Spotless Mind' by Michel Gondry, cinematography by Ellen Kuras",
-        "negative_prompt": ""
-    },
-    {
-        "name": "Fantastic Mr. Fox",
-        "prompt": "{prompt} in the style of 'Fantastic Mr. Fox' by Wes Anderson, cinematography by Tristan Oliver",
-        "negative_prompt": ""
-    },
-    {
-        "name": "Fight Club",
-        "prompt": "{prompt} in the style of 'Fight Club' by David Fincher, cinematography by Jeff Cronenweth",
-        "negative_prompt": ""
-    },
-    {
-        "name": "Ghost in the Shell",
-        "prompt": "{prompt} in the style of 'Ghost in the Shell' by Mamoru Oshii, animation direction by Toshihiko Nishikubo",
-        "negative_prompt": ""
-    },
-    {
-        "name": "Hero",
-        "prompt": "{prompt} in the style of 'Hero' by Zhang Yimou, cinematography by Christopher Doyle",
-        "negative_prompt": ""
-    },
-    {
-        "name": "Inception",
-        "prompt": "{prompt} in the style of 'Inception' by Christopher Nolan, cinematography by Wally Pfister",
-        "negative_prompt": ""
-    },
-    {
-        "name": "In the Mood for Love",
-        "prompt": "{prompt} in the style of 'In the Mood for Love' by Wong Kar-wai, cinematography by Christopher Doyle",
-        "negative_prompt": ""
-    },
-    {
-        "name": "Interstellar",
-        "prompt": "{prompt} in the style of 'Interstellar' by Christopher Nolan, cinematography by Hoyte van Hoytema",
-        "negative_prompt": ""
-    },
-    {
-        "name": "La La Land",
-        "prompt": "{prompt} in the style of 'La La Land' by Damien Chazelle, cinematography by Linus Sandgren",
-        "negative_prompt": ""
-    },
-    {
-        "name": "Mad Max: Fury Road",
-        "prompt": "{prompt} in the style of 'Mad Max: Fury Road' by George Miller, cinematography by John Seale",
-        "negative_prompt": ""
-    },
-    {
-        "name": "Moonlight",
-        "prompt": "{prompt} in the style of 'Moonlight' by Barry Jenkins, cinematography by James Laxton",
-        "negative_prompt": ""
-    },
-    {
-        "name": "Mulholland Drive",
-        "prompt": "{prompt} in the style of 'Mulholland Drive' by David Lynch, cinematography by Peter Deming",
-        "negative_prompt": ""
-    },
-    {
-        "name": "No Country for Old Men",
-        "prompt": "{prompt} in the style of 'No Country for Old Men' by Joel and Ethan Coen, cinematography by Roger Deakins",
-        "negative_prompt": ""
-    },
-    {
-        "name": "Oldboy",
-        "prompt": "{prompt} in the style of 'Oldboy' by Park Chan-wook, cinematography by Chung Chung-hoon",
-        "negative_prompt": ""
-    },
-    {
-        "name": "Parasite",
-        "prompt": "{prompt} in the style of 'Parasite' by Bong Joon-ho, cinematography by Hong Kyung-pyo",
-        "negative_prompt": ""
-    },
-    {
-        "name": "Pulp Fiction",
-        "prompt": "{prompt} in the style of 'Pulp Fiction' by Quentin Tarantino, cinematography by Andrzej Sekuła",
-        "negative_prompt": ""
-    },
-    {
-        "name": "Requiem for a Dream",
-        "prompt": "{prompt} in the style of 'Requiem for a Dream' by Darren Aronofsky, cinematography by Matthew Libatique",
-        "negative_prompt": ""
-    },
-    {
-        "name": "Roma",
-        "prompt": "{prompt} in the style of 'Roma' by Alfonso Cuarón, cinematography by Alfonso Cuarón",
-        "negative_prompt": ""
-    },
-    {
-        "name": "Schindler's List",
-        "prompt": "{prompt} in the style of 'Schindler's List' by Steven Spielberg, cinematography by Janusz Kamiński",
-        "negative_prompt": ""
-    },
-    {
-        "name": "Scott Pilgrim vs. the World",
-        "prompt": "{prompt} in the style of 'Scott Pilgrim vs. the World' by Edgar Wright, cinematography by Bill Pope",
-        "negative_prompt": ""
-    },
-    {
-        "name": "Seven Samurai",
-        "prompt": "{prompt} in the style of 'Seven Samurai' by Akira Kurosawa, cinematography by Asakazu Nakai",
-        "negative_prompt": ""
-    },
-    {
-        "name": "Sin City",
-        "prompt": "{prompt} in the style of 'Sin City' by Frank Miller and Robert Rodriguez, cinematography by Robert Rodriguez",
-        "negative_prompt": ""
-    },
-    {
-        "name": "Spirited Away",
-        "prompt": "{prompt} in the style of 'Spirited Away' by Hayao Miyazaki, animation direction by Masashi Ando",
-        "negative_prompt": ""
-    },
-    {
-        "name": "The Big Lebowski",
-        "prompt": "{prompt} in the style of 'The Big Lebowski' by Joel and Ethan Coen, cinematography by Roger Deakins",
-        "negative_prompt": ""
-    },
-    {
-        "name": "The Dark Knight",
-        "prompt": "{prompt} in the style of 'The Dark Knight' by Christopher Nolan, cinematography by Wally Pfister",
-        "negative_prompt": ""
+        "name": "Dune (2021)",
+        "prompt": "{prompt} reminiscent of 'Dune (2021)' directed by Denis Villeneuve, vast desert landscapes, intricate futuristic architecture, otherworldly desert creatures, ornate costumes and clothing, dramatic sandstorms, epic battles in the desert, futuristic technology, grandiose and imposing spacecraft, desert nomadic tribes, barren and unforgiving landscapes, mystical and ancient symbols, dramatic lighting and shadows, towering sand dunes, opulent palaces, intricate sandworm designs, alien flora and fauna, intricate hieroglyphic-like writing",
+        "negative_prompt": "vibrant and colorful scenes, urban cityscapes, scenes with modern technology, lush vegetation, underwater scenes, modern vehicles and infrastructure"
     },
     {
         "name": "The Fall",
-        "prompt": "{prompt} in the style of 'The Fall' by Tarsem Singh, cinematography by Colin Watkinson",
-        "negative_prompt": ""
+        "prompt": "{prompt} reminiscent of 'The Fall' directed by Tarsem Singh, lush natural landscapes, vivid color palette, vibrant and surreal colors, dreamlike imagery, ornate and fantastical costumes, wide-angle scenic shots, imaginative set designs, striking visual contrasts, surreal wildlife encounters, whimsical and mythical creatures, magical realism, ethereal atmosphere, fantastical architecture, visually stunning storytelling, breathtaking cinematography",
+        "negative_prompt": "urban cityscapes, gritty realism"
     },
     {
         "name": "The Fountain",
-        "prompt": "{prompt} in the style of 'The Fountain' by Darren Aronofsky, cinematography by Matthew Libatique",
-        "negative_prompt": ""
+        "prompt": "{prompt} reminiscent of 'The Fountain' directed by Darren Aronofsky, cosmic vistas, surreal landscapes, ethereal lighting, intricate textures, organic motifs, otherworldly colors, merging of time and space, spiritual symbolism, emotional depth, celestial imagery, dreamlike textures, interplay of light and shadow, organic textures, mystical geometry, transcendental moments, visual poetry, cosmic journey",
+        "negative_prompt": "gritty realism, urban settings, modern technology"
     },
     {
-        "name": "The Godfather",
-        "prompt": "{prompt} in the style of 'The Godfather' by Francis Ford Coppola, cinematography by Gordon Willis",
-        "negative_prompt": ""
+        "name": "Ghostbusters (1984)",
+        "prompt": "{prompt} reminiscent of 'Ghostbusters (1984)' directed by Ivan Reitman, iconic proton packs, eerie green glow, paranormal equipment, spooky ghostly apparitions, iconic Ecto-1 car, unique ghost traps, supernatural encounters, proton beam streams, distinct paranormal locations, spectral encounters, ghostly spectacles, eerie atmosphere, signature jumpsuits, supernatural busting tools, ghostly confrontations",
+        "negative_prompt": "disco-themed visual elements, neon colors, underwater scenes, romantic visuals"
     },
     {
-        "name": "The Great Beauty",
-        "prompt": "{prompt} in the style of 'The Great Beauty' by Paolo Sorrentino, cinematography by Luca Bigazzi",
-        "negative_prompt": ""
+        "name": "The Grand Budapest Hotel",
+        "prompt": "{prompt} reminiscent of 'The Grand Budapest Hotel' directed by Wes Anderson, vintage color palette, quirky characters, symmetrical and meticulously designed spaces, ornate architecture and decor, pastel aesthetics, a sense of nostalgia, whimsical props, charming lobby, retro typography, intricate set design, playful use of aspect ratio, whimsical fashion, meticulous detailing, cinematic pastry creations, zany hotel staff",
+        "negative_prompt": "loud, chaotic scenes, gritty realism, contemporary technology, modern urban settings, intense action sequences"
     },
     {
-        "name": "The Matrix",
-        "prompt": "{prompt} in the style of 'The Matrix' by the Wachowskis, cinematography by Bill Pope",
-        "negative_prompt": ""
+        "name": "Hero",
+        "prompt": "{prompt} reminiscent of 'Hero' directed by Zhang Yimou, visually stunning cinematography, vibrant color palette, graceful use of silk, aerial combat scenes, striking use of red, intricate costume design, unique weapon styles, breathtaking landscapes, poetic storytelling, symbolic use of water and fire, visual contrasts, silhouetted characters, masterful use of negative space, dream sequences",
+        "negative_prompt": "gritty urban settings, modern technology, contemporary fashion"
     },
     {
-        "name": "The Revenant",
-        "prompt": "{prompt} in the style of 'The Revenant' by Alejandro González Iñárritu, cinematography by Emmanuel Lubezki",
-        "negative_prompt": ""
+        "name": "Life of Pi",
+        "prompt": "{prompt} reminiscent of 'Life of Pi' directed by Ang Lee, vibrant color palette, surrealistic visuals, mesmerizing ocean vistas, intricate water reflections, exotic wildlife, lush greenery, stunning sunset scenes, dramatic skyscapes, magical realism, bioluminescent aquatic life, mesmerizing underwater shots, isolated island settings, striking visual contrast, ethereal dream sequences, captivating use of light and shadow",
+        "negative_prompt": "gritty urban environments, monochromatic visuals, crowded and cluttered scenes, industrial landscapes"
     },
     {
-        "name": "The Royal Tenenbaums",
-        "prompt": "{prompt} in the style of 'The Royal Tenenbaums' by Wes Anderson, cinematography by Robert D. Yeoman",
-        "negative_prompt": ""
+        "name": "The Lord of the Rings",
+        "prompt": "{prompt} reminiscent of 'The Lord of the Rings' directed by Peter Jackson, epic landscapes, fantasy elements, detailed costumes, ancient architecture, scenic battles, mythical creatures, dramatic lighting, lush greenery, intricate weaponry, majestic kingdoms, mythical races, vast horizons, rugged terrains, enchanting forests, elaborate armor",
+        "negative_prompt": "modern technology, futuristic elements, urban settings, contemporary fashion"
     },
     {
-        "name": "The Shape of Water",
-        "prompt": "{prompt} in the style of 'The Shape of Water' by Guillermo del Toro, cinematography by Dan Laustsen",
-        "negative_prompt": ""
+        "name": "Spider-Man - Into the Spider-Verse",
+        "prompt": "{prompt} reminiscent of 'Spider-Man: Into the Spider-Verse', dynamic camera angles, comic book-style animation, vibrant color palette, kinetic action sequences, graffiti-inspired visuals, multiple art styles, exaggerated character expressions, urban landscapes, unique character designs, onomatopoeic comic book sound effects, motion blur, perspective shifts, pop-art elements",
+        "negative_prompt": "live-action sequences, realistic visuals, monotone color schemes"
     },
     {
-        "name": "The Shining",
-        "prompt": "{prompt} in the style of 'The Shining' by Stanley Kubrick, cinematography by John Alcott",
-        "negative_prompt": ""
+        "name": "Star Trek: The Next Generation",
+        "prompt": "{prompt} reminiscent of 'Star Trek: The Next Generation', Starfleet uniforms, iconic Starfleet emblem, futuristic technology, starship interiors, vibrant starship control panels, interstellar landscapes, alien species diversity (including Romulans and Vulcans with distinctive pointed ears), space exploration, sleek starship designs like USS Enterprise, ethereal nebulae, distinctive Klingon aesthetics, captivating alien worlds, dramatic planet surfaces, majestic starship exteriors, striking starship lighting",
+        "negative_prompt": "gritty post-apocalyptic settings, supernatural elements"
     },
     {
-        "name": "The Social Network",
-        "prompt": "{prompt} in the style of 'The Social Network' by David Fincher, cinematography by Jeff Cronenweth",
-        "negative_prompt": ""
+        "name": "Star Wars",
+        "prompt": "{prompt} reminiscent of 'Star Wars' directed by George Lucas, intricate costume designs including Darth Vader's iconic black attire, stormtroopers, iconic lightsabers, futuristic technology, dramatic starship designs, alien species diversity, desert landscapes, lush forests, cityscape skylines, unique creature species, holographic displays, mysterious force powers, vivid color palette, droids of various shapes and sizes, epic space battles",
+        "negative_prompt": "contemporary fashion influences"
     },
     {
-        "name": "The Tree of Life",
-        "prompt": "{prompt} in the style of 'The Tree of Life' by Terrence Malick, cinematography by Emmanuel Lubezki",
-        "negative_prompt": ""
-    },
-    {
-        "name": "The Truman Show",
-        "prompt": "{prompt} in the style of 'The Truman Show' by Peter Weir, cinematography by Peter Biziou",
-        "negative_prompt": ""
-    },
-    {
-        "name": "The Witch",
-        "prompt": "{prompt} in the style of 'The Witch' by Robert Eggers, cinematography by Jarin Blaschke",
-        "negative_prompt": ""
-    },
-    {
-        "name": "There Will Be Blood",
-        "prompt": "{prompt} in the style of 'There Will Be Blood' by Paul Thomas Anderson, cinematography by Robert Elswit",
-        "negative_prompt": ""
-    },
-    {
-        "name": "Trainspotting",
-        "prompt": "{prompt} in the style of 'Trainspotting' by Danny Boyle, cinematography by Brian Tufano",
-        "negative_prompt": ""
-    },
-    {
-        "name": "Uncut Gems",
-        "prompt": "{prompt} in the style of 'Uncut Gems' by Safdie Brothers, cinematography by Darius Khondji",
-        "negative_prompt": ""
-    },
-    {
-        "name": "V for Vendetta",
-        "prompt": "{prompt} in the style of 'V for Vendetta' by James McTeigue, cinematography by Adrian Biddle",
-        "negative_prompt": ""
-    },
-    {
-        "name": "Vertigo",
-        "prompt": "{prompt} in the style of 'Vertigo' by Alfred Hitchcock, cinematography by Robert Burks",
-        "negative_prompt": ""
-    },
-    {
-        "name": "Waking Life",
-        "prompt": "{prompt} in the style of 'Waking Life' by Richard Linklater, animation direction by Bob Sabiston",
-        "negative_prompt": ""
-    },
-    {
-        "name": "Wall-E",
-        "prompt": "{prompt} in the style of 'Wall-E' by Andrew Stanton, animation direction by Andrew Stanton",
-        "negative_prompt": ""
-    },
-    {
-        "name": "Whiplash",
-        "prompt": "{prompt} in the style of 'Whiplash' by Damien Chazelle, cinematography by Sharone Meir",
-        "negative_prompt": ""
-    },
-    {
-        "name": "Wings of Desire",
-        "prompt": "{prompt} in the style of 'Wings of Desire' by Wim Wenders, cinematography by Henri Alekan",
-        "negative_prompt": ""
-    },
-    {
-        "name": "Y Tu Mamá También",
-        "prompt": "{prompt} in the style of 'Y Tu Mamá También' by Alfonso Cuarón, cinematography by Emmanuel Lubezki",
-        "negative_prompt": ""
-    },
-    {
-        "name": "Your Name",
-        "prompt": "{prompt} in the style of 'Your Name' by Makoto Shinkai, animation direction by Makoto Shinkai",
-        "negative_prompt": ""
-    },
-    {
-        "name": "Zodiac",
-        "prompt": "{prompt} in the style of 'Zodiac' by David Fincher, cinematography by Harris Savides",
-        "negative_prompt": ""
+        "name": "Tron Legacy",
+        "prompt": "{prompt} reminiscent of 'Tron Legacy' directed by Joseph Kosinski, vibrant neon color palette, neon-lit cityscape, sleek and luminous suits with distinctive lighting stripes, digital circuitry patterns, glowing helmets, stark contrast of light and dark, electrifying grid, holographic displays, futuristic motorcycles, cybernetic landscapes, pulsating light trails, minimalist design aesthetic, illuminated identity discs, high-tech vehicles, virtual reality and cyberpunk aesthetics",
+        "negative_prompt": "natural color palettes, organic textures, traditional architecture"
     }
 ]
