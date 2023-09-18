@@ -70,5 +70,5 @@ __Style__
 
 # Credits
 
-SDXL Prompt Styler is based on work by twri - https://github.com/twri/sdxl_prompt_styler
+SDXL Prompt Styler is an extended version of SDXL Prompt Styler by twri - https://github.com/twri/sdxl_prompt_styler
 
