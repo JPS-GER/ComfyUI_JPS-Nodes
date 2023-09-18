@@ -37,8 +37,8 @@ __Switches__
 * Model Switch - "5 to 1"-switch for models
 * VAE Switch - "5 to 1"-switch for VAE
 * ControlNet Switch - "5 to 1"-switch for ControlNet
-* Disable Enable Switch - input for nodes that use "disable/enable" types of input (for example K-Sampler)
-* Enable Disable Switch - input for nodes that use "enable/disable" types of input (for example K-Sampler)
+* Disable Enable Switch - input for nodes that use "disable/enable" types of input (for example KSampler) - useful to switch those values in combinaton with other switches
+* Enable Disable Switch - input for nodes that use "enable/disable" types of input (for example KSampler) - useful to switch those values in combinaton with other switches
 
 __Pipes__
 * SDXL Basic Settings Pipe - used to access data from "SDXL Basic Settings" menu node - place outside of the menu structure of your workflow
