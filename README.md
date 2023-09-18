@@ -18,7 +18,7 @@ You can also install the nodes using the following methods:
 # List of Custom Nodes
 
 __IO__
-* Lora Loader - Lora Loader with On/Off Switch - output is 1 or 2, so it works with most "x to 1"-switches
+* Lora Loader - Lora Loader with On/Off Switch - output is 1 or 2, so it works with most "x to 1"-switches (while some other alternatives use boolean 0 or 1 and need corresponding switches or additional math nodes)
 
 __Settings__
 * SDXL Resolutions - small node that offers recommended SDXL resolutions and outputs height and width values
