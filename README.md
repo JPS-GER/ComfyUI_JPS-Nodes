@@ -63,7 +63,7 @@ __Text__
 * SDXL Prompt Handling - control how text_g and text_l input will be handled (many options)
   
 __Image__
-* Get Image Size - get width and height value from an input image, useful in combination with "Resolution Multiply" node
+* Get Image Size - get width and height value from an input image, useful in combination with "Resolution Multiply" and "SDXL Recommended Resolution Calc" nodes
 
 __Style__
 * SDXL Prompt Styler - add movie and general styles to your text prompt - uses json files, so you can extend the available options
