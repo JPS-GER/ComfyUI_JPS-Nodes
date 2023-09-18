@@ -1598,40 +1598,24 @@ class SDXL_Prompt_Styler:
         text_pos_g_movie, text_pos_l_movie, text_neg_movie = read_sdxl_templates_replace_and_combine(self.json_data_movies, movie, text_positive_g, text_positive_l, text_negative)
 
         if(text_positive_g == text_positive_l):
-            print("pos_g is same as pos_l")
             if(text_pos_l_movie != text_positive_l and text_pos_g_movie != text_positive_g):
-                print("and both changed")
                 text_positive_l = ""
                 text_pos_g_movie, text_pos_l_movie, text_neg_movie = read_sdxl_templates_replace_and_combine(self.json_data_movie, movie, text_positive_g, text_positive_l, text_negative) 
             elif(text_pos_g_movie != text_positive_g):
-                print("and pos_g changed")
                 text_pos_l_movie = text_pos_g_movie
             elif(text_pos_l_movie != text_positive_l):
-                print("and pos_l changed")
                 text_pos_g_movie = text_pos_l_movie
-        else:
-            print("pos_g_movie not same as pos_l_movie")
-            print(text_pos_g_movie)
-            print(text_pos_l_movie)
 
         text_pos_g_style, text_pos_l_style, text_neg_style = read_sdxl_templates_replace_and_combine(self.json_data_styles, style, text_pos_g_movie, text_pos_l_movie, text_neg_movie)
 
         if(text_pos_g_movie == text_pos_l_movie):
-            print("pos_g_movie is same as pos_l_movie")
             if(text_pos_l_movie != text_pos_l_style and text_pos_g_movie != text_pos_g_style):
-                print("and both changed")
                 text_pos_l_movie = ""
                 text_pos_g_style, text_pos_l_style, text_neg_style = read_sdxl_templates_replace_and_combine(self.json_data_styles, style, text_pos_g_movie, text_pos_l_movie, text_neg_movie) 
             elif(text_pos_g_movie != text_pos_g_style):
-                print("and pos_g changed")
                 text_pos_l_style = text_pos_g_style
             elif(text_pos_l_movie != text_pos_l_style):
-                print("and pos_l changed")
                 text_pos_g_style = text_pos_l_style
-        else:
-            print("pos_g_movie not same as pos_l_movie")
-            print(text_pos_g_movie)
-            print(text_pos_l_movie)
 
         if(text_pos_g_style != text_pos_l_style):
             if(text_pos_l_style != ""):
@@ -1640,20 +1624,6 @@ class SDXL_Prompt_Styler:
                 text_pos_style = text_pos_g_style 
         else:
             text_pos_style = text_pos_g_style 
-
-        print(f"movie: {movie}")
-        print(f"style: {style}")
-        print(f"pos_g: {text_positive_g}")
-        print(f"pos_l: {text_positive_l}")
-        print(f"neg: {text_negative}")
-        if(movie != "none"):
-            print(f"pos_g_movie: {text_pos_g_movie}")
-            print(f"pos_l_movie: {text_pos_l_movie}")
-            print(f"neg_movie: {text_neg_movie}")
-        print(f"pos_g styled: {text_pos_g_style}")
-        print(f"pos_l styled: {text_pos_l_style}")
-        print(f"pos styled: {text_pos_style}")
-        print(f"neg styled: {text_neg_style}")
 
         return text_pos_g_style, text_pos_l_style, text_pos_style, text_neg_style
 
