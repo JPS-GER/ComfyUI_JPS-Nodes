@@ -1567,8 +1567,8 @@ class SDXL_Prompt_Styler:
     @classmethod
     def INPUT_TYPES(self):
         current_directory = os.path.dirname(os.path.realpath(__file__))
-        self.json_data_movies, movies = load_styles_from_directory(current_directory + '\styles\movies')
-        self.json_data_styles, styles = load_styles_from_directory(current_directory + '\styles\main')
+        self.json_data_movies, movies = load_styles_from_directory(os.path.join(current_directory, 'styles', 'movies'))
+        self.json_data_styles, styles = load_styles_from_directory(os.path.join(current_directory, 'styles', 'main'))
         
         return {
             "required": {
