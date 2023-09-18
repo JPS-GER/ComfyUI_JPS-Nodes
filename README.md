@@ -46,7 +46,7 @@ __Pipes__
 * IP Adapter Settings Pipe - used to access data from "IP Adapter Settings" menu node - place outside of the menu structure of your workflow
 * Revision Settings Pipe - used to access data from "Revision Settings" menu node - place outside of the menu structure of your workflow
 * SDXL Fundamentals MultiPipe - used to build a pipe for basic SDXL settings, has input/outputs for all supported types, so you can access/change values more easily than classic "from/to/edit"-pipes
-* Images Masks MultiPipe - used to build a pipe for various images used in my workflow, has input/outputs for all images, so you can access/change images more easily than classic "from/to/edit"-pipes 
+* Images Masks MultiPipe - used to build a pipe for various images and masks used in my workflow, has input/outputs for all images, so you can access/change images and masks more easily than classic "from/to/edit"-pipes 
 
 __Math__
 * SDXL Recommended Resolution Calc - gives you the closest recommended SDXL resolution for the width and height values, useful for IMG2IMG and ControlNet input images, to bring them in line with SDXL workflows
