@@ -68,7 +68,7 @@ __Image__
 __Style__
 * SDXL Prompt Styler - add movie and general styles to your text prompt - uses json files, so you can extend the available options
 
-#Credits
+# Credits
 
 SDXL Prompt Styler is based on work by twri - https://github.com/twri/sdxl_prompt_styler
 
