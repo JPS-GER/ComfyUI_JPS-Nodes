@@ -21,7 +21,7 @@
     },
     {
         "name": "Avatar",
-        "prompt": "{prompt} in the style of 'Avatar' directed by James Cameron, lush alien flora and fauna, bioluminescent forests, floating mountains, blue skin Na'vi, alien wildlife, tribal Na'vi culture, futuristic human technology, exotic Pandora landscapes, graceful movements, Avatar bodies, aerial battles with banshees and gunships, alien rituals and ceremonies",
+        "prompt": "{prompt} in the style of 'Avatar' directed by James Cameron, lush alien flora and fauna, bioluminescent forests, blue skin, alien wildlife, tribal culture, exotic Pandora landscapes",
         "negative_prompt": ""
     },
     {
