@@ -1,22 +1,22 @@
 [
     {
         "name": "2001 - A Space Odyssey",
-        "prompt": "{prompt} in style of '2001 - A Space Odyssey' directed by Stanley Kubrick, futuristic aesthetics, minimalist design, monolithic structures, vivid contrast between darkness and light, sterile and clean environments, symbolic use of the monolith, abstract and surreal visuals, geometric compositions, HAL 9000, astronaut helmets and suits, space station interiors, cosmic landscapes, interstellar journey, otherworldly vistas",
+        "prompt": "{prompt} in style of '2001 - A Space Odyssey' directed by Stanley Kubrick, futuristic aesthetics, minimalist design, monolithic structures, vivid contrast between darkness and light, sterile and clean environments, abstract and surreal visuals, geometric compositions, HAL 9000, astronaut helmets and suits, space station interiors",
         "negative_prompt": "organic shapes, warm and cozy atmospheres"
     },
     {
         "name": "300",
-        "prompt": "{prompt} in style of '300' directed by Zack Snyder, Spartan warriors in battle, Dramatic slow-motion action, Gritty and desaturated visuals, Cinematic battle formations, Iconic Spartan shields and spears, Blood and sweat in close-up, Intense facial expressions, Dramatic lighting and shadows, High-contrast visuals, arrow volleys, Battlefield chaos and dust clouds, Spartan red capes billowing, Artistic blood splatters, Dark and moody atmosphere",
+        "prompt": "{prompt} in style of '300' directed by Zack Snyder, Gritty and desaturated visuals, Iconic Spartan shields and spears, Blood and sweat in close-up, Intense facial expressions, Dramatic lighting and shadows, High-contrast visuals, Spartan red capes billowing, Artistic blood splatters, Dark and moody atmosphere",
         "negative_prompt": "vibrant colors, modern technology, modern clothing"
     },
     {
         "name": "A.I.",
-        "prompt": "{prompt} in the style of 'A.I.' directed by Steven Spielberg, futuristic cityscape, advanced robots, artificial intelligence, human-robot interactions, emotional androids, abandoned urban environments, underwater cities, post-apocalyptic landscapes, sentient beings, neon-lit streets, advanced technology, bleak future, mysterious AI symbols, robotic companions, flying vehicles, urban decay",
+        "prompt": "{prompt} in the style of 'A.I.' directed by Steven Spielberg, futuristic cityscape, advanced robots, artificial intelligence, human-robot interactions, emotional androids, abandoned urban environments, underwater cities, post-apocalyptic landscapes, sentient beings, neon-lit streets, robotic companions, flying vehicles, urban decay",
         "negative_prompt": ""
     },
     {
         "name": "Amélie",
-        "prompt": "{prompt} in the style of 'Amélie' directed by Jean-Pierre Jeunet, whimsical Parisian scenes, vibrant color palettes, nostalgic sepia tones, imaginative daydreams, whimsical details, playful street photography, romantic encounters, cozy Montmartre cafes, charmingly quirky characters, idyllic cityscapes, heartwarming moments",
+        "prompt": "{prompt} in the style of 'Amélie' directed by Jean-Pierre Jeunet, whimsical scenes, vibrant color palettes, nostalgic sepia tones, imaginative daydreams, whimsical details, playful street photography, charmingly quirky characters, idyllic cityscapes",
         "negative_prompt": "dark and gloomy settings, gritty realism"
     },
     {
@@ -41,27 +41,27 @@
     },
     {
         "name": "Dark City",
-        "prompt": "{prompt} in style of 'Dark City' directed by Alex Proyas, surreal cityscape, dimly lit streets, spiraling architecture, highlighted pale faces, dark clothes, bald heads, noir-inspired lighting, mysterious strangers, perpetual nighttime, shadowy figures, clockwork aesthetics, dystopian urban landscape, haunting atmosphere, eerie cityscape, enigmatic symbols",
+        "prompt": "{prompt} in style of 'Dark City' directed by Alex Proyas, surreal cityscape, dimly lit streets, spiraling architecture, highlighted pale faces, dark clothes, bald heads, noir-inspired lighting, mysterious strangers, perpetual nighttime, shadowy figures, clockwork aesthetics, dystopian urban landscape, haunting atmosphere, eerie cityscape",
         "negative_prompt": "futuristic technology, daylight, colorful visuals, natural landscapes, traditional architecture"
     },
     {
         "name": "Django Unchained",
-        "prompt": "{prompt} in style of 'Django Unchained' directed by Quentin Tarantino, intense close-ups, vintage color grading, gritty landscapes, dramatic use of shadows, dynamic camera angles, vivid blood splatters, unconventional framing, candid facial expressions, gun smoke-filled scenes, candle-lit interiors, Western attire, dramatic horseback riding",
+        "prompt": "{prompt} in style of 'Django Unchained' directed by Quentin Tarantino, intense close-ups, vintage color grading, gritty landscapes, dramatic use of shadows, dynamic camera angles, vivid blood splatters, unconventional framing, candid facial expressions, candle-lit interiors, Western attire",
         "negative_prompt": "modern technology"
     },
     {
         "name": "Dune (2021)",
-        "prompt": "{prompt} in style of 'Dune (2021)' directed by Denis Villeneuve, vast desert landscapes, intricate futuristic architecture, otherworldly desert creatures, ornate costumes and clothing, dramatic sandstorms, epic battles in the desert, futuristic technology, grandiose and imposing spacecraft, desert nomadic tribes, barren and unforgiving landscapes, mystical and ancient symbols, dramatic lighting and shadows, towering sand dunes, opulent palaces, intricate sandworm designs, alien flora and fauna, intricate hieroglyphic-like writing",
+        "prompt": "{prompt} in style of 'Dune (2021)' directed by Denis Villeneuve, vast desert landscapes, intricate futuristic architecture, ornate costumes and clothing, dramatic sandstorms, grandiose and imposing spacecraft, desert nomadic tribes, barren and unforgiving landscapes, mystical and ancient symbols, dramatic lighting and shadows, towering sand dunes, opulent palaces, intricate sandworm designs, intricate hieroglyphic-like writing",
         "negative_prompt": "vibrant and colorful scenes, urban, modern technology, lush vegetation"
     },
     {
         "name": "Ex Machina",
-        "prompt": "{prompt} in the style of 'Ex Machina' directed by Alex Garland, futuristic technology, sleek and modern design, human-robot interactions, artificial intelligence, isolated and minimalist environment, subtle use of color, dimly lit spaces, reflections and glass surfaces, geometric shapes, high-tech laboratory, humanoid robot, ethical dilemmas, eerie atmosphere",
+        "prompt": "{prompt} in the style of 'Ex Machina' directed by Alex Garland, futuristic technology, sleek and modern design, human-robot interactions, artificial intelligence, isolated and minimalist environment, subtle use of color, dimly lit spaces, reflections and glass surfaces, geometric shapes, high-tech laboratory, humanoid robot, eerie atmosphere",
         "negative_prompt": "outdoor scenes, natural landscapes, vibrant colors"
     },
     {
         "name": "The Fall",
-        "prompt": "{prompt} in style of 'The Fall' directed by Tarsem Singh, lush natural landscapes, vivid color palette, vibrant and surreal colors, dreamlike imagery, ornate and fantastical costumes, wide-angle scenic shots, imaginative set designs, striking visual contrasts, surreal wildlife encounters, whimsical and mythical creatures, magical realism, ethereal atmosphere, fantastical architecture, visually stunning storytelling, breathtaking cinematography",
+        "prompt": "{prompt} in style of 'The Fall' directed by Tarsem Singh, lush natural landscapes, vivid color palette, vibrant and surreal colors, dreamlike imagery, ornate and fantastical costumes, wide-angle scenic shots, imaginative set designs, striking visual contrasts, surreal wildlife encounters, whimsical and mythical creatures, magical realism, ethereal atmosphere, fantastical architecture, visually stunning, breathtaking cinematography",
         "negative_prompt": "urban, gritty realism"
     },
     {
@@ -71,7 +71,7 @@
     },
     {
         "name": "Gattaca",
-        "prompt": "{prompt} in the style of 'Gattaca' directed by Andrew Niccol, futuristic architecture, dystopian landscapes, stark contrasts, futuristic technology, genetic sequencing, DNA helix, identity concealment, sleek and elegant aesthetics, high-contrast lighting, genetic discrimination, minimalistic design",
+        "prompt": "{prompt} in the style of 'Gattaca' directed by Andrew Niccol, futuristic architecture, dystopian landscapes, stark contrasts, futuristic technology, genetic sequencing, DNA helix, sleek and elegant aesthetics, high-contrast lighting, genetic discrimination, minimalistic design",
         "negative_prompt": "fantasy, magic, supernatural"
     },
     {
@@ -81,7 +81,7 @@
     },
     {
         "name": "Hero",
-        "prompt": "{prompt} in style of 'Hero' directed by Zhang Yimou, visually stunning cinematography, vibrant color palette, graceful use of silk, aerial combat scenes, striking use of red, intricate costume design, unique weapon styles, breathtaking landscapes, poetic storytelling, symbolic use of water and fire, visual contrasts, silhouetted characters, masterful use of negative space, dream sequences",
+        "prompt": "{prompt} in style of 'Hero' directed by Zhang Yimou, visually stunning cinematography, vibrant color palette, graceful use of silk, striking use of red, intricate costume design, breathtaking landscapes, poetic storytelling, symbolic use of water and fire, visual contrasts, silhouetted characters, masterful use of negative space, dream sequences",
         "negative_prompt": "gritty urban settings, modern technology, contemporary fashion"
     },
     {
@@ -101,13 +101,13 @@
     },
     {
         "name": "The Lord of the Rings",
-        "prompt": "{prompt} in style of 'The Lord of the Rings' directed by Peter Jackson, epic landscapes, fantasy elements, detailed costumes, ancient architecture, scenic battles, mythical creatures, dramatic lighting, lush greenery, intricate weaponry, majestic kingdoms, mythical races, vast horizons, rugged terrains, enchanting forests, elaborate armor",
+        "prompt": "{prompt} in style of 'The Lord of the Rings' directed by Peter Jackson, high fantasy, epic landscapes, detailed costumes, ancient architecture, dramatic lighting, lush greenery, majestic kingdoms, mythical races, vast horizons, rugged terrains, enchanting forests, elaborate armor",
         "negative_prompt": "modern technology, futuristic elements, urban settings, contemporary fashion"
     },
     {
         "name": "Mad Max - Fury Road",
-        "prompt": "{prompt} in the style of 'Mad Max - Fury Road' directed by George Miller, desolate landscapes, gritty vehicles, fiery explosions, post-apocalyptic chaos, dust storms, brutal survival, high-octane action, wasteland warriors, vehicular combat, dystopian fashion, war-torn world, adrenaline-fueled pursuits, rugged vehicles, intense battles, vehicular mayhem",
-        "negative_prompt": "serene landscapes, calm moments, tranquil settings"
+        "prompt": "{prompt} in the style of 'Mad Max - Fury Road' directed by George Miller, desolate landscapes, gritty vehicles, fiery explosions, post-apocalyptic chaos, dust storms, brutal survival, high-octane action, wasteland warriors, vehicular combat, dystopian fashion, war-torn world, rugged vehicles",
+        "negative_prompt": "serene landscapes, calm, tranquil settings"
     },
     {
         "name": "The Matrix",
@@ -116,7 +116,7 @@
     },
     {
         "name": "Melancholia",
-        "prompt": "{prompt} in style of 'Melancholia' directed by Lars von Trier, surreal landscapes, apocalyptic imagery, haunting celestial bodies, psychological turmoil, eerie lighting, desolate landscapes, fractured emotions, ethereal atmosphere, juxtaposed emotions, celestial collisions, melancholic color palettes, ominous celestial events",
+        "prompt": "{prompt} in style of 'Melancholia' directed by Lars von Trier, surreal landscapes, apocalyptic imagery, psychological turmoil, eerie lighting, desolate landscapes, fractured emotions, ethereal atmosphere, juxtaposed emotions, celestial collisions, melancholic color palettes",
         "negative_prompt": "vibrant colors, joyful moments, crowded scenes"
     },
     {
@@ -131,7 +131,7 @@
     },
     {
         "name": "Parasite",
-        "prompt": "{prompt} in the style of 'Parasite' directed by Bong Joon Ho, social contrast, architectural symbolism, hidden secrets, class division, staircases, underground living, rain-soaked streets, dark humor, suspenseful lighting, glass architecture, tension, hidden agendas, rich-poor dynamics, camera angles",
+        "prompt": "{prompt} in the style of 'Parasite' directed by Bong Joon Ho, social contrast, architectural symbolism, hidden secrets, class division, staircases, underground living, rain-soaked streets, dark humor, suspenseful lighting, glass architecture, tension, rich-poor dynamics, unique camera angles",
         "negative_prompt": "bright and sunny setting"
     },
     {
@@ -146,7 +146,7 @@
     },
     {
         "name": "Tron Legacy",
-        "prompt": "{prompt} in style of 'Tron Legacy' directed by Joseph Kosinski, vibrant neon color palette, neon-lit cityscape, sleek and luminous suits with distinctive lighting stripes, digital circuitry patterns, glowing helmets, stark contrast of light and dark, electrifying grid, holographic displays, futuristic motorcycles, cybernetic landscapes, pulsating light trails, minimalist design aesthetic, illuminated identity discs, high-tech vehicles, virtual reality and cyberpunk aesthetics",
+        "prompt": "{prompt} in style of 'Tron Legacy' directed by Joseph Kosinski, vibrant neon color palette, neon-lit cityscape, sleek and luminous suits with distinctive lighting stripes, digital circuitry patterns, glowing helmets, stark contrast of light and dark, electrifying grid, holographic displays, futuristic motorcycles, cybernetic landscapes, pulsating light trails, minimalist design aesthetic, virtual reality and cyberpunk aesthetics",
         "negative_prompt": "natural color palettes, organic textures, traditional architecture"
     },
     {
