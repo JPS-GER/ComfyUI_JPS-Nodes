@@ -15,6 +15,11 @@
         "negative_prompt": ""
     },
     {
+        "name": "Akira",
+        "prompt": "{prompt} in style of 'Akira' directed by Katsuhiro Otomo, cyberpunk cityscape, neon-lit streets, futuristic motorcycles, telekinetic powers, government conspiracy, post-apocalyptic Tokyo, Kaneda's iconic red motorcycle, Tetsuo's transformation, psychic battles, massive explosions, iconic pill capsules, cybernetic enhancements, high-tech laboratories, dystopian urban decay",
+        "negative_prompt": "natural landscapes, serene settings, traditional clothing"
+    },
+    {
         "name": "Amélie",
         "prompt": "{prompt} in the style of 'Amélie' directed by Jean-Pierre Jeunet, whimsical scenes, vibrant color palettes, nostalgic sepia tones, imaginative daydreams, whimsical details, playful street photography, charmingly quirky characters, idyllic cityscapes",
         "negative_prompt": "dark and gloomy settings, gritty realism"
@@ -33,6 +38,16 @@
         "name": "Blade Runner 2049",
         "prompt": "{prompt} in style of 'Blade Runner 2049' directed by Denis Villeneuve, dystopian cityscape with artificial lighting, rain-soaked streets, neon-lit advertisements, futuristic architecture, holographic billboards, smoky atmospheric scenes, cyberpunk fashion, futuristic vehicles, dark and moody color palette, reflective surfaces, urban decay, cybernetic enhancements",
         "negative_prompt": "bright, cheerful"
+    },
+    {
+        "name": "Blue Velvet",
+        "prompt": "{prompt} in the style of 'Blue Velvet' directed by David Lynch, surrealistic and disturbing atmosphere, eerie and unsettling tones, voyeuristic perspective, red roses, blue skies, retro 1950s aesthetics, striking color contrast, surreal dream sequences, mysterious and unsettling characters, velvet textures, dramatic lighting, eerie silence, suburban decay",
+        "negative_prompt": "cheerful, vibrant colors, upbeat, joyful"
+    },
+    {
+        "name": "Brazil",
+        "prompt": "{prompt} in style of 'Brazil' directed by Terry Gilliam, surreal and bureaucratic dystopian world, retro-futuristic technology, decaying industrial landscapes, dreamlike visuals, dark humor, Kafkaesque absurdity, towering and labyrinthine bureaucratic structures, ominous masks, sterile buildings, gritty dilapidated streets, oversized typewriters, enigmatic figures in trench coats, challenge perceptions of reality and sanity",
+        "negative_prompt": ""
     },
     {
         "name": "The Cell",
@@ -58,6 +73,11 @@
         "name": "Ex Machina",
         "prompt": "{prompt} in the style of 'Ex Machina' directed by Alex Garland, futuristic technology, sleek and modern design, human-robot interactions, artificial intelligence, isolated and minimalist environment, subtle use of color, dimly lit spaces, reflections and glass surfaces, geometric shapes, high-tech laboratory, humanoid robot, eerie atmosphere",
         "negative_prompt": "outdoor scenes, natural landscapes, vibrant colors"
+    },
+    {
+        "name": "Eyes Wide Shut",
+        "prompt": "{prompt} in the style of 'Eyes Wide Shut' directed by Stanley Kubrick, mysterious and provocative lighting, seductive and enigmatic atmosphere, intimate and tense emotions, masked and hidden identities, dimly lit and opulent interiors, voyeuristic, dreamlike sequences, surreal and unsettling visuals, striking use of color and contrast, tension in body language, forbidden desires, hypnotic and suspenseful ambiance, emotionally charged, a sense of secrecy and obsession, dramatic and ambiguous expressions",
+        "negative_prompt": "cheerful setting, explicit, overtly happy, carefree emotions"
     },
     {
         "name": "The Fall",
@@ -88,6 +108,11 @@
         "name": "Inception",
         "prompt": "{prompt} in the style of 'Inception' directed by Christopher Nolan, surreal cityscape, labyrinthine architecture, shifting gravity, iconic spinning top, mirrored reflections, dream-like landscapes, fractured reality, mind-bending visuals, distorted perception, gravity-defying scenes, surreal landscapes, abstract geometry",
         "negative_prompt": ""
+    },
+    {
+        "name": "In the Mood for Love",
+        "prompt": "{prompt} in the style of 'In the Mood for Love' directed by Wong Kar-wai, intimate moments between characters, rain-soaked streets, subtle glances and gestures, dimly lit alleyways, traditional 1960s Hong Kong fashion, elegant and sensual visuals, rich color palette, romantic tension, close-ups of faces in contemplation, brief encounters in narrow spaces, fleeting emotions, use of shadows and reflections, nostalgic atmosphere",
+        "negative_prompt": "modern technology, vibrant colors, explicit scenes, crowded, noisy, wide-open spaces, contemporary fashion"
     },
     {
         "name": "Kill Bill",
@@ -125,6 +150,11 @@
         "negative_prompt": "organic nature, natural landscapes, bright colors, rural settings"
     },
     {
+        "name": "Moulin Rouge",
+        "prompt": "{prompt} in the style of 'Moulin Rouge' directed by Baz Luhrmann, vibrant colors, opulent costumes, dramatic lighting, dramatic close-ups, elaborate set design, passionate performances, can-can dancers, extravagant parties, bohemian atmosphere, glittering nightlife",
+        "negative_prompt": "modern technology, futuristic elements, quiet, serene, daytime"
+    },
+    {
         "name": "Neon Demon",
         "prompt": "{prompt} in the style of 'Neon Demon' directed by Nicolas Winding Refn, intense neon lighting, bold color contrasts, high-fashion models, eerie reflections, striking makeup, dramatic shadows, surreal settings, fashion runway vibes, glamorous decadence, avant-garde fashion, bold visual compositions, hypnotic visuals, neon-soaked atmosphere, edgy and unsettling beauty, seductive but disturbing",
         "negative_prompt": "gritty realism, natural landscapes, daytime, cheerful aesthetics, rural"
@@ -145,6 +175,11 @@
         "negative_prompt": "monotone color schemes"
     },
     {
+        "name": "Spirited Away",
+        "prompt": "{prompt} in the style of 'Spirited Away' directed by Hayao Miyazaki, Studio Ghibli, ethereal landscapes, mysterious creatures, enchanting spirits, otherworldly architecture, lantern-lit scenes, foggy forests, magical transformations, fantastical cuisine, dreamlike journeys, spiritual encounters, whimsical color palettes, surreal atmosphere",
+        "negative_prompt": "dark, gloomy, violence, modern technology, urban environments"
+    },
+    {
         "name": "Tron Legacy",
         "prompt": "{prompt} in style of 'Tron Legacy' directed by Joseph Kosinski, vibrant neon color palette, neon-lit cityscape, sleek and luminous suits with distinctive lighting stripes, digital circuitry patterns, glowing helmets, stark contrast of light and dark, electrifying grid, holographic displays, futuristic motorcycles, cybernetic landscapes, pulsating light trails, minimalist design aesthetic, virtual reality and cyberpunk aesthetics",
         "negative_prompt": "natural color palettes, organic textures, traditional architecture"
@@ -153,5 +188,10 @@
         "name": "V for Vendetta",
         "prompt": "{prompt} in style of 'V for Vendetta' directed by James McTeigue, Guy Fawkes mask, dystopian, shadowy, oppressive government regime, urban warfare, government propaganda, totalitarian London, fireworks, mask symbolism, rain-soaked streets, political resistance, misty alleyways",
         "negative_prompt": "daylight"
+    },
+    {
+        "name": "What Dreams May Come",
+        "prompt": "{prompt} in the style of 'What Dreams May Come' directed by Vincent Ward, ethereal landscapes, vibrant and surreal colors, heavenly vistas, dreamlike transitions, fantastical architecture, otherworldly flora and fauna, celestial beings, emotional depth, serene and tranquil, evocative use of light and shadow, abstract and surreal compositions, spiritual symbolism, ethereal atmospheres, surreal reflections, transcendent beauty, metaphysical elements",
+        "negative_prompt": "dark, grim, harsh colors, disturbing, nightmarish"
     }
 ]
