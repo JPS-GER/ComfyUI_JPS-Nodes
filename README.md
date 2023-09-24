@@ -66,7 +66,7 @@ __Image__
 * Get Image Size - get width and height value from an input image, useful in combination with "Resolution Multiply" and "SDXL Recommended Resolution Calc" nodes
 
 __Style__
-* SDXL Prompt Styler - add movie and general styles to your text prompt - uses json files, so you can extend the available options
+* SDXL Prompt Styler - add artists, movies and general styles to your text prompt - uses json files, so you can extend the available options
 
 # Credits
 
