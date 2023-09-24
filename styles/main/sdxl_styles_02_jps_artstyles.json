@@ -1,0 +1,62 @@
+[
+    {
+        "name": "Dystopian",
+        "prompt": "dystopian style {prompt} . bleak, post-apocalyptic, somber, dramatic, highly detailed",
+        "negative_prompt": "ugly, deformed, noisy, blurry, low contrast, cheerful, optimistic, vibrant, colorful"
+    },
+    {
+        "name": "Film Noir",
+        "prompt": "film noir style {prompt} . monochrome, high contrast, dramatic shadows, 1940s style, mysterious, cinematic",
+        "negative_prompt": "ugly, deformed, noisy, blurry, low contrast, realism, photorealistic, vibrant, colorful"
+    },
+    {
+        "name": "Gothic",
+        "prompt": "gothic style {prompt} . dark, mysterious, haunting, dramatic, ornate, detailed",
+        "negative_prompt": "ugly, deformed, noisy, blurry, low contrast, realism, photorealistic, cheerful, optimistic"
+    },
+    {
+        "name": "Horror",
+        "prompt": "horror-themed {prompt} . eerie, unsettling, dark, spooky, suspenseful, grim, highly detailed",
+        "negative_prompt": "cheerful, bright, vibrant, light-hearted, cute"
+    },
+    {
+        "name": "Hyperrealism",
+        "prompt": "hyperrealistic art {prompt} . extremely high-resolution details, photographic, extreme realism, fine texture, incredibly lifelike",
+        "negative_prompt": "simplified, abstract, unrealistic, impressionistic, low resolution"
+    },
+    {
+        "name": "Manga",
+        "prompt": "manga style {prompt} . vibrant, high-energy, detailed, iconic, Japanese comic style",
+        "negative_prompt": "ugly, deformed, noisy, blurry, low contrast, realism, photorealistic, Western comic style"
+    },
+    {
+        "name": "Neon Noir",
+        "prompt": "neon noir {prompt} . cyberpunk, dark, rainy streets, neon signs, high contrast, low light, vibrant, highly detailed",
+        "negative_prompt": "bright, sunny, daytime, low contrast, black and white, sketch, watercolor"
+    },
+    {
+        "name": "Paper Mache",
+        "prompt": "paper mache representation of {prompt} . 3D, sculptural, textured, handmade, vibrant, fun",
+        "negative_prompt": "2D, flat, photo, sketch, digital art, deformed, noisy, blurry"
+    },
+    {
+        "name": "Papercut Shadow Box",
+        "prompt": "3D papercut shadow box of {prompt} . layered, dimensional, depth, silhouette, shadow, papercut, handmade, high contrast",
+        "negative_prompt": "painting, drawing, photo, 2D, flat, high detail, blurry, noisy, disfigured"
+    },
+    {
+        "name": "Papercut Stacked",
+        "prompt": "stacked papercut art of {prompt} . 3D, layered, dimensional, depth, precision cut, stacked layers, papercut, high contrast",
+        "negative_prompt": "2D, flat, noisy, blurry, painting, drawing, photo, deformed"
+    },
+    {
+        "name": "Silhouette",
+        "prompt": "silhouette style {prompt} . high contrast, minimalistic, black and white, stark, dramatic",
+        "negative_prompt": "ugly, deformed, noisy, blurry, low contrast, color, realism, photorealistic"
+    },
+    {
+        "name": "Techwear Fashion",
+        "prompt": "techwear fashion {prompt} . futuristic, cyberpunk, urban, tactical, sleek, dark, highly detailed",
+        "negative_prompt": "vintage, rural, colorful, low contrast, realism, sketch, watercolor"
+    }
+]
