@@ -1,0 +1,102 @@
+[
+    {
+        "name": "Eyvind Earle",
+        "prompt": "{prompt} by Eyvind Earle",
+        "negative_prompt": ""
+    },
+    {
+        "name": "Lori Earley",
+        "prompt": "{prompt} by Lori Earley",
+        "negative_prompt": ""
+    },
+    {
+        "name": "Michael Eastman",
+        "prompt": "{prompt} by Michael Eastman",
+        "negative_prompt": ""
+    },
+    {
+        "name": "Tristan Eaton",
+        "prompt": "{prompt} by Tristan Eaton",
+        "negative_prompt": ""
+    },
+    {
+        "name": "Janet Echelman",
+        "prompt": "{prompt} by Janet Echelman",
+        "negative_prompt": ""
+    },
+    {
+        "name": "Harold Edgerton",
+        "prompt": "{prompt} by Harold Edgerton",
+        "negative_prompt": ""
+    },
+    {
+        "name": "Jason Edmiston",
+        "prompt": "{prompt} by Jason Edmiston",
+        "negative_prompt": ""
+    },
+    {
+        "name": "Les Edwards",
+        "prompt": "{prompt} by Les Edwards",
+        "negative_prompt": ""
+    },
+    {
+        "name": "Bob Eggleton",
+        "prompt": "{prompt} by Bob Eggleton",
+        "negative_prompt": ""
+    },
+    {
+        "name": "Fritz Eichenberg",
+        "prompt": "{prompt} by Fritz Eichenberg",
+        "negative_prompt": ""
+    },
+    {
+        "name": "Will Eisner",
+        "prompt": "{prompt} by Will Eisner",
+        "negative_prompt": ""
+    },
+    {
+        "name": "Olafur Eliasson",
+        "prompt": "{prompt} by Olafur Eliasson",
+        "negative_prompt": ""
+    },
+    {
+        "name": "Christine Ellger",
+        "prompt": "{prompt} by Christine Ellger",
+        "negative_prompt": ""
+    },
+    {
+        "name": "Peter Elson",
+        "prompt": "{prompt} by Peter Elson",
+        "negative_prompt": ""
+    },
+    {
+        "name": "Gil Elvgren",
+        "prompt": "{prompt} by Gil Elvgren",
+        "negative_prompt": ""
+    },
+    {
+        "name": "Ron Embleton",
+        "prompt": "{prompt} by Ron Embleton",
+        "negative_prompt": ""
+    },
+    {
+        "name": "Ed Emshwiller",
+        "prompt": "{prompt} by Ed Emshwiller",
+        "negative_prompt": ""
+    },
+    {
+        "name": "Daria Endresen",
+        "prompt": "{prompt} by Daria Endresen",
+        "negative_prompt": ""
+    },
+    {
+        "name": "Ron English",
+        "prompt": "{prompt} by Ron English",
+        "negative_prompt": ""
+    },
+    {
+        "name": "MC Escher",
+        "prompt": "{prompt} by MC Escher",
+        "negative_prompt": ""
+    }
+]

@@ -1,0 +1,127 @@
+[
+    {
+        "name": "Mike Dargas",
+        "prompt": "{prompt} by Mike Dargas",
+        "negative_prompt": ""
+    },
+    {
+        "name": "Craig Davison",
+        "prompt": "{prompt} by Craig Davison",
+        "negative_prompt": ""
+    },
+    {
+        "name": "Gabriel Dawe",
+        "prompt": "{prompt} by Gabriel Dawe",
+        "negative_prompt": ""
+    },
+    {
+        "name": "Wim Delvoye",
+        "prompt": "{prompt} by Wim Delvoye",
+        "negative_prompt": ""
+    },
+    {
+        "name": "Aron Demetz",
+        "prompt": "{prompt} by Aron Demetz",
+        "negative_prompt": ""
+    },
+    {
+        "name": "George Digalakis",
+        "prompt": "{prompt} by George Digalakis",
+        "negative_prompt": ""
+    },
+    {
+        "name": "Evgeni Dinev",
+        "prompt": "{prompt} by Evgeni Dinev",
+        "negative_prompt": ""
+    },
+    {
+        "name": "Anna Dittmann",
+        "prompt": "{prompt} by Anna Dittmann",
+        "negative_prompt": ""
+    },
+    {
+        "name": "Tom Dixon",
+        "prompt": "{prompt} by Tom Dixon",
+        "negative_prompt": ""
+    },
+    {
+        "name": "Dima Dmitriev",
+        "prompt": "{prompt} by Dima Dmitriev",
+        "negative_prompt": ""
+    },
+    {
+        "name": "Terry Dodson",
+        "prompt": "{prompt} by Terry Dodson",
+        "negative_prompt": ""
+    },
+    {
+        "name": "Anita Dongre",
+        "prompt": "{prompt} by Anita Dongre",
+        "negative_prompt": ""
+    },
+    {
+        "name": "Stanley Donwood",
+        "prompt": "{prompt} by Stanley Donwood",
+        "negative_prompt": ""
+    },
+    {
+        "name": "Tim Doyle",
+        "prompt": "{prompt} by Tim Doyle",
+        "negative_prompt": ""
+    },
+    {
+        "name": "Alberto Dros",
+        "prompt": "{prompt} by Alberto Dros",
+        "negative_prompt": ""
+    },
+    {
+        "name": "Jessica Drossin",
+        "prompt": "{prompt} by Jessica Drossin",
+        "negative_prompt": ""
+    },
+    {
+        "name": "TJ Drysdale",
+        "prompt": "{prompt} by TJ Drysdale",
+        "negative_prompt": ""
+    },
+    {
+        "name": "Mac Duggal",
+        "prompt": "{prompt} by Mac Duggal",
+        "negative_prompt": ""
+    },
+    {
+        "name": "Chris Dunn",
+        "prompt": "{prompt} by Chris Dunn",
+        "negative_prompt": ""
+    },
+    {
+        "name": "Jessica Durrant",
+        "prompt": "{prompt} by Jessica Durrant",
+        "negative_prompt": ""
+    },
+    {
+        "name": "Chad Dutson",
+        "prompt": "{prompt} by Chad Dutson",
+        "negative_prompt": ""
+    },
+    {
+        "name": "Ryan Dyar",
+        "prompt": "{prompt} by Ryan Dyar",
+        "negative_prompt": ""
+    },
+    {
+        "name": "Chris Dyer",
+        "prompt": "{prompt} by Chris Dyer",
+        "negative_prompt": ""
+    },
+    {
+        "name": "Camilla d'Errico",
+        "prompt": "{prompt} by Camilla d'Errico",
+        "negative_prompt": ""
+    },
+    {
+        "name": "Philip Lorca diCorcia",
+        "prompt": "{prompt} by Philip Lorca diCorcia",
+        "negative_prompt": ""
+    }
+]

@@ -1,0 +1,112 @@
+[
+    {
+        "name": "Norman Ackroyd",
+        "prompt": "{prompt} by Norman Ackroyd",
+        "negative_prompt": ""
+    },
+    {
+        "name": "Reem Acra",
+        "prompt": "{prompt} by Reem Acra",
+        "negative_prompt": ""
+    },
+    {
+        "name": "Neal Adams",
+        "prompt": "{prompt} by Neal Adams",
+        "negative_prompt": ""
+    },
+    {
+        "name": "Ansel Adams",
+        "prompt": "{prompt} by Ansel Adams",
+        "negative_prompt": ""
+    },
+    {
+        "name": "Josh Adamski",
+        "prompt": "{prompt} by Josh Adamski",
+        "negative_prompt": ""
+    },
+    {
+        "name": "Marc Adamus",
+        "prompt": "{prompt} by Marc Adamus",
+        "negative_prompt": ""
+    },
+    {
+        "name": "Alena Aenami",
+        "prompt": "{prompt} by Alena Aenami",
+        "negative_prompt": ""
+    },
+    {
+        "name": "David Aja",
+        "prompt": "{prompt} by David Aja",
+        "negative_prompt": ""
+    },
+    {
+        "name": "Miles Aldridge",
+        "prompt": "{prompt} by Miles Aldridge",
+        "negative_prompt": ""
+    },
+    {
+        "name": "Pablo Amaringo",
+        "prompt": "{prompt} by Pablo Amaringo",
+        "negative_prompt": ""
+    },
+    {
+        "name": "Wes Anderson",
+        "prompt": "{prompt} by Wes Anderson",
+        "negative_prompt": ""
+    },
+    {
+        "name": "Esao Andrews",
+        "prompt": "{prompt} by Esao Andrews",
+        "negative_prompt": ""
+    },
+    {
+        "name": "Miss Aniela",
+        "prompt": "{prompt} by Miss Aniela",
+        "negative_prompt": ""
+    },
+    {
+        "name": "Martin Ansin",
+        "prompt": "{prompt} by Martin Ansin",
+        "negative_prompt": ""
+    },
+    {
+        "name": "Sergio Aragonés",
+        "prompt": "{prompt} by Sergio Aragonés",
+        "negative_prompt": ""
+    },
+    {
+        "name": "Diane Arbus",
+        "prompt": "{prompt} by Diane Arbus",
+        "negative_prompt": ""
+    },
+    {
+        "name": "Mark Arian",
+        "prompt": "{prompt} by Mark Arian",
+        "negative_prompt": ""
+    },
+    {
+        "name": "Peter Arno",
+        "prompt": "{prompt} by Peter Arno",
+        "negative_prompt": ""
+    },
+    {
+        "name": "Daniel Arsham",
+        "prompt": "{prompt} by Daniel Arsham",
+        "negative_prompt": ""
+    },
+    {
+        "name": "Miki Asai",
+        "prompt": "{prompt} by Miki Asai",
+        "negative_prompt": ""
+    },
+    {
+        "name": "Ruth Asawa",
+        "prompt": "{prompt} by Ruth Asawa",
+        "negative_prompt": ""
+    },
+    {
+        "name": "Clemens Ascher",
+        "prompt": "{prompt} by Clemens Ascher",
+        "negative_prompt": ""
+    }
+]

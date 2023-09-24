@@ -1,0 +1,132 @@
+[
+    {
+        "name": "Lois van Baarle",
+        "prompt": "{prompt} by Lois van Baarle",
+        "negative_prompt": ""
+    },
+    {
+        "name": "Anne Bachelier",
+        "prompt": "{prompt} by Anne Bachelier",
+        "negative_prompt": ""
+    },
+    {
+        "name": "Shigeru Ban",
+        "prompt": "{prompt} by Shigeru Ban",
+        "negative_prompt": ""
+    },
+    {
+        "name": "Clive Barker",
+        "prompt": "{prompt} by Clive Barker",
+        "negative_prompt": ""
+    },
+    {
+        "name": "Carl Barks",
+        "prompt": "{prompt} by Carl Barks",
+        "negative_prompt": ""
+    },
+    {
+        "name": "Matthew Barney",
+        "prompt": "{prompt} by Matthew Barney",
+        "negative_prompt": ""
+    },
+    {
+        "name": "Paul Barson",
+        "prompt": "{prompt} by Paul Barson",
+        "negative_prompt": ""
+    },
+    {
+        "name": "Bo Bartlett",
+        "prompt": "{prompt} by Bo Bartlett",
+        "negative_prompt": ""
+    },
+    {
+        "name": "Xu Beihong",
+        "prompt": "{prompt} by Xu Beihong",
+        "negative_prompt": ""
+    },
+    {
+        "name": "Thomas Hart Benton",
+        "prompt": "{prompt} by Thomas Hart Benton",
+        "negative_prompt": ""
+    },
+    {
+        "name": "Stan Berenstain",
+        "prompt": "{prompt} by Stan Berenstain",
+        "negative_prompt": ""
+    },
+    {
+        "name": "John Berkey",
+        "prompt": "{prompt} by John Berkey",
+        "negative_prompt": ""
+    },
+    {
+        "name": "Ruth Bernhard",
+        "prompt": "{prompt} by Ruth Bernhard",
+        "negative_prompt": ""
+    },
+    {
+        "name": "Butcher Billy",
+        "prompt": "{prompt} by Butcher Billy",
+        "negative_prompt": ""
+    },
+    {
+        "name": "Rachel Bingaman",
+        "prompt": "{prompt} by Rachel Bingaman",
+        "negative_prompt": ""
+    },
+    {
+        "name": "Anna Bocek",
+        "prompt": "{prompt} by Anna Bocek",
+        "negative_prompt": ""
+    },
+    {
+        "name": "Franck Bohbot",
+        "prompt": "{prompt} by Franck Bohbot",
+        "negative_prompt": ""
+    },
+    {
+        "name": "Chesley Bonestell",
+        "prompt": "{prompt} by Chesley Bonestell",
+        "negative_prompt": ""
+    },
+    {
+        "name": "Aleksi Briclot",
+        "prompt": "{prompt} by Aleksi Briclot",
+        "negative_prompt": ""
+    },
+    {
+        "name": "Margaret Brundage",
+        "prompt": "{prompt} by Margaret Brundage",
+        "negative_prompt": ""
+    },
+    {
+        "name": "Christopher Bucklow",
+        "prompt": "{prompt} by Christopher Bucklow",
+        "negative_prompt": ""
+    },
+    {
+        "name": "Charles E Burchfield",
+        "prompt": "{prompt} by Charles E Burchfield",
+        "negative_prompt": ""
+    },
+    {
+        "name": "Alejandro Burdisio",
+        "prompt": "{prompt} by Alejandro Burdisio",
+        "negative_prompt": ""
+    },
+    {
+        "name": "Tim Burton",
+        "prompt": "{prompt} by Tim Burton",
+        "negative_prompt": ""
+    },
+    {
+        "name": "James Lee Byars",
+        "prompt": "{prompt} by James Lee Byars",
+        "negative_prompt": ""
+    },
+    {
+        "name": "Bob Byerley",
+        "prompt": "{prompt} by Bob Byerley",
+        "negative_prompt": ""
+    }
+]
