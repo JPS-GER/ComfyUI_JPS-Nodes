@@ -1567,6 +1567,7 @@ class SDXL_Prompt_Styler:
     @classmethod
     def INPUT_TYPES(self):
         current_directory = os.path.dirname(os.path.realpath(__file__))
+        self.json_data_artists, artists = load_styles_from_directory(os.path.join(current_directory, 'styles', 'artists'))
         self.json_data_movies, movies = load_styles_from_directory(os.path.join(current_directory, 'styles', 'movies'))
         self.json_data_styles, styles = load_styles_from_directory(os.path.join(current_directory, 'styles', 'main'))
         
@@ -1575,6 +1576,7 @@ class SDXL_Prompt_Styler:
                 "text_positive_g": ("STRING", {"default": "", "multiline": True}),
                 "text_positive_l": ("STRING", {"default": "", "multiline": True}),
                 "text_negative": ("STRING", {"default": "", "multiline": True}),
+                "artist": ((artists), ),
                 "movie": ((movies), ),
                 "style": ((styles), ),
             },
@@ -1585,7 +1587,7 @@ class SDXL_Prompt_Styler:
     FUNCTION = 'sdxlpromptstyler'
     CATEGORY = 'JPS Nodes/Style'
 
-    def sdxlpromptstyler(self, text_positive_g, text_positive_l, text_negative, movie, style):
+    def sdxlpromptstyler(self, text_positive_g, text_positive_l, text_negative, artist, movie, style):
         # Process and combine prompts in templates
         # The function replaces the positive prompt placeholder in the template,
         # and combines the negative prompt with the template's negative prompt, if they exist.
@@ -1595,15 +1597,26 @@ class SDXL_Prompt_Styler:
         text_pos_style = ""
         text_neg_style = ""
 
-        text_pos_g_movie, text_pos_l_movie, text_neg_movie = read_sdxl_templates_replace_and_combine(self.json_data_movies, movie, text_positive_g, text_positive_l, text_negative)
+        text_pos_g_artist, text_pos_l_artist, text_neg_artist = read_sdxl_templates_replace_and_combine(self.json_data_artists, artist, text_positive_g, text_positive_l, text_negative)
 
         if(text_positive_g == text_positive_l):
-            if(text_pos_l_movie != text_positive_l and text_pos_g_movie != text_positive_g):
+            if(text_pos_l_artist != text_positive_l and text_pos_g_artist != text_positive_g):
                 text_positive_l = ""
+                text_pos_g_artist, text_pos_l_artist, text_neg_artist = read_sdxl_templates_replace_and_combine(self.json_data_artist, artist, text_positive_g, text_positive_l, text_negative) 
+            elif(text_pos_g_artist != text_positive_g):
+                text_pos_l_artist = text_pos_g_artist
+            elif(text_pos_l_artist != text_positive_l):
+                text_pos_g_artist = text_pos_l_artist
+
+        text_pos_g_movie, text_pos_l_movie, text_neg_movie = read_sdxl_templates_replace_and_combine(self.json_data_movies, movie, text_pos_g_artist, text_pos_l_artist, text_negative)
+
+        if(text_pos_g_artist == text_pos_l_artist):
+            if(text_pos_l_movie != text_pos_l_artist and text_pos_g_movie != text_pos_g_artist):
+                text_pos_l_artist = ""
                 text_pos_g_movie, text_pos_l_movie, text_neg_movie = read_sdxl_templates_replace_and_combine(self.json_data_movie, movie, text_positive_g, text_positive_l, text_negative) 
-            elif(text_pos_g_movie != text_positive_g):
+            elif(text_pos_g_movie != text_pos_g_artist):
                 text_pos_l_movie = text_pos_g_movie
-            elif(text_pos_l_movie != text_positive_l):
+            elif(text_pos_l_movie != text_pos_l_artist):
                 text_pos_g_movie = text_pos_l_movie
 
         text_pos_g_style, text_pos_l_style, text_neg_style = read_sdxl_templates_replace_and_combine(self.json_data_styles, style, text_pos_g_movie, text_pos_l_movie, text_neg_movie)
