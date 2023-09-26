@@ -22,7 +22,7 @@ __IO__
 
 __Settings__
 * SDXL Resolutions - small node that offers recommended SDXL resolutions and outputs height and width values
-* SDXL Basic Settings - menu node for basic SDXL settings, required for most SDXL workflows (connect to "SDXL Basic Settings Pipe" to access the values)
+* SDXL Basic Settings - menu node for basic SDXL settings, required for most SDXL workflows (connect to "SDXL Basic Settings Pipe" to access the values), includes FreeU options now
 * Generation TXT IMG Settings - menu node to switch between TXT2IMG and IMG2IMG
 * Generation Settings - menu node to switch between, TXT2IMG, IMG2IMG, Control Net Canny, Control Net Depth, Inpainting (conntect to "Generation Settings Pipe" to access the values) 
 * IP Adapter Settings - menu node to turn on/off five IP adapter input images and settings (conntect to "IP Adapter Settings Pipe" to access the values)
