@@ -25,7 +25,7 @@ __Settings__
 * SDXL Basic Settings - menu node for basic SDXL settings, required for most SDXL workflows (connect to "SDXL Basic Settings Pipe" to access the values)
 * Generation TXT IMG Settings - menu node to switch between TXT2IMG and IMG2IMG
 * Generation Settings - menu node to switch between, TXT2IMG, IMG2IMG, Control Net Canny, Control Net Depth, Inpainting (conntect to "Generation Settings Pipe" to access the values) 
-* IP Adapter Settings - menu node to turn on/off two IP adapter input images and settings (conntect to "IP Adapter Settings Pipe" to access the values)
+* IP Adapter Settings - menu node to turn on/off five IP adapter input images and settings (conntect to "IP Adapter Settings Pipe" to access the values)
 * Revision Settings - menu node to turn on/off two revision input images and settings (conntect to "Revision Settings Pipe" to access the values)
 * Sampler Scheduler Settings - menu node for sampler + scheduler settings, can also be used as pipe
 
