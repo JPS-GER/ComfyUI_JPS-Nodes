@@ -234,6 +234,9 @@ class SDXL_Resolutions:
 #---------------------------------------------------------------------------------------------------------------------------------------------------#
 
 class SDXL_Basic_Settings:
+    freeuswitch = ["OFF","ON"]
+    freeubackbone = ["off", "very soft", "soft", "medium", "strong", "very strong", "max"]
+    freeuskip = ["off", "very soft", "soft", "medium", "strong", "very strong", "max"]
     resolution = ["square - 1024x1024 (1:1)","landscape - 1152x896 (4:3)","landscape - 1216x832 (3:2)","landscape - 1344x768 (16:9)","landscape - 1536x640 (21:9)", "portrait - 896x1152 (3:4)","portrait - 832x1216 (2:3)","portrait - 768x1344 (9:16)","portrait - 640x1536 (9:21)"]
     vaefrom = ["Separate VAE","Base Model VAE","Refiner Model VAE"]
 
@@ -247,12 +250,16 @@ class SDXL_Basic_Settings:
                 "resolution": (s.resolution,),
                 "sampler_name": (comfy.samplers.KSampler.SAMPLERS,),
                 "scheduler": (comfy.samplers.KSampler.SCHEDULERS,),
+                "scheduler": (comfy.samplers.KSampler.SCHEDULERS,),
                 "vae_source": (s.vaefrom,),
                 "steps_total": ("INT", {"default": 60, "min": 20, "max": 250, "step": 5}),
                 "base_percentage": ("INT", {"default": 80, "min": 5, "max": 100, "step": 5}),
                 "cfg_base": ("FLOAT", {"default": 7, "min": 1, "max": 20, "step": 0.5}),
                 "cfg_refiner": ("FLOAT", {"default": 0, "min": 0, "max": 20, "step": 0.5}),
                 "ascore_refiner": ("FLOAT", {"default": 6, "min": 1, "max": 10, "step": 0.5}),
+                "freeu_switch": (s.freeuswitch,),
+                "freeu_backbone": (s.freeubackbone,),
+                "freeu_skip": (s.freeuskip,),
                 "clip_skip_base": ("INT", {"default": -1, "min": -24, "max": -1}),
                 "clip_skip_refiner": ("INT", {"default": -1, "min": -24, "max": -1}),
                 "filename": ("STRING", {"default": "JPS"}),
@@ -263,7 +270,7 @@ class SDXL_Basic_Settings:
 
     CATEGORY="JPS Nodes/Settings"
 
-    def get_values(self,resolution,sampler_name,scheduler,vae_source,steps_total,base_percentage,cfg_base,cfg_refiner,ascore_refiner,clip_skip_base,clip_skip_refiner,filename):
+    def get_values(self,resolution,sampler_name,scheduler,vae_source,steps_total,base_percentage,cfg_base,cfg_refiner,ascore_refiner,freeu_switch,freeu_backbone,freeu_skip,clip_skip_base,clip_skip_refiner,filename):
         width = 1024
         height = 1024
         width = int(width)
@@ -312,7 +319,56 @@ class SDXL_Basic_Settings:
         if(vae_source == "Refiner Model VAE"):
             vae_select = 3
 
-        sdxl_basic_settings = width, height, sampler_name, scheduler, vae_select, steps_total, step_split, cfg_base, cfg_refiner, ascore_refiner, clip_skip_base, clip_skip_refiner, filename
+        if(freeu_switch == "ON"):
+            if(freeu_backbone == "very soft"):
+                freeu_b1 = 1.03
+                freeu_b2 = 1.10
+            elif(freeu_backbone == "soft"):
+                freeu_b1 = 1.07
+                freeu_b2 = 1.15
+            elif(freeu_backbone == "medium"):
+                freeu_b1 = 1.10
+                freeu_b2 = 1.20
+            elif(freeu_backbone == "strong"):
+                freeu_b1 = 1.13
+                freeu_b2 = 1.25
+            elif(freeu_backbone == "very strong"):
+                freeu_b1 = 1.17
+                freeu_b2 = 1.30
+            elif(freeu_backbone == "max"):
+                freeu_b1 = 1.20
+                freeu_b2 = 1.35
+            else:
+                freeu_b1 = 1.00
+                freeu_b2 = 1.00
+            if(freeu_skip == "very soft"):
+                freeu_s1 = 0.97
+                freeu_s2 = 0.60
+            elif(freeu_skip == "soft"):
+                freeu_s1 = 0.93
+                freeu_s2 = 0.40
+            elif(freeu_skip == "medium"):
+                freeu_s1 = 0.90
+                freeu_s2 = 0.20
+            elif(freeu_skip == "strong"):
+                freeu_s1 = 0.86
+                freeu_s2 = 0.17
+            elif(freeu_skip == "very strong"):
+                freeu_s1 = 0.80
+                freeu_s2 = 0.13
+            elif(freeu_skip == "max"):
+                freeu_s1 = 0.75
+                freeu_s2 = 0.10
+            else:
+                freeu_s1 = 1.00
+                freeu_s2 = 1.00
+        else:
+            freeu_b1 = 1.00
+            freeu_b2 = 1.00
+            freeu_s1 = 1.00
+            freeu_s2 = 1.00
+
+        sdxl_basic_settings = width, height, sampler_name, scheduler, vae_select, steps_total, step_split, cfg_base, cfg_refiner, ascore_refiner, freeu_b1, freeu_b2, freeu_s1, freeu_s2, clip_skip_base, clip_skip_refiner, filename
         
 
         return(sdxl_basic_settings,)
@@ -333,17 +389,17 @@ class SDXL_Basic_Settings_Pipe:
                 "sdxl_basic_settings": ("BASIC_PIPE",)
             },
         }
-    RETURN_TYPES = ("BASIC_PIPE","INT","INT",comfy.samplers.KSampler.SAMPLERS,comfy.samplers.KSampler.SCHEDULERS,"INT","INT","INT","FLOAT","FLOAT","FLOAT","INT","INT","STRING",)
-    RETURN_NAMES = ("sdxl_basic_settings","width","height","sampler_name","scheduler","vae_select","steps_total","step_split","cfg_base","cfg_refiner","ascore_refiner","clip_skip_base","clip_skip_refiner","filename",)
+    RETURN_TYPES = ("BASIC_PIPE","INT","INT",comfy.samplers.KSampler.SAMPLERS,comfy.samplers.KSampler.SCHEDULERS,"INT","INT","INT","FLOAT","FLOAT","FLOAT","FLOAT","FLOAT","FLOAT","FLOAT","INT","INT","STRING",)
+    RETURN_NAMES = ("sdxl_basic_settings","width","height","sampler_name","scheduler","vae_select","steps_total","step_split","cfg_base","cfg_refiner","ascore_refiner","freeu_b1","freeu_b2","freeu_s1","freeu_s2","clip_skip_base","clip_skip_refiner","filename",)
     FUNCTION = "give_values"
 
     CATEGORY="JPS Nodes/Pipes"
 
     def give_values(self,sdxl_basic_settings):
         
-        width, height, sampler_name, scheduler, vae_select, steps_total, step_split, cfg_base, cfg_refiner, ascore_refiner, clip_skip_base, clip_skip_refiner, filename = sdxl_basic_settings
+        width, height, sampler_name, scheduler, vae_select, steps_total, step_split, cfg_base, cfg_refiner, ascore_refiner, freeu_b1, freeu_b2, freeu_s1, freeu_s2, clip_skip_base, clip_skip_refiner, filename = sdxl_basic_settings
 
-        return(sdxl_basic_settings, int(width), int(height), sampler_name, scheduler, int(vae_select), int(steps_total), int(step_split), float(cfg_base), float(cfg_refiner), float(ascore_refiner), int(clip_skip_base), int(clip_skip_refiner), str(filename),)
+        return(sdxl_basic_settings, int(width), int(height), sampler_name, scheduler, int(vae_select), int(steps_total), int(step_split), float(cfg_base), float(cfg_refiner), float(ascore_refiner), float(freeu_b1), float(freeu_b2), float(freeu_s1), float(freeu_s2), int(clip_skip_base), int(clip_skip_refiner), str(filename),)
 
 #---------------------------------------------------------------------------------------------------------------------------------------------------#
 
@@ -880,8 +936,15 @@ class Generation_Settings_Pipe:
 #---------------------------------------------------------------------------------------------------------------------------------------------------#
 
 class IP_Adapter_Settings:
+    ipaswitch = ["IP Adapter Mode OFF","IP Adapter Mode ON"]
+    ipaweight = ["Use IP Adapter #1 weight","Use separate IP Adapter weights"]
+    ipanoise = ["Use IP Adapter #1 noise","Use separate IP Adapter noises"]    
     ipa1switch = ["IP Adapter #1 OFF","IP Adapter #1 ON"]
     ipa2switch = ["IP Adapter #2 OFF","IP Adapter #2 ON"]
+    ipa3switch = ["IP Adapter #3 OFF","IP Adapter #3 ON"]
+    ipa4switch = ["IP Adapter #4 OFF","IP Adapter #4 ON"]
+    ipa5switch = ["IP Adapter #5 OFF","IP Adapter #5 ON"]
+    ipamerge = ["Merge as Batch","Merge as Chain"]
 
     def __init__(self):
         pass
@@ -890,10 +953,25 @@ class IP_Adapter_Settings:
     def INPUT_TYPES(s):
         return {
             "required": {
+                "ipa_switch": (s.ipaswitch,),
                 "ipa1_switch": (s.ipa1switch,),
                 "ipa2_switch": (s.ipa2switch,),
+                "ipa3_switch": (s.ipa3switch,),
+                "ipa4_switch": (s.ipa4switch,),
+                "ipa5_switch": (s.ipa5switch,),
+                "ipa_weight": (s.ipaweight,),
                 "ipa1_weight": ("FLOAT", {"default": 0.5, "min": -1, "max": 3, "step": 0.05}),
                 "ipa2_weight": ("FLOAT", {"default": 0.5, "min": -1, "max": 3, "step": 0.05}),
+                "ipa3_weight": ("FLOAT", {"default": 0.5, "min": -1, "max": 3, "step": 0.05}),
+                "ipa4_weight": ("FLOAT", {"default": 0.5, "min": -1, "max": 3, "step": 0.05}),
+                "ipa5_weight": ("FLOAT", {"default": 0.5, "min": -1, "max": 3, "step": 0.05}),
+                "ipa_noise": (s.ipanoise,),
+                "ipa1_noise": ("FLOAT", {"default": 0.0, "min": 0, "max": 1, "step": 0.05}),
+                "ipa2_noise": ("FLOAT", {"default": 0.0, "min": 0, "max": 1, "step": 0.05}),
+                "ipa3_noise": ("FLOAT", {"default": 0.0, "min": 0, "max": 1, "step": 0.05}),
+                "ipa4_noise": ("FLOAT", {"default": 0.0, "min": 0, "max": 1, "step": 0.05}),
+                "ipa5_noise": ("FLOAT", {"default": 0.0, "min": 0, "max": 1, "step": 0.05}),
+                "ipa_merge": (s.ipamerge,),
             }
         }
     RETURN_TYPES = ("BASIC_PIPE",)
@@ -902,23 +980,57 @@ class IP_Adapter_Settings:
 
     CATEGORY="JPS Nodes/Settings"
 
-    def get_ipamode(self,ipa1_switch,ipa2_switch,ipa1_weight,ipa2_weight):
+    def get_ipamode(self,ipa_switch,ipa_weight,ipa_noise,ipa1_switch,ipa2_switch,ipa3_switch,ipa4_switch,ipa5_switch,ipa1_weight,ipa2_weight,ipa3_weight,ipa4_weight,ipa5_weight,ipa1_noise,ipa2_noise,ipa3_noise,ipa4_noise,ipa5_noise,ipa_merge):
+        if(ipa_weight == "Use IP Adapter #1 weight"):
+            ipa2_weight = ipa1_weight
+            ipa3_weight = ipa1_weight
+            ipa4_weight = ipa1_weight
+            ipa5_weight = ipa1_weight
+        if(ipa_weight == "Use IP Adapter #1 noise"):
+            ipa2_noise = ipa1_noise
+            ipa3_noise = ipa1_noise
+            ipa4_noise = ipa1_noise
+            ipa5_noise = ipa1_noise
         ipa1switch = int(1)
-        ipa2switch = int(1)
-        if(ipa1_switch == "IP Adapter #1 OFF"):
-            ipa1switch = int(1)
-            ipa1weight = 0
-        if(ipa1_switch == "IP Adapter #1 ON"):
+        ipa1weight = 0
+        ipa1noise = 0
+        if(ipa1_switch == "IP Adapter #1 ON" and ipa_switch == "IP Adapter Mode ON"):
             ipa1switch = int(2)
             ipa1weight = ipa1_weight
-        if(ipa2_switch == "IP Adapter #2 OFF"):
-            ipa2switch = int(1)
-            ipa2weight = 0
-        if(ipa2_switch == "IP Adapter #2 ON"):
+            ipa1noise = ipa1_noise
+        ipa2switch = int(1)
+        ipa2weight = 0
+        ipa2noise = 0
+        if(ipa2_switch == "IP Adapter #2 ON" and ipa_switch == "IP Adapter Mode ON"):
             ipa2switch = int(2)
             ipa2weight = ipa2_weight
+            ipa2noise = ipa2_noise
+        ipa3switch = int(1)
+        ipa3weight = 0
+        ipa3noise = 0
+        if(ipa3_switch == "IP Adapter #3 ON" and ipa_switch == "IP Adapter Mode ON"):
+            ipa3switch = int(2)
+            ipa3weight = ipa3_weight
+            ipa3noise = ipa3_noise
+        ipa4switch = int(1)
+        ipa4weight = 0
+        ipa4noise = 0
+        if(ipa4_switch == "IP Adapter #4 ON" and ipa_switch == "IP Adapter Mode ON"):
+            ipa4switch = int(2)
+            ipa4weight = ipa4_weight
+            ipa4noise = ipa4_noise
+        ipa5switch = int(1)
+        ipa5weight = 0
+        ipa5noise = 0
+        if(ipa5_switch == "IP Adapter #5 ON" and ipa_switch == "IP Adapter Mode ON"):
+            ipa5switch = int(2)
+            ipa5weight = ipa5_weight
+            ipa5noise = ipa5_noise
+        ipamerge = int(1)
+        if(ipa_merge == "Merge as Chain"):
+            ipamerge = int(2)
 
-        ip_adapter_settings = ipa1switch,ipa2switch,ipa1weight,ipa2weight
+        ip_adapter_settings = ipa1switch,ipa2switch,ipa3switch,ipa4switch,ipa5switch,ipa1weight,ipa2weight,ipa3weight,ipa4weight,ipa5weight,ipa1noise,ipa2noise,ipa3noise,ipa4noise,ipa5noise,ipamerge
 
         return(ip_adapter_settings,)
 
@@ -938,17 +1050,18 @@ class IP_Adapter_Settings_Pipe:
                 "ip_adapter_settings": ("BASIC_PIPE",),
             }
         }
-    RETURN_TYPES = ("INT","INT","FLOAT","FLOAT",)
-    RETURN_NAMES = ("ipa1_switch", "ipa2_switch", "ipa1_weight", "ipa2_weight",)
+    RETURN_TYPES = ("INT","INT","INT","INT","INT","FLOAT","FLOAT","FLOAT","FLOAT","FLOAT","FLOAT","FLOAT","FLOAT","FLOAT","FLOAT","INT")
+    RETURN_NAMES = ("ipa1_switch", "ipa2_switch", "ipa3_switch", "ipa4_switch", "ipa5_switch", "ipa1_weight", "ipa2_weight", "ipa3_weight", "ipa4_weight", "ipa5_weight", "ipa1_noise", "ipa2_noise", "ipa3_noise", "ipa4_noise", "ipa5_noise","ipa_merge")
     FUNCTION = "get_ipamode"
 
     CATEGORY="JPS Nodes/Pipes"
 
     def get_ipamode(self,ip_adapter_settings):
 
-        ipa1switch,ipa2switch,ipa1weight,ipa2weight = ip_adapter_settings
+        ipa1switch,ipa2switch,ipa3switch,ipa4switch,ipa5switch,ipa1weight,ipa2weight,ipa3weight,ipa4weight,ipa5weight,ipa1noise,ipa2noise,ipa3noise,ipa4noise,ipa5noise,ipamerge = ip_adapter_settings
 
-        return(int(ipa1switch),int(ipa2switch),float(ipa1weight),float(ipa2weight),)
+        return(int(ipa1switch),int(ipa2switch),int(ipa3switch),int(ipa4switch),int(ipa5switch),float(ipa1weight),float(ipa2weight),float(ipa3weight),float(ipa4weight),float(ipa5weight),float(ipa1noise),float(ipa2noise),float(ipa3noise),float(ipa4noise),float(ipa5noise),int(ipamerge),)
+
 #---------------------------------------------------------------------------------------------------------------------------------------------------#
 
 class Revision_Settings:
