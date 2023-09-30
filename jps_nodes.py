@@ -823,7 +823,7 @@ class Generation_TXT_IMG_Settings:
 #---------------------------------------------------------------------------------------------------------------------------------------------------#
 
 class Generation_Settings:
-    mode = ["Text Prompt","Image to Image", "Canny", "Depth", "Inpainting"]
+    mode = ["Text Prompt","Image to Image", "CtrlNet Canny", "CtrlNet Depth", "Inpainting"]
     resfrom = ["Use Settings Resolution", "Use Image Resolution"]
     
     def __init__(self):
@@ -835,7 +835,9 @@ class Generation_Settings:
             "required": {
                 "mode": (s.mode,),
                 "resfrom": (s.resfrom,),
-                "strength_percent": ("INT", {"default": 50, "min": 0, "max": 100, "step": 2}),
+                "img_to_img_strength": ("INT", {"default": 50, "min": 2, "max": 100, "step": 2}),
+                "inpainting_strength": ("INT", {"default": 100, "min": 2, "max": 100, "step": 2}),
+                "ctrl_strength": ("INT", {"default": 36, "min": 2, "max": 100, "step": 2}),
                 "ctrl_start_percent": ("INT", {"default": 0, "min": 0, "max": 100, "step": 5}),
                 "ctrl_stop_percent": ("INT", {"default": 100, "min": 0, "max": 100, "step": 5}),
                 "ctrl_low_threshold": ("INT", {"default": 100, "min": 0, "max": 255, "step": 5}),
@@ -848,7 +850,7 @@ class Generation_Settings:
 
     CATEGORY="JPS Nodes/Settings"
 
-    def get_genfull(self, mode, resfrom, strength_percent, ctrl_start_percent, ctrl_stop_percent, ctrl_low_threshold, ctrl_high_threshold):
+    def get_genfull(self, mode, resfrom, img_to_img_strength, inpainting_strength, ctrl_strength, ctrl_start_percent, ctrl_stop_percent, ctrl_low_threshold, ctrl_high_threshold):
         gen_mode = 1
         res_from = 1
         img_strength = 0
@@ -859,44 +861,26 @@ class Generation_Settings:
         ctrl_high = 0
         if(mode == "Text Prompt"):
             gen_mode = int(1)
-            img_strength = 0.001
-            ctrl_strength = 0
-            ctrl_start = 0
-            ctrl_stop = 0
-            ctrl_low = 0
-            ctrl_high = 0
         if(mode == "Image to Image"):
             gen_mode = int(2)
-            img_strength = strength_percent / 100
-            ctrl_strength = 0
-            ctrl_start = 0
-            ctrl_stop = 0
-            ctrl_low = 0
-            ctrl_high = 0
-        if(mode == "Canny"):
+            img_strength = img_to_img_strength / 100
+        if(mode == "CtrlNet Canny"):
             gen_mode = int(3)
-            img_strength = 0.001
-            ctrl_strength = strength_percent / 100
+            ctrl_strength = ctrl_strength / 100
             ctrl_start = ctrl_start_percent / 100
             ctrl_stop = ctrl_stop_percent / 100
             ctrl_low = ctrl_low_threshold
             ctrl_high = ctrl_high_threshold
-        if(mode == "Depth"):
+        if(mode == "CtrlNet Depth"):
             gen_mode = int(4)
-            img_strength = 0.001
-            ctrl_strength = strength_percent / 100
+            ctrl_strength = ctrl_strength / 100
             ctrl_start = ctrl_start_percent / 100
             ctrl_stop = ctrl_stop_percent / 100
             ctrl_low = ctrl_low_threshold
             ctrl_high = ctrl_high_threshold
         if(mode == "Inpainting"):
             gen_mode = int(5)
-            img_strength = (100 - strength_percent + 0.001) / 100
-            ctrl_strength = 0
-            ctrl_start = 0
-            ctrl_stop = 0
-            ctrl_low = 0
-            ctrl_high = 0
+            img_strength = (100 - inpainting_strength + 0.001) / 100
         if(resfrom == "Use Settings Resolution"):
             res_from = int(1)
         if(resfrom == "Use Image Resolution"):
@@ -922,8 +906,8 @@ class Generation_Settings_Pipe:
                 "generation_settings": ("BASIC_PIPE",)
             },
         }
-    RETURN_TYPES = ("BASIC_PIPE","INT","INT","FLOAT","FLOAT","FLOAT","FLOAT","INT","INT",)
-    RETURN_NAMES = ("generation_settings","gen_mode", "res_from", "img_strength", "ctrl_strength", "ctrl_start", "ctrl_stop", "ctrl_low", "ctrl_high",)
+    RETURN_TYPES = ("INT","INT","FLOAT","FLOAT","FLOAT","FLOAT","INT","INT",)
+    RETURN_NAMES = ("gen_mode", "res_from", "img_strength", "ctrl_strength", "ctrl_start", "ctrl_stop", "ctrl_low", "ctrl_high",)
     FUNCTION = "give_values"
 
     CATEGORY="JPS Nodes/Pipes"
@@ -932,13 +916,13 @@ class Generation_Settings_Pipe:
         
         gen_mode, res_from, img_strength, ctrl_strength, ctrl_start, ctrl_stop, ctrl_low, ctrl_high = generation_settings
 
-        return(generation_settings, int(gen_mode), int(res_from), float(img_strength), float(ctrl_strength), float(ctrl_start), float(ctrl_stop), int(ctrl_low), int(ctrl_high),)
+        return(int(gen_mode), int(res_from), float(img_strength), float(ctrl_strength), float(ctrl_start), float(ctrl_stop), int(ctrl_low), int(ctrl_high),)
 
 #---------------------------------------------------------------------------------------------------------------------------------------------------#
 
 class IP_Adapter_Settings:
-    ipaweight = ["Use IP Adapter #1 weight","Use separate IP Adapter weights"]
-    ipanoise = ["Use IP Adapter #1 noise","Use separate IP Adapter noises"]    
+    ipaweight = ["Use IP Adapter #1 weight for all","Use separate IP Adapter weights"]
+    ipanoise = ["Use IP Adapter #1 noise for all","Use separate IP Adapter noises"]    
     ipa1switch = ["IP Adapter #1 OFF","IP Adapter #1 ON"]
     ipa2switch = ["IP Adapter #2 OFF","IP Adapter #2 ON"]
     ipa3switch = ["IP Adapter #3 OFF","IP Adapter #3 ON"]
@@ -954,34 +938,39 @@ class IP_Adapter_Settings:
         return {
             "required": {
                 "ipa1_switch": (s.ipa1switch,),
-                "ipa2_switch": (s.ipa2switch,),
-                "ipa3_switch": (s.ipa3switch,),
-                "ipa4_switch": (s.ipa4switch,),
-                "ipa5_switch": (s.ipa5switch,),
-                "crop_res": ("INT", { "default": 224 , "min": 224, "max": 1792, "step": 224, "display": "number" }),
-                "crop_intpol": (["lanczos", "nearest", "bilinear", "bicubic", "area", "nearest-exact"],),                
                 "ipa1_crop": (["center","top", "bottom", "left", "right"],),
                 "ipa1_offset": ("INT", { "default": 0, "min": -2048, "max": 2048, "step": 1, "display": "number" }),
+                "ipa1_weight": ("FLOAT", {"default": 0.5, "min": -1, "max": 3, "step": 0.05}),
+                "ipa1_noise": ("FLOAT", {"default": 0.0, "min": 0, "max": 1, "step": 0.05}),
+
+                "ipa2_switch": (s.ipa2switch,),
                 "ipa2_crop": (["center","top", "bottom", "left", "right"],),
                 "ipa2_offset": ("INT", { "default": 0, "min": -2048, "max": 2048, "step": 1, "display": "number" }),
+                "ipa2_weight": ("FLOAT", {"default": 0.5, "min": -1, "max": 3, "step": 0.05}),
+                "ipa2_noise": ("FLOAT", {"default": 0.0, "min": 0, "max": 1, "step": 0.05}),
+
+                "ipa3_switch": (s.ipa3switch,),
                 "ipa3_crop": (["center","top", "bottom", "left", "right"],),
                 "ipa3_offset": ("INT", { "default": 0, "min": -2048, "max": 2048, "step": 1, "display": "number" }),
+                "ipa3_weight": ("FLOAT", {"default": 0.5, "min": -1, "max": 3, "step": 0.05}),
+                "ipa3_noise": ("FLOAT", {"default": 0.0, "min": 0, "max": 1, "step": 0.05}),
+
+                "ipa4_switch": (s.ipa4switch,),
                 "ipa4_crop": (["center","top", "bottom", "left", "right"],),
                 "ipa4_offset": ("INT", { "default": 0, "min": -2048, "max": 2048, "step": 1, "display": "number" }),
+                "ipa4_weight": ("FLOAT", {"default": 0.5, "min": -1, "max": 3, "step": 0.05}),
+                "ipa4_noise": ("FLOAT", {"default": 0.0, "min": 0, "max": 1, "step": 0.05}),
+
+                "ipa5_switch": (s.ipa5switch,),
                 "ipa5_crop": (["center","top", "bottom", "left", "right"],),
                 "ipa5_offset": ("INT", { "default": 0, "min": -2048, "max": 2048, "step": 1, "display": "number" }),
-                "ipa_weight": (s.ipaweight,),
-                "ipa1_weight": ("FLOAT", {"default": 0.5, "min": -1, "max": 3, "step": 0.05}),
-                "ipa2_weight": ("FLOAT", {"default": 0.5, "min": -1, "max": 3, "step": 0.05}),
-                "ipa3_weight": ("FLOAT", {"default": 0.5, "min": -1, "max": 3, "step": 0.05}),
-                "ipa4_weight": ("FLOAT", {"default": 0.5, "min": -1, "max": 3, "step": 0.05}),
                 "ipa5_weight": ("FLOAT", {"default": 0.5, "min": -1, "max": 3, "step": 0.05}),
-                "ipa_noise": (s.ipanoise,),
-                "ipa1_noise": ("FLOAT", {"default": 0.0, "min": 0, "max": 1, "step": 0.05}),
-                "ipa2_noise": ("FLOAT", {"default": 0.0, "min": 0, "max": 1, "step": 0.05}),
-                "ipa3_noise": ("FLOAT", {"default": 0.0, "min": 0, "max": 1, "step": 0.05}),
-                "ipa4_noise": ("FLOAT", {"default": 0.0, "min": 0, "max": 1, "step": 0.05}),
                 "ipa5_noise": ("FLOAT", {"default": 0.0, "min": 0, "max": 1, "step": 0.05}),
+
+                "crop_intpol": (["lanczos", "nearest", "bilinear", "bicubic", "area", "nearest-exact"],),                
+                "crop_res": ("INT", { "default": 224 , "min": 224, "max": 1792, "step": 224, "display": "number" }),
+                "ipa_weight": (s.ipaweight,),
+                "ipa_noise": (s.ipanoise,),
                 "ipa_merge": (s.ipamerge,),
             }
         }
@@ -992,12 +981,12 @@ class IP_Adapter_Settings:
     CATEGORY="JPS Nodes/Settings"
 
     def get_ipamode(self,ipa1_switch,ipa2_switch,ipa3_switch,ipa4_switch,ipa5_switch,crop_res,crop_intpol,ipa1_crop,ipa1_offset,ipa2_crop,ipa2_offset,ipa3_crop,ipa3_offset,ipa4_crop,ipa4_offset,ipa5_crop,ipa5_offset,ipa_weight,ipa1_weight,ipa2_weight,ipa3_weight,ipa4_weight,ipa5_weight,ipa_noise,ipa1_noise,ipa2_noise,ipa3_noise,ipa4_noise,ipa5_noise,ipa_merge):
-        if(ipa_weight == "Use IP Adapter #1 weight"):
+        if(ipa_weight == "Use IP Adapter #1 weight for all"):
             ipa2_weight = ipa1_weight
             ipa3_weight = ipa1_weight
             ipa4_weight = ipa1_weight
             ipa5_weight = ipa1_weight
-        if(ipa_weight == "Use IP Adapter #1 noise"):
+        if(ipa_weight == "Use IP Adapter #1 noise for all"):
             ipa2_noise = ipa1_noise
             ipa3_noise = ipa1_noise
             ipa4_noise = ipa1_noise
@@ -1089,19 +1078,22 @@ class Revision_Settings:
         return {
             "required": {
                 "rev1_switch": (s.rev1switch,),
-                "rev2_switch": (s.rev2switch,),
-                "pos_prompt": (s.posprompt,),                
-                "neg_prompt": (s.negprompt,),
-                "crop_res": ("INT", { "default": 224 , "min": 224, "max": 1792, "step": 224, "display": "number" }),
-                "crop_intpol": (["lanczos", "nearest", "bilinear", "bicubic", "area", "nearest-exact"],),                
                 "rev1_crop": (["center","top", "bottom", "left", "right"],),
                 "rev1_offset": ("INT", { "default": 0, "min": -2048, "max": 2048, "step": 1, "display": "number" }),
+                "rev1_strength": ("FLOAT", {"default": 1, "min": 0, "max": 10, "step": 0.1}),
+                "rev1_noiseaug": ("FLOAT", {"default": 0, "min": 0, "max": 1, "step": 0.1}),
+
+                "rev2_switch": (s.rev2switch,),
                 "rev2_crop": (["center","top", "bottom", "left", "right"],),
                 "rev2_offset": ("INT", { "default": 0, "min": -2048, "max": 2048, "step": 1, "display": "number" }),                
-                "rev1_strength": ("FLOAT", {"default": 1, "min": 0, "max": 10, "step": 0.5}),
-                "rev2_strength": ("FLOAT", {"default": 1, "min": 0, "max": 10, "step": 0.5}),
-                "rev1_noiseaug": ("FLOAT", {"default": 0, "min": 0, "max": 1, "step": 0.5}),
-                "rev2_noiseaug": ("FLOAT", {"default": 0, "min": 0, "max": 1, "step": 0.5}),
+                "rev2_strength": ("FLOAT", {"default": 1, "min": 0, "max": 10, "step": 0.1}),
+                "rev2_noiseaug": ("FLOAT", {"default": 0, "min": 0, "max": 1, "step": 0.1}),
+
+                "crop_intpol": (["lanczos", "nearest", "bilinear", "bicubic", "area", "nearest-exact"],),                
+                "crop_res": ("INT", { "default": 224 , "min": 224, "max": 1792, "step": 224, "display": "number" }),
+
+                "pos_prompt": (s.posprompt,),                
+                "neg_prompt": (s.negprompt,),
             }
         }
     RETURN_TYPES = ("BASIC_PIPE",)
