@@ -64,7 +64,7 @@ __Text__
   
 __Image__
 * Get Image Size - get width and height value from an input image, useful in combination with "Resolution Multiply" and "SDXL Recommended Resolution Calc" nodes
-* Crop Image Square - crop images to a square aspect ratio - choose between center, top, bottom, left and right part of the image and fine tune with offset option, optional: resize image to target size
+* Crop Image Square - crop images to a square aspect ratio - choose between center, top, bottom, left and right part of the image and fine tune with offset option, optional: resize image to target size (useful for Clip Vision input images, like IP-Adapter or Revision)
 
 __Style__
 * SDXL Prompt Styler - add artists, movies and general styles to your text prompt - uses json files, so you can extend the available options
