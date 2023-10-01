@@ -1,3 +1,10 @@
+"""
+@author: JPS
+@title: JPS Custom Nodes for ComfyUI
+@nickname: JPS Custom Nodes
+@description: Various nodes to handle SDXL Resolutions, SDXL Basic Settings, IP Adapter Settings, Revision Settings, SDXL Prompt Styler, Crop Image to Square, Crop Image to Target Sizue, Get Date-Time String, Resolution Multiply, Largest Integer, 5-to-1 Switches for Integer, Images, Latents, Conditioning, Model, VAE, ControlNet
+"""
+
 #------------------------------------------------------------------------#
 # JPS Custom Nodes          https://github.com/JPS-GER/ComfyUI_JPS-Nodes #
 # for ComfyUI               https://github.com/comfyanonymous/ComfyUI    #
