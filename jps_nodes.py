@@ -853,19 +853,25 @@ class Generation_Settings:
     def get_genfull(self, mode, resfrom, img_to_img_strength, inpainting_strength, ctrl_strength, ctrl_start_percent, ctrl_stop_percent, ctrl_low_threshold, ctrl_high_threshold):
         gen_mode = 1
         res_from = 1
-        img_strength = 0
-        ctrl_strength = 0
-        ctrl_start = 0
-        ctrl_stop = 0
-        ctrl_low = 0
-        ctrl_high = 0
         if(mode == "Text Prompt"):
             gen_mode = int(1)
+            img_strength = 0
+            ctrl_strength = 0
+            ctrl_start = 0
+            ctrl_stop = 0
+            ctrl_low = 0
+            ctrl_high = 0
         if(mode == "Image to Image"):
             gen_mode = int(2)
             img_strength = img_to_img_strength / 100
+            ctrl_strength = 0
+            ctrl_start = 0
+            ctrl_stop = 0
+            ctrl_low = 0
+            ctrl_high = 0
         if(mode == "CtrlNet Canny"):
             gen_mode = int(3)
+            img_strength = 0
             ctrl_strength = ctrl_strength / 100
             ctrl_start = ctrl_start_percent / 100
             ctrl_stop = ctrl_stop_percent / 100
@@ -873,6 +879,7 @@ class Generation_Settings:
             ctrl_high = ctrl_high_threshold
         if(mode == "CtrlNet Depth"):
             gen_mode = int(4)
+            img_strength = 0
             ctrl_strength = ctrl_strength / 100
             ctrl_start = ctrl_start_percent / 100
             ctrl_stop = ctrl_stop_percent / 100
@@ -881,6 +888,11 @@ class Generation_Settings:
         if(mode == "Inpainting"):
             gen_mode = int(5)
             img_strength = (100 - inpainting_strength + 0.001) / 100
+            ctrl_strength = 0
+            ctrl_start = 0
+            ctrl_stop = 0
+            ctrl_low = 0
+            ctrl_high = 0
         if(resfrom == "Use Settings Resolution"):
             res_from = int(1)
         if(resfrom == "Use Image Resolution"):
