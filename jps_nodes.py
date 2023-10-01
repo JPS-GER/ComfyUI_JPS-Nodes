@@ -842,6 +842,8 @@ class Generation_Settings:
                 "ctrl_stop_percent": ("INT", {"default": 100, "min": 0, "max": 100, "step": 5}),
                 "ctrl_low_threshold": ("INT", {"default": 100, "min": 0, "max": 255, "step": 5}),
                 "ctrl_high_threshold": ("INT", {"default": 200, "min": 0, "max": 255, "step": 5}),
+                "crop_position": (["center", "left", "right", "top", "bottom"],),
+                "crop_offset": ("INT", { "default": 0, "min": -2048, "max": 2048, "step": 1, "display": "number" }),
             }   
         }
     RETURN_TYPES = ("BASIC_PIPE",) 
@@ -850,7 +852,7 @@ class Generation_Settings:
 
     CATEGORY="JPS Nodes/Settings"
 
-    def get_genfull(self, mode, resfrom, img_to_img_strength, inpainting_strength, ctrl_strength, ctrl_start_percent, ctrl_stop_percent, ctrl_low_threshold, ctrl_high_threshold):
+    def get_genfull(self, mode, resfrom, img_to_img_strength, inpainting_strength, ctrl_strength, ctrl_start_percent, ctrl_stop_percent, ctrl_low_threshold, ctrl_high_threshold, crop_position, crop_offset):
         gen_mode = 1
         res_from = 1
         if(mode == "Text Prompt"):
@@ -898,7 +900,7 @@ class Generation_Settings:
         if(resfrom == "Use Image Resolution"):
             res_from = int(2)
         
-        generation_settings = gen_mode, res_from, img_strength, ctrl_strength, ctrl_start, ctrl_stop, ctrl_low, ctrl_high
+        generation_settings = gen_mode, res_from, img_strength, ctrl_strength, ctrl_start, ctrl_stop, ctrl_low, ctrl_high, crop_position, crop_offset
 
         return(generation_settings,)
 
@@ -918,17 +920,17 @@ class Generation_Settings_Pipe:
                 "generation_settings": ("BASIC_PIPE",)
             },
         }
-    RETURN_TYPES = ("INT","INT","FLOAT","FLOAT","FLOAT","FLOAT","INT","INT",)
-    RETURN_NAMES = ("gen_mode", "res_from", "img_strength", "ctrl_strength", "ctrl_start", "ctrl_stop", "ctrl_low", "ctrl_high",)
+    RETURN_TYPES = ("INT","INT","FLOAT","FLOAT","FLOAT","FLOAT","INT","INT",["center", "left", "right", "top", "bottom"],"INT",)
+    RETURN_NAMES = ("gen_mode", "res_from", "img_strength", "ctrl_strength", "ctrl_start", "ctrl_stop", "ctrl_low", "ctrl_high", "crop_position", "crop_offset",)
     FUNCTION = "give_values"
 
     CATEGORY="JPS Nodes/Pipes"
 
     def give_values(self,generation_settings):
         
-        gen_mode, res_from, img_strength, ctrl_strength, ctrl_start, ctrl_stop, ctrl_low, ctrl_high = generation_settings
+        gen_mode, res_from, img_strength, ctrl_strength, ctrl_start, ctrl_stop, ctrl_low, ctrl_high, crop_position, crop_offset = generation_settings
 
-        return(int(gen_mode), int(res_from), float(img_strength), float(ctrl_strength), float(ctrl_start), float(ctrl_stop), int(ctrl_low), int(ctrl_high),)
+        return(int(gen_mode), int(res_from), float(img_strength), float(ctrl_strength), float(ctrl_start), float(ctrl_stop), int(ctrl_low), int(ctrl_high), crop_position, int(crop_offset),)
 
 #---------------------------------------------------------------------------------------------------------------------------------------------------#
 
@@ -1774,7 +1776,7 @@ class Crop_Image_Square:
         return {
             "required": {
                 "image": ("IMAGE",),
-                "crop_position": (["center","top", "bottom", "left", "right"],),
+                "crop_position": (["center", "top", "bottom", "left", "right"],),
                 "offset": ("INT", { "default": 0, "min": -2048, "max": 2048, "step": 1, "display": "number" }),
                 "interpolation": (["lanczos", "nearest", "bilinear", "bicubic", "area", "nearest-exact"],),
                 "target_rez": ("INT", { "default": 0 , "min": 0, "step": 8, "display": "number" }),
@@ -1825,15 +1827,6 @@ class Crop_Image_Square:
         x2 = x+crop_size
         y2 = y+crop_size
 
- #       if x2 > w:
- #           x2 = w
- #       if x < 0:
- #           x = 0
- #       if y2 > h:
- #           y2 = h
- #       if y < 0:
- #           y = 0
-
         output = image[:, y:y2, x:x2, :]
 
         output = output.permute([0,3,1,2])
@@ -1847,6 +1840,96 @@ class Crop_Image_Square:
         output = output.permute([0,2,3,1])
 
         return(output, )
+
+#---------------------------------------------------------------------------------------------------------------------------------------------------#    
+
+class Crop_Image_TargetSize:
+    @classmethod
+    def INPUT_TYPES(s):
+        return {
+            "required": {
+                "image": ("IMAGE",),
+                "target_w": ("INT", { "default": 0 , "min": 0, "step": 8, "display": "number" }),
+                "target_h": ("INT", { "default": 0 , "min": 0, "step": 8, "display": "number" }),                
+                "crop_position": (["center", "left", "right", "top", "bottom"],),
+                "offset": ("INT", { "default": 0, "min": -2048, "max": 2048, "step": 1, "display": "number" }),
+                "interpolation": (["lanczos", "nearest", "bilinear", "bicubic", "area", "nearest-exact"],),
+            }
+        }
+    
+    RETURN_TYPES = ("IMAGE",)
+    RETURN_NAMES = ("IMAGE",)
+    FUNCTION = "crop_targetsize"
+    CATEGORY = "JPS Nodes/Image"
+
+    def crop_targetsize(self, image, target_w, target_h, crop_position, offset, interpolation):
+        _, current_h, current_w, _ = image.shape
+
+        current_ar = current_w / current_h
+
+        if target_w / current_ar >= target_h:
+            new_w = target_w
+            new_h = round(new_w / current_ar)
+            offset_h = offset
+            offset_w = 0
+        else:
+            new_h = target_h
+            new_w = round(new_h * current_ar)
+            offset_w = offset
+            offset_h = 0
+
+  #      print("New Size")
+  #      print(new_w)
+  #      print(new_h)
+
+        resized_image = image.permute([0,3,1,2])
+
+        if interpolation == "lanczos":
+            resized_image = comfy.utils.lanczos(resized_image, new_w, new_h)
+        else:
+            resized_image = F.interpolate(resized_image, size=(new_h, new_w), mode=interpolation)
+
+        resized_image = resized_image.permute([0,2,3,1])
+
+        output_image = resized_image
+
+        if (crop_position == "left"):
+            newoffset_w = offset_w
+        elif (crop_position == "right"):
+            newoffset_w = new_w - target_w + offset_w
+        else:
+            newoffset_w = (new_w - target_w) // 2 + offset_w
+
+        if (crop_position == "top"):
+            newoffset_h = offset_h
+        elif (crop_position == "bottom"):
+            newoffset_h = new_h - target_h + offset_h
+        else:
+            newoffset_h = (new_h - target_h) // 2 + offset_h
+
+        if newoffset_w < 0:
+            newoffset_w = 0
+        elif newoffset_w + target_w > new_w:
+            newoffset_w = new_w - target_w
+
+        if newoffset_h < 0:
+            newoffset_h = 0
+        elif newoffset_h + target_h > new_h:
+            newoffset_h = new_h - target_h
+        
+        x = newoffset_w
+        x2 = newoffset_w+target_w
+        y = newoffset_h
+        y2 = newoffset_h+target_h
+
+ #       print("x: "+str(x))
+ #       print("x2: "+str(x2))
+ #       print("y: "+str(y))
+ #       print("y2: "+str(y2))
+
+        output_image = output_image[:, y:y2, x:x2, :]
+
+        return(output_image, )
 
 #---------------------------------------------------------------------------------------------------------------------------------------------------#    
 
@@ -1885,6 +1968,7 @@ NODE_CLASS_MAPPINGS = {
     "Get Date Time String (JPS)": Get_Date_Time_String,
     "Get Image Size (JPS)": Get_Image_Size,
     "Crop Image Square (JPS)": Crop_Image_Square,
+    "Crop Image TargetSize (JPS)": Crop_Image_TargetSize,
     "SDXL Prompt Styler (JPS)": SDXL_Prompt_Styler,
     "SDXL Prompt Handling (JPS)": SDXL_Prompt_Handling,
 }
