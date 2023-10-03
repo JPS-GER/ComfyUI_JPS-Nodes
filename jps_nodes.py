@@ -2,7 +2,7 @@
 @author: JPS
 @title: JPS Custom Nodes for ComfyUI
 @nickname: JPS Custom Nodes
-@description: Various nodes to handle SDXL Resolutions, SDXL Basic Settings, IP Adapter Settings, Revision Settings, SDXL Prompt Styler, Crop Image to Square, Crop Image to Target Sizue, Get Date-Time String, Resolution Multiply, Largest Integer, 5-to-1 Switches for Integer, Images, Latents, Conditioning, Model, VAE, ControlNet
+@description: Various nodes to handle SDXL Resolutions, SDXL Basic Settings, IP Adapter Settings, Revision Settings, SDXL Prompt Styler, Crop Image to Square, Crop Image to Target Size, Get Date-Time String, Resolution Multiply, Largest Integer, 5-to-1 Switches for Integer, Images, Latents, Conditioning, Model, VAE, ControlNet
 """
 
 #------------------------------------------------------------------------#
@@ -408,6 +408,62 @@ class SDXL_Basic_Settings_Pipe:
         width, height, sampler_name, scheduler, vae_select, steps_total, step_split, cfg_base, cfg_refiner, ascore_refiner, freeu_b1, freeu_b2, freeu_s1, freeu_s2, clip_skip_base, clip_skip_refiner, filename = sdxl_basic_settings
 
         return(sdxl_basic_settings, int(width), int(height), sampler_name, scheduler, int(vae_select), int(steps_total), int(step_split), float(cfg_base), float(cfg_refiner), float(ascore_refiner), float(freeu_b1), float(freeu_b2), float(freeu_s1), float(freeu_s2), int(clip_skip_base), int(clip_skip_refiner), str(filename),)
+
+#---------------------------------------------------------------------------------------------------------------------------------------------------#
+
+class SDXL_Prompt_Handling_Plus:
+    handling = ["Copy to Both if Empty","Use Positive_G + Positive_L","Copy Positive_G to Both","Copy Positive_L to Both","Ignore Positive_G Input", "Ignore Positive_L Input", "Combine Positive_G + Positive_L", "Combine Positive_L + Positive_G",]
+    uni_neg = ["OFF","ON"]
+    def __init__(self):
+        pass
+
+    @classmethod
+    def INPUT_TYPES(s):
+        return {
+            "required": {
+                "handling": (s.handling,),
+                "pos_g": ("STRING", {"default": ""}),
+                "pos_l": ("STRING", {"default": ""}),
+                "neg": ("STRING", {"default": ""}),
+                "universal_neg": (s.uni_neg,),
+            },
+        }
+    RETURN_TYPES = ("STRING","STRING","STRING",)
+    RETURN_NAMES = ("pos_g","pos_l","neg",)
+    FUNCTION = "pick_handling"
+
+    CATEGORY="JPS Nodes/Text"
+
+    def pick_handling(self,handling,pos_g,pos_l,neg,universal_neg):
+        
+        if(handling == "Copy Positive_G to Both"):
+            pos_l = pos_g
+        elif(handling == "Copy Positive_L to Both"):
+            pos_g = pos_l
+        elif(handling == "Ignore Positive_G Input"):
+            pos_g = ''
+        elif(handling == "Ignore Positive_L Input"):
+            pos_l = ''
+        elif(handling == "Combine Positive_G + Positive_L"):
+            combine = pos_g + ' . ' + pos_l
+            pos_g = combine
+            pos_l = combine
+        elif(handling == "Combine Positive_L + Positive_G"):
+            combine = pos_l + ' . ' + pos_g
+            pos_g = combine
+            pos_l = combine
+        elif(handling == "Copy to Both if Empty" and pos_l == ''):
+            pos_l = pos_g
+        elif(handling == "Copy to Both if Empty" and pos_g == ''):
+            pos_g = pos_l
+
+        if(universal_neg == "ON"):
+            if (neg != ''):
+                neg = neg + ', text, watermark, low-quality, signature, moire pattern, downsampling, aliasing, distorted, blurry, glossy, blur, jpeg artifacts, compression artifacts, poorly drawn, low-resolution, bad, distortion, twisted, excessive, exaggerated pose, exaggerated limbs, grainy, symmetrical, duplicate, error, pattern, beginner, pixelated, fake, hyper, glitch, overexposed, high-contrast, bad-contrast'
+            else:
+                neg = 'text, watermark, low-quality, signature, moiré pattern, downsampling, aliasing, distorted, blurry, glossy, blur, jpeg artifacts, compression artifacts, poorly drawn, low-resolution, bad, distortion, twisted, excessive, exaggerated pose, exaggerated limbs, grainy, symmetrical, duplicate, error, pattern, beginner, pixelated, fake, hyper, glitch, overexposed, high-contrast, bad-contrast'
+
+        return(pos_g,pos_l,neg,)
 
 #---------------------------------------------------------------------------------------------------------------------------------------------------#
 
@@ -1699,6 +1755,8 @@ class SDXL_Prompt_Styler:
     def __init__(self):
         pass
 
+    uni_neg = ["OFF","ON"]
+
     @classmethod
     def INPUT_TYPES(self):
         current_directory = os.path.dirname(os.path.realpath(__file__))
@@ -1714,6 +1772,7 @@ class SDXL_Prompt_Styler:
                 "artist": ((artists), ),
                 "movie": ((movies), ),
                 "style": ((styles), ),
+                "universal_neg": (self.uni_neg,),
             },
         }
 
@@ -1722,7 +1781,7 @@ class SDXL_Prompt_Styler:
     FUNCTION = 'sdxlpromptstyler'
     CATEGORY = 'JPS Nodes/Style'
 
-    def sdxlpromptstyler(self, text_positive_g, text_positive_l, text_negative, artist, movie, style):
+    def sdxlpromptstyler(self, text_positive_g, text_positive_l, text_negative, artist, movie, style,universal_neg):
         # Process and combine prompts in templates
         # The function replaces the positive prompt placeholder in the template,
         # and combines the negative prompt with the template's negative prompt, if they exist.
@@ -1772,6 +1831,12 @@ class SDXL_Prompt_Styler:
                 text_pos_style = text_pos_g_style 
         else:
             text_pos_style = text_pos_g_style 
+
+        if(universal_neg == "ON"):
+            if (text_neg_style != ''):
+                text_neg_style = text_neg_style + ', text, watermark, low-quality, signature, moire pattern, downsampling, aliasing, distorted, blurry, glossy, blur, jpeg artifacts, compression artifacts, poorly drawn, low-resolution, bad, distortion, twisted, excessive, exaggerated pose, exaggerated limbs, grainy, symmetrical, duplicate, error, pattern, beginner, pixelated, fake, hyper, glitch, overexposed, high-contrast, bad-contrast'
+            else:
+                text_neg_style = 'text, watermark, low-quality, signature, moiré pattern, downsampling, aliasing, distorted, blurry, glossy, blur, jpeg artifacts, compression artifacts, poorly drawn, low-resolution, bad, distortion, twisted, excessive, exaggerated pose, exaggerated limbs, grainy, symmetrical, duplicate, error, pattern, beginner, pixelated, fake, hyper, glitch, overexposed, high-contrast, bad-contrast'
 
         return text_pos_g_style, text_pos_l_style, text_pos_style, text_neg_style
 
@@ -1978,4 +2043,5 @@ NODE_CLASS_MAPPINGS = {
     "Crop Image TargetSize (JPS)": Crop_Image_TargetSize,
     "SDXL Prompt Styler (JPS)": SDXL_Prompt_Styler,
     "SDXL Prompt Handling (JPS)": SDXL_Prompt_Handling,
+    "SDXL Prompt Handling Plus (JPS)": SDXL_Prompt_Handling_Plus,
 }
