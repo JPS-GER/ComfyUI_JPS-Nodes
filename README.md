@@ -62,6 +62,9 @@ __Text__
 * Get Date Time String - get current date/time (has extra code to make sure it will not use cached data)
 * SDXL Prompt Handling - control how text_g and text_l input will be handled (many options)
 * SDXL Prompt Handling Plus - control how text_g and text_l input will be handled (many options), option to add an "universal negative" prompt
+
+![image](https://github.com/JPS-GER/ComfyUI_JPS-Nodes/assets/142158778/66da22f7-e4d6-4898-ae30-7b123a268615)
+![image](https://github.com/JPS-GER/ComfyUI_JPS-Nodes/assets/142158778/c5abb960-0c6c-448a-a2f2-72d857dddc70)
   
 __Image__
 * Get Image Size - get width and height value from an input image, useful in combination with "Resolution Multiply" and "SDXL Recommended Resolution Calc" nodes
@@ -69,6 +72,8 @@ __Image__
 
 __Style__
 * SDXL Prompt Styler - add artists, movies and general styles to your text prompt, option to add an "universal negative" prompt - uses json files, so you can extend the available options
+
+![image](https://github.com/JPS-GER/ComfyUI_JPS-Nodes/assets/142158778/486e2e32-1a06-4a79-b85d-0d21e4013016)
 
 # Credits
 
