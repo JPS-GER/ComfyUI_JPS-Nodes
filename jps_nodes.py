@@ -243,10 +243,7 @@ class SDXL_Resolutions:
 
 class SDXL_Basic_Settings:
     freeuswitch = ["OFF","ON"]
-    freeubackbone = ["off", "very soft", "soft", "medium", "strong", "very strong", "max"]
-    freeuskip = ["off", "very soft", "soft", "medium", "strong", "very strong", "max"]
     resolution = ["square - 1024x1024 (1:1)","landscape - 1152x896 (4:3)","landscape - 1216x832 (3:2)","landscape - 1344x768 (16:9)","landscape - 1536x640 (21:9)", "portrait - 896x1152 (3:4)","portrait - 832x1216 (2:3)","portrait - 768x1344 (9:16)","portrait - 640x1536 (9:21)"]
-    vaefrom = ["Separate VAE","Base Model VAE","Refiner Model VAE"]
 
     def __init__(self):
         pass
@@ -259,17 +256,12 @@ class SDXL_Basic_Settings:
                 "sampler_name": (comfy.samplers.KSampler.SAMPLERS,),
                 "scheduler": (comfy.samplers.KSampler.SCHEDULERS,),
                 "scheduler": (comfy.samplers.KSampler.SCHEDULERS,),
-                "vae_source": (s.vaefrom,),
                 "steps_total": ("INT", {"default": 60, "min": 20, "max": 250, "step": 5}),
                 "base_percentage": ("INT", {"default": 80, "min": 5, "max": 100, "step": 5}),
-                "cfg_base": ("FLOAT", {"default": 7, "min": 1, "max": 20, "step": 0.5}),
-                "cfg_refiner": ("FLOAT", {"default": 0, "min": 0, "max": 20, "step": 0.5}),
+                "cfg_base": ("FLOAT", {"default": 6.5, "min": 1, "max": 20, "step": 0.5}),
+                "cfg_refiner": ("FLOAT", {"default": 6.5, "min": 0, "max": 20, "step": 0.5}),
                 "ascore_refiner": ("FLOAT", {"default": 6, "min": 1, "max": 10, "step": 0.5}),
-                "freeu_switch": (s.freeuswitch,),
-                "freeu_backbone": (s.freeubackbone,),
-                "freeu_skip": (s.freeuskip,),
-                "clip_skip_base": ("INT", {"default": -1, "min": -24, "max": -1}),
-                "clip_skip_refiner": ("INT", {"default": -1, "min": -24, "max": -1}),
+                "clip_skip": ("INT", {"default": -2, "min": -24, "max": -1}),
                 "filename": ("STRING", {"default": "JPS"}),
         }}
     RETURN_TYPES = ("BASIC_PIPE",)
@@ -278,7 +270,7 @@ class SDXL_Basic_Settings:
 
     CATEGORY="JPS Nodes/Settings"
 
-    def get_values(self,resolution,sampler_name,scheduler,vae_source,steps_total,base_percentage,cfg_base,cfg_refiner,ascore_refiner,freeu_switch,freeu_backbone,freeu_skip,clip_skip_base,clip_skip_refiner,filename):
+    def get_values(self,resolution,sampler_name,scheduler,steps_total,base_percentage,cfg_base,cfg_refiner,ascore_refiner,clip_skip,filename):
         width = 1024
         height = 1024
         width = int(width)
@@ -321,63 +313,7 @@ class SDXL_Basic_Settings:
         if(cfg_refiner == 0):
             cfg_refiner = cfg_base
         
-        vae_select = 1
-        if(vae_source == "Base Model VAE"):
-            vae_select = 2
-        if(vae_source == "Refiner Model VAE"):
-            vae_select = 3
-
-        if(freeu_switch == "ON"):
-            if(freeu_backbone == "very soft"):
-                freeu_b1 = 1.03
-                freeu_b2 = 1.10
-            elif(freeu_backbone == "soft"):
-                freeu_b1 = 1.07
-                freeu_b2 = 1.15
-            elif(freeu_backbone == "medium"):
-                freeu_b1 = 1.10
-                freeu_b2 = 1.20
-            elif(freeu_backbone == "strong"):
-                freeu_b1 = 1.13
-                freeu_b2 = 1.25
-            elif(freeu_backbone == "very strong"):
-                freeu_b1 = 1.17
-                freeu_b2 = 1.30
-            elif(freeu_backbone == "max"):
-                freeu_b1 = 1.20
-                freeu_b2 = 1.35
-            else:
-                freeu_b1 = 1.00
-                freeu_b2 = 1.00
-            if(freeu_skip == "very soft"):
-                freeu_s1 = 0.97
-                freeu_s2 = 0.60
-            elif(freeu_skip == "soft"):
-                freeu_s1 = 0.93
-                freeu_s2 = 0.40
-            elif(freeu_skip == "medium"):
-                freeu_s1 = 0.90
-                freeu_s2 = 0.20
-            elif(freeu_skip == "strong"):
-                freeu_s1 = 0.86
-                freeu_s2 = 0.17
-            elif(freeu_skip == "very strong"):
-                freeu_s1 = 0.80
-                freeu_s2 = 0.13
-            elif(freeu_skip == "max"):
-                freeu_s1 = 0.75
-                freeu_s2 = 0.10
-            else:
-                freeu_s1 = 1.00
-                freeu_s2 = 1.00
-        else:
-            freeu_b1 = 1.00
-            freeu_b2 = 1.00
-            freeu_s1 = 1.00
-            freeu_s2 = 1.00
-
-        sdxl_basic_settings = width, height, sampler_name, scheduler, vae_select, steps_total, step_split, cfg_base, cfg_refiner, ascore_refiner, freeu_b1, freeu_b2, freeu_s1, freeu_s2, clip_skip_base, clip_skip_refiner, filename
-        
+        sdxl_basic_settings = width, height, sampler_name, scheduler, steps_total, step_split, cfg_base, cfg_refiner, ascore_refiner, clip_skip, filename
 
         return(sdxl_basic_settings,)
 
@@ -385,7 +321,6 @@ class SDXL_Basic_Settings:
 
 class SDXL_Basic_Settings_Pipe:
     resolution = ["square - 1024x1024 (1:1)","landscape - 1152x896 (4:3)","landscape - 1216x832 (3:2)","landscape - 1344x768 (16:9)","landscape - 1536x640 (21:9)", "portrait - 896x1152 (3:4)","portrait - 832x1216 (2:3)","portrait - 768x1344 (9:16)","portrait - 640x1536 (9:21)"]
-    vaefrom = ["Separate VAE","Base Model VAE","Refiner Model VAE"]
 
     def __init__(self):
         pass
@@ -397,17 +332,17 @@ class SDXL_Basic_Settings_Pipe:
                 "sdxl_basic_settings": ("BASIC_PIPE",)
             },
         }
-    RETURN_TYPES = ("BASIC_PIPE","INT","INT",comfy.samplers.KSampler.SAMPLERS,comfy.samplers.KSampler.SCHEDULERS,"INT","INT","INT","FLOAT","FLOAT","FLOAT","FLOAT","FLOAT","FLOAT","FLOAT","INT","INT","STRING",)
-    RETURN_NAMES = ("sdxl_basic_settings","width","height","sampler_name","scheduler","vae_select","steps_total","step_split","cfg_base","cfg_refiner","ascore_refiner","freeu_b1","freeu_b2","freeu_s1","freeu_s2","clip_skip_base","clip_skip_refiner","filename",)
+    RETURN_TYPES = ("INT","INT",comfy.samplers.KSampler.SAMPLERS,comfy.samplers.KSampler.SCHEDULERS,"INT","INT","FLOAT","FLOAT","FLOAT","INT","STRING",)
+    RETURN_NAMES = ("width","height","sampler_name","scheduler","steps_total","step_split","cfg_base","cfg_refiner","ascore_refiner","clip_skip","filename",)
     FUNCTION = "give_values"
 
     CATEGORY="JPS Nodes/Pipes"
 
     def give_values(self,sdxl_basic_settings):
         
-        width, height, sampler_name, scheduler, vae_select, steps_total, step_split, cfg_base, cfg_refiner, ascore_refiner, freeu_b1, freeu_b2, freeu_s1, freeu_s2, clip_skip_base, clip_skip_refiner, filename = sdxl_basic_settings
+        width, height, sampler_name, scheduler, steps_total, step_split, cfg_base, cfg_refiner, ascore_refiner, clip_skip, filename = sdxl_basic_settings
 
-        return(sdxl_basic_settings, int(width), int(height), sampler_name, scheduler, int(vae_select), int(steps_total), int(step_split), float(cfg_base), float(cfg_refiner), float(ascore_refiner), float(freeu_b1), float(freeu_b2), float(freeu_s1), float(freeu_s2), int(clip_skip_base), int(clip_skip_refiner), str(filename),)
+        return(int(width), int(height), sampler_name, scheduler, int(steps_total), int(step_split), float(cfg_base), float(cfg_refiner), float(ascore_refiner), int(clip_skip), str(filename),)
 
 #---------------------------------------------------------------------------------------------------------------------------------------------------#
 
@@ -461,7 +396,7 @@ class SDXL_Prompt_Handling_Plus:
             if (neg != ''):
                 neg = neg + ', text, watermark, low-quality, signature, moire pattern, downsampling, aliasing, distorted, blurry, glossy, blur, jpeg artifacts, compression artifacts, poorly drawn, low-resolution, bad, distortion, twisted, excessive, exaggerated pose, exaggerated limbs, grainy, symmetrical, duplicate, error, pattern, beginner, pixelated, fake, hyper, glitch, overexposed, high-contrast, bad-contrast'
             else:
-                neg = 'text, watermark, low-quality, signature, moiré pattern, downsampling, aliasing, distorted, blurry, glossy, blur, jpeg artifacts, compression artifacts, poorly drawn, low-resolution, bad, distortion, twisted, excessive, exaggerated pose, exaggerated limbs, grainy, symmetrical, duplicate, error, pattern, beginner, pixelated, fake, hyper, glitch, overexposed, high-contrast, bad-contrast'
+                neg = 'text, watermark, low-quality, signature, moire pattern, downsampling, aliasing, distorted, blurry, glossy, blur, jpeg artifacts, compression artifacts, poorly drawn, low-resolution, bad, distortion, twisted, excessive, exaggerated pose, exaggerated limbs, grainy, symmetrical, duplicate, error, pattern, beginner, pixelated, fake, hyper, glitch, overexposed, high-contrast, bad-contrast'
 
         return(pos_g,pos_l,neg,)
 
@@ -526,7 +461,7 @@ class Math_Resolution_Multiply:
             "required": {
                 "width": ("INT", {"default": 1024, "min": 256, "max": 8192, "step": 16}),
                 "height": ("INT", {"default": 1024, "min": 256, "max": 8192, "step": 16}),
-                "factor": ("INT", {"default": 2, "min": 1, "max": 4, "step": 1}),
+                "factor": ("INT", {"default": 2, "min": 1, "max": 8, "step": 1}),
         }}
     RETURN_TYPES = ("INT","INT")
     RETURN_NAMES = ("width_resized", "height_resized")
@@ -900,9 +835,9 @@ class Generation_Settings:
                 "resfrom": (s.resfrom,),
                 "img_to_img_strength": ("INT", {"default": 50, "min": 2, "max": 100, "step": 2}),
                 "inpainting_strength": ("INT", {"default": 100, "min": 2, "max": 100, "step": 2}),
-                "ctrl_strength": ("INT", {"default": 36, "min": 2, "max": 100, "step": 2}),
+                "ctrl_strength": ("INT", {"default": 40, "min": 2, "max": 100, "step": 2}),
                 "ctrl_start_percent": ("INT", {"default": 0, "min": 0, "max": 100, "step": 5}),
-                "ctrl_stop_percent": ("INT", {"default": 100, "min": 0, "max": 100, "step": 5}),
+                "ctrl_stop_percent": ("INT", {"default": 70, "min": 0, "max": 100, "step": 5}),
                 "ctrl_low_threshold": ("INT", {"default": 100, "min": 0, "max": 255, "step": 5}),
                 "ctrl_high_threshold": ("INT", {"default": 200, "min": 0, "max": 255, "step": 5}),
                 "crop_position": (["center", "left", "right", "top", "bottom"],),
