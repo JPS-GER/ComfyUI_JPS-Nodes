@@ -842,6 +842,7 @@ class Generation_Settings:
                 "ctrl_high_threshold": ("INT", {"default": 200, "min": 0, "max": 255, "step": 5}),
                 "crop_position": (["center", "left", "right", "top", "bottom"],),
                 "crop_offset": ("INT", { "default": 0, "min": -2048, "max": 2048, "step": 1, "display": "number" }),
+                "crop_intpol": (["lanczos", "nearest", "bilinear", "bicubic", "area", "nearest-exact"],),
             }   
         }
     RETURN_TYPES = ("BASIC_PIPE",) 
@@ -850,7 +851,7 @@ class Generation_Settings:
 
     CATEGORY="JPS Nodes/Settings"
 
-    def get_genfull(self, mode, resfrom, img_to_img_strength, inpainting_strength, ctrl_strength, ctrl_start_percent, ctrl_stop_percent, ctrl_low_threshold, ctrl_high_threshold, crop_position, crop_offset):
+    def get_genfull(self, mode, resfrom, img_to_img_strength, inpainting_strength, ctrl_strength, ctrl_start_percent, ctrl_stop_percent, ctrl_low_threshold, ctrl_high_threshold, crop_position, crop_offset, crop_intpol):
         gen_mode = 1
         res_from = 1
         if(mode == "Text Prompt"):
@@ -898,15 +899,13 @@ class Generation_Settings:
         if(resfrom == "Use Image Resolution"):
             res_from = int(2)
         
-        generation_settings = gen_mode, res_from, img_strength, ctrl_strength, ctrl_start, ctrl_stop, ctrl_low, ctrl_high, crop_position, crop_offset
+        generation_settings = gen_mode, res_from, img_strength, ctrl_strength, ctrl_start, ctrl_stop, ctrl_low, ctrl_high, crop_position, crop_offset, crop_intpol
 
         return(generation_settings,)
 
 #---------------------------------------------------------------------------------------------------------------------------------------------------#
 
 class Generation_Settings_Pipe:
-#    resolution = ["square - 1024x1024 (1:1)","landscape - 1152x896 (4:3)","landscape - 1216x832 (3:2)","landscape - 1344x768 (16:9)","landscape - 1536x640 (21:9)", "portrait - 896x1152 (3:4)","portrait - 832x1216 (2:3)","portrait - 768x1344 (9:16)","portrait - 640x1536 (9:21)"]
-#    vaefrom = ["Separate VAE","Base Model VAE","Refiner Model VAE"]
 
     def __init__(self):
         pass
@@ -918,28 +917,23 @@ class Generation_Settings_Pipe:
                 "generation_settings": ("BASIC_PIPE",)
             },
         }
-    RETURN_TYPES = ("INT","INT","FLOAT","FLOAT","FLOAT","FLOAT","INT","INT",["center", "left", "right", "top", "bottom"],"INT",)
-    RETURN_NAMES = ("gen_mode", "res_from", "img_strength", "ctrl_strength", "ctrl_start", "ctrl_stop", "ctrl_low", "ctrl_high", "crop_position", "crop_offset",)
+    RETURN_TYPES = ("INT","INT","FLOAT","FLOAT","FLOAT","FLOAT","INT","INT",["center", "left", "right", "top", "bottom"],"INT",["lanczos", "nearest", "bilinear", "bicubic", "area", "nearest-exact"],)
+    RETURN_NAMES = ("gen_mode", "res_from", "img_strength", "ctrl_strength", "ctrl_start", "ctrl_stop", "ctrl_low", "ctrl_high", "crop_position", "crop_offset","crop_intpol")
     FUNCTION = "give_values"
 
     CATEGORY="JPS Nodes/Pipes"
 
     def give_values(self,generation_settings):
         
-        gen_mode, res_from, img_strength, ctrl_strength, ctrl_start, ctrl_stop, ctrl_low, ctrl_high, crop_position, crop_offset = generation_settings
+        gen_mode, res_from, img_strength, ctrl_strength, ctrl_start, ctrl_stop, ctrl_low, ctrl_high, crop_position, crop_offset, crop_intpol = generation_settings
 
-        return(int(gen_mode), int(res_from), float(img_strength), float(ctrl_strength), float(ctrl_start), float(ctrl_stop), int(ctrl_low), int(ctrl_high), crop_position, int(crop_offset),)
+        return(int(gen_mode), int(res_from), float(img_strength), float(ctrl_strength), float(ctrl_start), float(ctrl_stop), int(ctrl_low), int(ctrl_high), crop_position, int(crop_offset), crop_intpol, )
 
 #---------------------------------------------------------------------------------------------------------------------------------------------------#
 
 class IP_Adapter_Settings:
     ipaweight = ["Use IP Adapter #1 weight for all","Use separate IP Adapter weights"]
     ipanoise = ["Use IP Adapter #1 noise for all","Use separate IP Adapter noises"]    
-    ipa1switch = ["IP Adapter #1 OFF","IP Adapter #1 ON"]
-    ipa2switch = ["IP Adapter #2 OFF","IP Adapter #2 ON"]
-    ipa3switch = ["IP Adapter #3 OFF","IP Adapter #3 ON"]
-    ipa4switch = ["IP Adapter #4 OFF","IP Adapter #4 ON"]
-    ipa5switch = ["IP Adapter #5 OFF","IP Adapter #5 ON"]
 
     def __init__(self):
         pass
@@ -948,40 +942,38 @@ class IP_Adapter_Settings:
     def INPUT_TYPES(s):
         return {
             "required": {
-                "ipa1_switch": (s.ipa1switch,),
-                "ipa1_crop": (["center","top", "bottom", "left", "right"],),
-                "ipa1_offset": ("INT", { "default": 0, "min": -2048, "max": 2048, "step": 1, "display": "number" }),
-                "ipa1_weight": ("FLOAT", {"default": 0.5, "min": -1, "max": 3, "step": 0.05}),
-                "ipa1_noise": ("FLOAT", {"default": 0.0, "min": 0, "max": 1, "step": 0.05}),
-
-                "ipa2_switch": (s.ipa2switch,),
-                "ipa2_crop": (["center","top", "bottom", "left", "right"],),
-                "ipa2_offset": ("INT", { "default": 0, "min": -2048, "max": 2048, "step": 1, "display": "number" }),
-                "ipa2_weight": ("FLOAT", {"default": 0.5, "min": -1, "max": 3, "step": 0.05}),
-                "ipa2_noise": ("FLOAT", {"default": 0.0, "min": 0, "max": 1, "step": 0.05}),
-
-                "ipa3_switch": (s.ipa3switch,),
-                "ipa3_crop": (["center","top", "bottom", "left", "right"],),
-                "ipa3_offset": ("INT", { "default": 0, "min": -2048, "max": 2048, "step": 1, "display": "number" }),
-                "ipa3_weight": ("FLOAT", {"default": 0.5, "min": -1, "max": 3, "step": 0.05}),
-                "ipa3_noise": ("FLOAT", {"default": 0.0, "min": 0, "max": 1, "step": 0.05}),
-
-                "ipa4_switch": (s.ipa4switch,),
-                "ipa4_crop": (["center","top", "bottom", "left", "right"],),
-                "ipa4_offset": ("INT", { "default": 0, "min": -2048, "max": 2048, "step": 1, "display": "number" }),
-                "ipa4_weight": ("FLOAT", {"default": 0.5, "min": -1, "max": 3, "step": 0.05}),
-                "ipa4_noise": ("FLOAT", {"default": 0.0, "min": 0, "max": 1, "step": 0.05}),
-
-                "ipa5_switch": (s.ipa5switch,),
-                "ipa5_crop": (["center","top", "bottom", "left", "right"],),
-                "ipa5_offset": ("INT", { "default": 0, "min": -2048, "max": 2048, "step": 1, "display": "number" }),
-                "ipa5_weight": ("FLOAT", {"default": 0.5, "min": -1, "max": 3, "step": 0.05}),
-                "ipa5_noise": ("FLOAT", {"default": 0.0, "min": 0, "max": 1, "step": 0.05}),
-
-                "crop_intpol": (["lanczos", "nearest", "bilinear", "bicubic", "area", "nearest-exact"],),                
-                "crop_res": ("INT", { "default": 224 , "min": 224, "max": 1792, "step": 224, "display": "number" }),
                 "ipa_weight": (s.ipaweight,),
                 "ipa_noise": (s.ipanoise,),
+
+                "ipa1_weight": ("FLOAT", {"default": 0.5, "min": -1, "max": 3, "step": 0.05}),
+                "ipa2_weight": ("FLOAT", {"default": 0.5, "min": -1, "max": 3, "step": 0.05}),
+                "ipa3_weight": ("FLOAT", {"default": 0.5, "min": -1, "max": 3, "step": 0.05}),
+                "ipa4_weight": ("FLOAT", {"default": 0.5, "min": -1, "max": 3, "step": 0.05}),
+                "ipa5_weight": ("FLOAT", {"default": 0.5, "min": -1, "max": 3, "step": 0.05}),
+
+                "ipa1_noise": ("FLOAT", {"default": 0.0, "min": 0, "max": 1, "step": 0.05}),
+                "ipa2_noise": ("FLOAT", {"default": 0.0, "min": 0, "max": 1, "step": 0.05}),
+                "ipa3_noise": ("FLOAT", {"default": 0.0, "min": 0, "max": 1, "step": 0.05}),
+                "ipa4_noise": ("FLOAT", {"default": 0.0, "min": 0, "max": 1, "step": 0.05}),
+                "ipa5_noise": ("FLOAT", {"default": 0.0, "min": 0, "max": 1, "step": 0.05}),
+
+                "ipa1_crop": (["center","top", "bottom", "left", "right"],),
+                "ipa1_offset": ("INT", { "default": 0, "min": -2048, "max": 2048, "step": 1, "display": "number" }),
+
+                "ipa2_crop": (["center","top", "bottom", "left", "right"],),
+                "ipa2_offset": ("INT", { "default": 0, "min": -2048, "max": 2048, "step": 1, "display": "number" }),
+
+                "ipa3_crop": (["center","top", "bottom", "left", "right"],),
+                "ipa3_offset": ("INT", { "default": 0, "min": -2048, "max": 2048, "step": 1, "display": "number" }),
+
+                "ipa4_crop": (["center","top", "bottom", "left", "right"],),
+                "ipa4_offset": ("INT", { "default": 0, "min": -2048, "max": 2048, "step": 1, "display": "number" }),
+
+                "ipa5_crop": (["center","top", "bottom", "left", "right"],),
+                "ipa5_offset": ("INT", { "default": 0, "min": -2048, "max": 2048, "step": 1, "display": "number" }),
+
+                "crop_intpol": (["lanczos", "nearest", "bilinear", "bicubic", "area", "nearest-exact"],),
+                "crop_res": ("INT", { "default": 224 , "min": 224, "max": 1792, "step": 224, "display": "number" }),
             }
         }
     RETURN_TYPES = ("BASIC_PIPE",)
@@ -990,62 +982,36 @@ class IP_Adapter_Settings:
 
     CATEGORY="JPS Nodes/Settings"
 
-    def get_ipamode(self,ipa1_switch,ipa2_switch,ipa3_switch,ipa4_switch,ipa5_switch,crop_res,crop_intpol,ipa1_crop,ipa1_offset,ipa2_crop,ipa2_offset,ipa3_crop,ipa3_offset,ipa4_crop,ipa4_offset,ipa5_crop,ipa5_offset,ipa_weight,ipa1_weight,ipa2_weight,ipa3_weight,ipa4_weight,ipa5_weight,ipa_noise,ipa1_noise,ipa2_noise,ipa3_noise,ipa4_noise,ipa5_noise):
+    def get_ipamode(self,crop_res,crop_intpol,ipa1_crop,ipa1_offset,ipa2_crop,ipa2_offset,ipa3_crop,ipa3_offset,ipa4_crop,ipa4_offset,ipa5_crop,ipa5_offset,ipa_weight,ipa1_weight,ipa2_weight,ipa3_weight,ipa4_weight,ipa5_weight,ipa_noise,ipa1_noise,ipa2_noise,ipa3_noise,ipa4_noise,ipa5_noise):
         if(ipa_weight == "Use IP Adapter #1 weight for all"):
             ipa2_weight = ipa1_weight
             ipa3_weight = ipa1_weight
             ipa4_weight = ipa1_weight
             ipa5_weight = ipa1_weight
-        if(ipa_weight == "Use IP Adapter #1 noise for all"):
+        if(ipa_noise == "Use IP Adapter #1 noise for all"):
             ipa2_noise = ipa1_noise
             ipa3_noise = ipa1_noise
             ipa4_noise = ipa1_noise
             ipa5_noise = ipa1_noise
-        ipa1switch = int(1)
-        ipa1weight = 0
-        ipa1noise = 0
-        if(ipa1_switch == "IP Adapter #1 ON"):
-            ipa1switch = int(2)
-            ipa1weight = ipa1_weight
-            ipa1noise = ipa1_noise
-        ipa2switch = int(1)
-        ipa2weight = 0
-        ipa2noise = 0
-        if(ipa2_switch == "IP Adapter #2 ON" and ipa1_switch == "IP Adapter #1 ON"):
-            ipa2switch = int(2)
-            ipa2weight = ipa2_weight
-            ipa2noise = ipa2_noise
-        ipa3switch = int(1)
-        ipa3weight = 0
-        ipa3noise = 0
-        if(ipa3_switch == "IP Adapter #3 ON" and ipa1_switch == "IP Adapter #1 ON"):
-            ipa3switch = int(2)
-            ipa3weight = ipa3_weight
-            ipa3noise = ipa3_noise
-        ipa4switch = int(1)
-        ipa4weight = 0
-        ipa4noise = 0
-        if(ipa4_switch == "IP Adapter #4 ON" and ipa1_switch == "IP Adapter #1 ON"):
-            ipa4switch = int(2)
-            ipa4weight = ipa4_weight
-            ipa4noise = ipa4_noise
-        ipa5switch = int(1)
-        ipa5weight = 0
-        ipa5noise = 0
-        if(ipa5_switch == "IP Adapter #5 ON" and ipa1_switch == "IP Adapter #1 ON"):
-            ipa5switch = int(2)
-            ipa5weight = ipa5_weight
-            ipa5noise = ipa5_noise
 
-        ip_adapter_settings = ipa1switch,ipa2switch,ipa3switch,ipa4switch,ipa5switch,crop_res,crop_intpol,ipa1_crop,ipa1_offset,ipa2_crop,ipa2_offset,ipa3_crop,ipa3_offset,ipa4_crop,ipa4_offset,ipa5_crop,ipa5_offset,ipa1weight,ipa2weight,ipa3weight,ipa4weight,ipa5weight,ipa1noise,ipa2noise,ipa3noise,ipa4noise,ipa5noise
+        ipa1weight = ipa1_weight
+        ipa1noise = ipa1_noise
+        ipa2weight = ipa2_weight
+        ipa2noise = ipa2_noise
+        ipa3weight = ipa3_weight
+        ipa3noise = ipa3_noise
+        ipa4weight = ipa4_weight
+        ipa4noise = ipa4_noise
+        ipa5weight = ipa5_weight
+        ipa5noise = ipa5_noise
+
+        ip_adapter_settings = crop_res,crop_intpol,ipa1_crop,ipa1_offset,ipa2_crop,ipa2_offset,ipa3_crop,ipa3_offset,ipa4_crop,ipa4_offset,ipa5_crop,ipa5_offset,ipa1weight,ipa2weight,ipa3weight,ipa4weight,ipa5weight,ipa1noise,ipa2noise,ipa3noise,ipa4noise,ipa5noise
 
         return(ip_adapter_settings,)
 
 #---------------------------------------------------------------------------------------------------------------------------------------------------#
 
 class IP_Adapter_Settings_Pipe:
-    #ipa1switch = ["IP Adapter #1 OFF","IP Adapter #1 ON"]
-    #ipa2switch = ["IP Adapter #2 OFF","IP Adapter #2 ON"]
 
     def __init__(self):
         pass
@@ -1057,25 +1023,21 @@ class IP_Adapter_Settings_Pipe:
                 "ip_adapter_settings": ("BASIC_PIPE",),
             }
         }
-    RETURN_TYPES = ("INT","INT","INT","INT","INT","INT",["lanczos", "nearest", "bilinear", "bicubic", "area", "nearest-exact"],["center","top", "bottom", "left", "right"],"INT",["center","top", "bottom", "left", "right"],"INT",["center","top", "bottom", "left", "right"],"INT",["center","top", "bottom", "left", "right"],"INT",["center","top", "bottom", "left", "right"],"INT","FLOAT","FLOAT","FLOAT","FLOAT","FLOAT","FLOAT","FLOAT","FLOAT","FLOAT","FLOAT")
-    RETURN_NAMES = ("ipa1_switch", "ipa2_switch", "ipa3_switch", "ipa4_switch", "ipa5_switch", "crop_res", "crop_intpol", "ipa1_crop", "ipa1_offset", "ipa2_crop", "ipa2_offset", "ipa3_crop", "ipa3_offset", "ipa4_crop", "ipa4_offset", "ipa5_crop", "ipa5_offset", "ipa1_weight", "ipa2_weight", "ipa3_weight", "ipa4_weight", "ipa5_weight", "ipa1_noise", "ipa2_noise", "ipa3_noise", "ipa4_noise", "ipa5_noise")
+    RETURN_TYPES = ("INT",["lanczos", "nearest", "bilinear", "bicubic", "area", "nearest-exact"],["center","top", "bottom", "left", "right"],"INT",["center","top", "bottom", "left", "right"],"INT",["center","top", "bottom", "left", "right"],"INT",["center","top", "bottom", "left", "right"],"INT",["center","top", "bottom", "left", "right"],"INT","FLOAT","FLOAT","FLOAT","FLOAT","FLOAT","FLOAT","FLOAT","FLOAT","FLOAT","FLOAT")
+    RETURN_NAMES = ("crop_res", "crop_intpol", "ipa1_crop", "ipa1_offset", "ipa2_crop", "ipa2_offset", "ipa3_crop", "ipa3_offset", "ipa4_crop", "ipa4_offset", "ipa5_crop", "ipa5_offset", "ipa1_weight", "ipa2_weight", "ipa3_weight", "ipa4_weight", "ipa5_weight", "ipa1_noise", "ipa2_noise", "ipa3_noise", "ipa4_noise", "ipa5_noise")
     FUNCTION = "get_ipamode"
 
     CATEGORY="JPS Nodes/Pipes"
 
     def get_ipamode(self,ip_adapter_settings):
 
-        ipa1switch,ipa2switch,ipa3switch,ipa4switch,ipa5switch,crop_res,crop_intpol,ipa1_crop,ipa1_offset,ipa2_crop,ipa2_offset,ipa3_crop,ipa3_offset,ipa4_crop,ipa4_offset,ipa5_crop,ipa5_offset,ipa1weight,ipa2weight,ipa3weight,ipa4weight,ipa5weight,ipa1noise,ipa2noise,ipa3noise,ipa4noise,ipa5noise = ip_adapter_settings
+        crop_res,crop_intpol,ipa1_crop,ipa1_offset,ipa2_crop,ipa2_offset,ipa3_crop,ipa3_offset,ipa4_crop,ipa4_offset,ipa5_crop,ipa5_offset,ipa1weight,ipa2weight,ipa3weight,ipa4weight,ipa5weight,ipa1noise,ipa2noise,ipa3noise,ipa4noise,ipa5noise = ip_adapter_settings
 
-        return(int(ipa1switch),int(ipa2switch),int(ipa3switch),int(ipa4switch),int(ipa5switch),int(crop_res),crop_intpol,ipa1_crop,int(ipa1_offset),ipa2_crop,int(ipa2_offset),ipa3_crop,int(ipa3_offset),ipa4_crop,int(ipa4_offset),ipa5_crop,int(ipa5_offset),float(ipa1weight),float(ipa2weight),float(ipa3weight),float(ipa4weight),float(ipa5weight),float(ipa1noise),float(ipa2noise),float(ipa3noise),float(ipa4noise),float(ipa5noise),)
+        return(int(crop_res),crop_intpol,ipa1_crop,int(ipa1_offset),ipa2_crop,int(ipa2_offset),ipa3_crop,int(ipa3_offset),ipa4_crop,int(ipa4_offset),ipa5_crop,int(ipa5_offset),float(ipa1weight),float(ipa2weight),float(ipa3weight),float(ipa4weight),float(ipa5weight),float(ipa1noise),float(ipa2noise),float(ipa3noise),float(ipa4noise),float(ipa5noise),)
 
 #---------------------------------------------------------------------------------------------------------------------------------------------------#
 
 class Revision_Settings:
-    rev1switch = ["Revision #1 OFF","Revision #1 ON"]
-    rev2switch = ["Revision #2 OFF","Revision #2 ON"]
-    posprompt = ["Pos. Prompt OFF","Pos. Prompt ON"]    
-    negprompt = ["Neg. Prompt OFF","Neg. Prompt ON"]    
 
     def __init__(self):
         pass
@@ -1084,23 +1046,20 @@ class Revision_Settings:
     def INPUT_TYPES(s):
         return {
             "required": {
-                "rev1_switch": (s.rev1switch,),
+                "rev1_strength": ("FLOAT", {"default": 1, "min": 0, "max": 10, "step": 0.1}),
+                "rev2_strength": ("FLOAT", {"default": 1, "min": 0, "max": 10, "step": 0.1}),
+
+                "rev1_noiseaug": ("FLOAT", {"default": 0, "min": 0, "max": 1, "step": 0.1}),
+                "rev2_noiseaug": ("FLOAT", {"default": 0, "min": 0, "max": 1, "step": 0.1}),
+
                 "rev1_crop": (["center","top", "bottom", "left", "right"],),
                 "rev1_offset": ("INT", { "default": 0, "min": -2048, "max": 2048, "step": 1, "display": "number" }),
-                "rev1_strength": ("FLOAT", {"default": 1, "min": 0, "max": 10, "step": 0.1}),
-                "rev1_noiseaug": ("FLOAT", {"default": 0, "min": 0, "max": 1, "step": 0.1}),
 
-                "rev2_switch": (s.rev2switch,),
                 "rev2_crop": (["center","top", "bottom", "left", "right"],),
                 "rev2_offset": ("INT", { "default": 0, "min": -2048, "max": 2048, "step": 1, "display": "number" }),                
-                "rev2_strength": ("FLOAT", {"default": 1, "min": 0, "max": 10, "step": 0.1}),
-                "rev2_noiseaug": ("FLOAT", {"default": 0, "min": 0, "max": 1, "step": 0.1}),
 
                 "crop_intpol": (["lanczos", "nearest", "bilinear", "bicubic", "area", "nearest-exact"],),                
                 "crop_res": ("INT", { "default": 224 , "min": 224, "max": 1792, "step": 224, "display": "number" }),
-
-                "pos_prompt": (s.posprompt,),                
-                "neg_prompt": (s.negprompt,),
             }
         }
     RETURN_TYPES = ("BASIC_PIPE",)
@@ -1109,38 +1068,24 @@ class Revision_Settings:
 
     CATEGORY="JPS Nodes/Settings"
 
-    def get_revmode(self,rev1_switch,rev2_switch,pos_prompt,neg_prompt,crop_res,crop_intpol,rev1_crop,rev1_offset,rev2_crop,rev2_offset,rev1_strength,rev2_strength,rev1_noiseaug,rev2_noiseaug,):
-        rev1switch = int(1)
-        rev2switch = int(1)
+    def get_revmode(self,crop_res,crop_intpol,rev1_crop,rev1_offset,rev2_crop,rev2_offset,rev1_strength,rev2_strength,rev1_noiseaug,rev2_noiseaug,):
         rev1strength = 0
         rev1noiseaug = 0 
         rev2strength = 0
         rev2noiseaug = 0 
-        posprompt = int(2)
-        negprompt = int(2)
  
-        if(rev1_switch == "Revision #1 ON"):
-            rev1switch = int(2)
-            rev1strength = rev1_strength
-            rev1noiseaug = rev1_noiseaug
-        if(rev2_switch == "Revision #2 ON" and rev1_switch == "Revision #1 ON"):
-            rev2switch = int(2)
-            rev2strength = rev2_strength
-            rev2noiseaug = rev2_noiseaug
-        if(pos_prompt == "Pos. Prompt OFF" and rev1_switch == "Revision #1 ON"):
-            posprompt = int(1)
-        if(neg_prompt == "Neg. Prompt OFF" and rev1_switch == "Revision #1 ON"):
-            negprompt = int(1)
+        rev1strength = rev1_strength
+        rev1noiseaug = rev1_noiseaug
+        rev2strength = rev2_strength
+        rev2noiseaug = rev2_noiseaug
 
-        revision_settings = rev1switch,rev2switch,posprompt,negprompt,crop_res,crop_intpol,rev1_crop,rev1_offset,rev2_crop,rev2_offset,rev1strength,rev2strength,rev1noiseaug,rev2_noiseaug
+        revision_settings = crop_res,crop_intpol,rev1_crop,rev1_offset,rev2_crop,rev2_offset,rev1strength,rev2strength,rev1noiseaug,rev2_noiseaug
 
         return(revision_settings,)
 
 #---------------------------------------------------------------------------------------------------------------------------------------------------#
 
 class Revision_Settings_Pipe:
-    #rev1switch = ["Revision #1 OFF","Revision #1 ON"]
-    #rev2switch = ["Revision #2 OFF","Revision #2 ON"]
 
     def __init__(self):
         pass
@@ -1152,17 +1097,17 @@ class Revision_Settings_Pipe:
                 "revision_settings": ("BASIC_PIPE",),
             }
         }
-    RETURN_TYPES = ("INT","INT","INT","INT","INT",["lanczos", "nearest", "bilinear", "bicubic", "area", "nearest-exact"],["center","top", "bottom", "left", "right"],"INT",["center","top", "bottom", "left", "right"],"INT","FLOAT","FLOAT","FLOAT","FLOAT",)
-    RETURN_NAMES = ("rev1_switch", "rev2_switch", "pos_prompt", "neg_prompt", "crop_res", "crop_intpol", "rev1_crop", "rev1_offset", "rev2_crop", "rev2_offset", "rev1_strength", "rev2_strength", "rev1_noiseaug", "rev2_noiseaug",)
+    RETURN_TYPES = ("INT",["lanczos", "nearest", "bilinear", "bicubic", "area", "nearest-exact"],["center","top", "bottom", "left", "right"],"INT",["center","top", "bottom", "left", "right"],"INT","FLOAT","FLOAT","FLOAT","FLOAT",)
+    RETURN_NAMES = ("crop_res", "crop_intpol", "rev1_crop", "rev1_offset", "rev2_crop", "rev2_offset", "rev1_strength", "rev2_strength", "rev1_noiseaug", "rev2_noiseaug",)
     FUNCTION = "get_revmode"
 
     CATEGORY="JPS Nodes/Pipes"
 
     def get_revmode(self,revision_settings):
 
-        rev1switch,rev2switch,posprompt,negprompt,crop_res,crop_intpol,rev1_crop,rev1_offset,rev2_crop,rev2_offset,rev1strength,rev2strength,rev1noiseaug,rev2noiseaug = revision_settings
+        crop_res,crop_intpol,rev1_crop,rev1_offset,rev2_crop,rev2_offset,rev1strength,rev2strength,rev1noiseaug,rev2noiseaug = revision_settings
 
-        return(int(rev1switch),int(rev2switch),int(posprompt),int(negprompt),int(crop_res),crop_intpol,rev1_crop,int(rev1_offset),rev2_crop,int(rev2_offset),float(rev1strength),float(rev2strength),float(rev1noiseaug),float(rev2noiseaug),)
+        return(int(crop_res),crop_intpol,rev1_crop,int(rev1_offset),rev2_crop,int(rev2_offset),float(rev1strength),float(rev2strength),float(rev1noiseaug),float(rev2noiseaug),)
 
 #---------------------------------------------------------------------------------------------------------------------------------------------------#
 
