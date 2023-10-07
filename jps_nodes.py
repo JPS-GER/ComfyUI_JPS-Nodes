@@ -940,7 +940,6 @@ class IP_Adapter_Settings:
     ipa3switch = ["IP Adapter #3 OFF","IP Adapter #3 ON"]
     ipa4switch = ["IP Adapter #4 OFF","IP Adapter #4 ON"]
     ipa5switch = ["IP Adapter #5 OFF","IP Adapter #5 ON"]
-    ipamerge = ["Merge as Batch","Merge as Chain"]
 
     def __init__(self):
         pass
@@ -983,7 +982,6 @@ class IP_Adapter_Settings:
                 "crop_res": ("INT", { "default": 224 , "min": 224, "max": 1792, "step": 224, "display": "number" }),
                 "ipa_weight": (s.ipaweight,),
                 "ipa_noise": (s.ipanoise,),
-                "ipa_merge": (s.ipamerge,),
             }
         }
     RETURN_TYPES = ("BASIC_PIPE",)
@@ -992,7 +990,7 @@ class IP_Adapter_Settings:
 
     CATEGORY="JPS Nodes/Settings"
 
-    def get_ipamode(self,ipa1_switch,ipa2_switch,ipa3_switch,ipa4_switch,ipa5_switch,crop_res,crop_intpol,ipa1_crop,ipa1_offset,ipa2_crop,ipa2_offset,ipa3_crop,ipa3_offset,ipa4_crop,ipa4_offset,ipa5_crop,ipa5_offset,ipa_weight,ipa1_weight,ipa2_weight,ipa3_weight,ipa4_weight,ipa5_weight,ipa_noise,ipa1_noise,ipa2_noise,ipa3_noise,ipa4_noise,ipa5_noise,ipa_merge):
+    def get_ipamode(self,ipa1_switch,ipa2_switch,ipa3_switch,ipa4_switch,ipa5_switch,crop_res,crop_intpol,ipa1_crop,ipa1_offset,ipa2_crop,ipa2_offset,ipa3_crop,ipa3_offset,ipa4_crop,ipa4_offset,ipa5_crop,ipa5_offset,ipa_weight,ipa1_weight,ipa2_weight,ipa3_weight,ipa4_weight,ipa5_weight,ipa_noise,ipa1_noise,ipa2_noise,ipa3_noise,ipa4_noise,ipa5_noise):
         if(ipa_weight == "Use IP Adapter #1 weight for all"):
             ipa2_weight = ipa1_weight
             ipa3_weight = ipa1_weight
@@ -1038,11 +1036,8 @@ class IP_Adapter_Settings:
             ipa5switch = int(2)
             ipa5weight = ipa5_weight
             ipa5noise = ipa5_noise
-        ipamerge = int(1)
-        if(ipa_merge == "Merge as Chain"):
-            ipamerge = int(2)
 
-        ip_adapter_settings = ipa1switch,ipa2switch,ipa3switch,ipa4switch,ipa5switch,crop_res,crop_intpol,ipa1_crop,ipa1_offset,ipa2_crop,ipa2_offset,ipa3_crop,ipa3_offset,ipa4_crop,ipa4_offset,ipa5_crop,ipa5_offset,ipa1weight,ipa2weight,ipa3weight,ipa4weight,ipa5weight,ipa1noise,ipa2noise,ipa3noise,ipa4noise,ipa5noise,ipamerge
+        ip_adapter_settings = ipa1switch,ipa2switch,ipa3switch,ipa4switch,ipa5switch,crop_res,crop_intpol,ipa1_crop,ipa1_offset,ipa2_crop,ipa2_offset,ipa3_crop,ipa3_offset,ipa4_crop,ipa4_offset,ipa5_crop,ipa5_offset,ipa1weight,ipa2weight,ipa3weight,ipa4weight,ipa5weight,ipa1noise,ipa2noise,ipa3noise,ipa4noise,ipa5noise
 
         return(ip_adapter_settings,)
 
@@ -1062,17 +1057,17 @@ class IP_Adapter_Settings_Pipe:
                 "ip_adapter_settings": ("BASIC_PIPE",),
             }
         }
-    RETURN_TYPES = ("INT","INT","INT","INT","INT","INT",["lanczos", "nearest", "bilinear", "bicubic", "area", "nearest-exact"],["center","top", "bottom", "left", "right"],"INT",["center","top", "bottom", "left", "right"],"INT",["center","top", "bottom", "left", "right"],"INT",["center","top", "bottom", "left", "right"],"INT",["center","top", "bottom", "left", "right"],"INT","FLOAT","FLOAT","FLOAT","FLOAT","FLOAT","FLOAT","FLOAT","FLOAT","FLOAT","FLOAT","INT")
-    RETURN_NAMES = ("ipa1_switch", "ipa2_switch", "ipa3_switch", "ipa4_switch", "ipa5_switch", "crop_res", "crop_intpol", "ipa1_crop", "ipa1_offset", "ipa2_crop", "ipa2_offset", "ipa3_crop", "ipa3_offset", "ipa4_crop", "ipa4_offset", "ipa5_crop", "ipa5_offset", "ipa1_weight", "ipa2_weight", "ipa3_weight", "ipa4_weight", "ipa5_weight", "ipa1_noise", "ipa2_noise", "ipa3_noise", "ipa4_noise", "ipa5_noise","ipa_merge")
+    RETURN_TYPES = ("INT","INT","INT","INT","INT","INT",["lanczos", "nearest", "bilinear", "bicubic", "area", "nearest-exact"],["center","top", "bottom", "left", "right"],"INT",["center","top", "bottom", "left", "right"],"INT",["center","top", "bottom", "left", "right"],"INT",["center","top", "bottom", "left", "right"],"INT",["center","top", "bottom", "left", "right"],"INT","FLOAT","FLOAT","FLOAT","FLOAT","FLOAT","FLOAT","FLOAT","FLOAT","FLOAT","FLOAT")
+    RETURN_NAMES = ("ipa1_switch", "ipa2_switch", "ipa3_switch", "ipa4_switch", "ipa5_switch", "crop_res", "crop_intpol", "ipa1_crop", "ipa1_offset", "ipa2_crop", "ipa2_offset", "ipa3_crop", "ipa3_offset", "ipa4_crop", "ipa4_offset", "ipa5_crop", "ipa5_offset", "ipa1_weight", "ipa2_weight", "ipa3_weight", "ipa4_weight", "ipa5_weight", "ipa1_noise", "ipa2_noise", "ipa3_noise", "ipa4_noise", "ipa5_noise")
     FUNCTION = "get_ipamode"
 
     CATEGORY="JPS Nodes/Pipes"
 
     def get_ipamode(self,ip_adapter_settings):
 
-        ipa1switch,ipa2switch,ipa3switch,ipa4switch,ipa5switch,crop_res,crop_intpol,ipa1_crop,ipa1_offset,ipa2_crop,ipa2_offset,ipa3_crop,ipa3_offset,ipa4_crop,ipa4_offset,ipa5_crop,ipa5_offset,ipa1weight,ipa2weight,ipa3weight,ipa4weight,ipa5weight,ipa1noise,ipa2noise,ipa3noise,ipa4noise,ipa5noise,ipamerge = ip_adapter_settings
+        ipa1switch,ipa2switch,ipa3switch,ipa4switch,ipa5switch,crop_res,crop_intpol,ipa1_crop,ipa1_offset,ipa2_crop,ipa2_offset,ipa3_crop,ipa3_offset,ipa4_crop,ipa4_offset,ipa5_crop,ipa5_offset,ipa1weight,ipa2weight,ipa3weight,ipa4weight,ipa5weight,ipa1noise,ipa2noise,ipa3noise,ipa4noise,ipa5noise = ip_adapter_settings
 
-        return(int(ipa1switch),int(ipa2switch),int(ipa3switch),int(ipa4switch),int(ipa5switch),int(crop_res),crop_intpol,ipa1_crop,int(ipa1_offset),ipa2_crop,int(ipa2_offset),ipa3_crop,int(ipa3_offset),ipa4_crop,int(ipa4_offset),ipa5_crop,int(ipa5_offset),float(ipa1weight),float(ipa2weight),float(ipa3weight),float(ipa4weight),float(ipa5weight),float(ipa1noise),float(ipa2noise),float(ipa3noise),float(ipa4noise),float(ipa5noise),int(ipamerge),)
+        return(int(ipa1switch),int(ipa2switch),int(ipa3switch),int(ipa4switch),int(ipa5switch),int(crop_res),crop_intpol,ipa1_crop,int(ipa1_offset),ipa2_crop,int(ipa2_offset),ipa3_crop,int(ipa3_offset),ipa4_crop,int(ipa4_offset),ipa5_crop,int(ipa5_offset),float(ipa1weight),float(ipa2weight),float(ipa3weight),float(ipa4weight),float(ipa5weight),float(ipa1noise),float(ipa2noise),float(ipa3noise),float(ipa4noise),float(ipa5noise),)
 
 #---------------------------------------------------------------------------------------------------------------------------------------------------#
 
