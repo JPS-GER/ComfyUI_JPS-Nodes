@@ -945,11 +945,11 @@ class IP_Adapter_Settings:
                 "ipa_weight": (s.ipaweight,),
                 "ipa_noise": (s.ipanoise,),
 
-                "ipa1_weight": ("FLOAT", {"default": 0.5, "min": -1, "max": 3, "step": 0.05}),
-                "ipa2_weight": ("FLOAT", {"default": 0.5, "min": -1, "max": 3, "step": 0.05}),
-                "ipa3_weight": ("FLOAT", {"default": 0.5, "min": -1, "max": 3, "step": 0.05}),
-                "ipa4_weight": ("FLOAT", {"default": 0.5, "min": -1, "max": 3, "step": 0.05}),
-                "ipa5_weight": ("FLOAT", {"default": 0.5, "min": -1, "max": 3, "step": 0.05}),
+                "ipa1_weight": ("FLOAT", {"default": 0.5, "min": -1, "max": 3, "step": 0.02}),
+                "ipa2_weight": ("FLOAT", {"default": 0.5, "min": -1, "max": 3, "step": 0.02}),
+                "ipa3_weight": ("FLOAT", {"default": 0.5, "min": -1, "max": 3, "step": 0.02}),
+                "ipa4_weight": ("FLOAT", {"default": 0.5, "min": -1, "max": 3, "step": 0.02}),
+                "ipa5_weight": ("FLOAT", {"default": 0.5, "min": -1, "max": 3, "step": 0.02}),
 
                 "ipa1_noise": ("FLOAT", {"default": 0.0, "min": 0, "max": 1, "step": 0.05}),
                 "ipa2_noise": ("FLOAT", {"default": 0.0, "min": 0, "max": 1, "step": 0.05}),
