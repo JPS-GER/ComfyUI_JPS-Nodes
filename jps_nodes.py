@@ -689,7 +689,7 @@ class Text_Concatenate:
 #---------------------------------------------------------------------------------------------------------------------------------------------------#
 
 class Get_Date_Time_String:
-    time_format = ["%Y%m%d%H%M%S","%Y%m%d%H%M","%Y%m%d","%Y-%m-%d-%H_%M_%S","%Y-%m-%d-%H_%M","%Y-%m-%d","%Y-%m-%d %H_%M_%S","%Y-%m-%d %H_%M","%Y-%m-%d"]
+    time_format = ["%Y%m%d%H%M%S","%Y%m%d%H%M","%Y%m%d","%Y-%m-%d-%H_%M_%S","%Y-%m-%d-%H_%M","%Y-%m-%d","%Y-%m-%d %H_%M_%S","%Y-%m-%d %H_%M","%Y-%m-%d","%H%M","%H%M%S","%H_%M","%H_%M_%S"]
     def __init__(self):
         pass
     
@@ -933,6 +933,7 @@ class Generation_Settings_Pipe:
 
 class IP_Adapter_Settings:
     ipaweight = ["Use IP Adapter #1 weight for all","Use separate IP Adapter weights"]
+    ipawtype = ["Use IP Adapter #1 wtype for all","Use separate IP Adapter wtypes"]
     ipanoise = ["Use IP Adapter #1 noise for all","Use separate IP Adapter noises"]    
 
     def __init__(self):
@@ -943,34 +944,43 @@ class IP_Adapter_Settings:
         return {
             "required": {
                 "ipa_weight": (s.ipaweight,),
+                "ipa_wtype": (s.ipawtype,),
                 "ipa_noise": (s.ipanoise,),
 
-                "ipa1_weight": ("FLOAT", {"default": 0.5, "min": -1, "max": 3, "step": 0.02}),
-                "ipa2_weight": ("FLOAT", {"default": 0.5, "min": -1, "max": 3, "step": 0.02}),
-                "ipa3_weight": ("FLOAT", {"default": 0.5, "min": -1, "max": 3, "step": 0.02}),
-                "ipa4_weight": ("FLOAT", {"default": 0.5, "min": -1, "max": 3, "step": 0.02}),
-                "ipa5_weight": ("FLOAT", {"default": 0.5, "min": -1, "max": 3, "step": 0.02}),
-
+                "ipa1_weight": ("FLOAT", {"default": 0.5, "min": 0, "max": 3, "step": 0.01}),
+                "ipa1_wtype": (["original", "linear", "channel penalty"],),
                 "ipa1_noise": ("FLOAT", {"default": 0.0, "min": 0, "max": 1, "step": 0.05}),
-                "ipa2_noise": ("FLOAT", {"default": 0.0, "min": 0, "max": 1, "step": 0.05}),
-                "ipa3_noise": ("FLOAT", {"default": 0.0, "min": 0, "max": 1, "step": 0.05}),
-                "ipa4_noise": ("FLOAT", {"default": 0.0, "min": 0, "max": 1, "step": 0.05}),
-                "ipa5_noise": ("FLOAT", {"default": 0.0, "min": 0, "max": 1, "step": 0.05}),
-
+                "ipa1_start": ("FLOAT", {"default": 0.00, "min": 0, "max": 1, "step": 0.05}),
+                "ipa1_stop": ("FLOAT", {"default": 1.00, "min": 0, "max": 1, "step": 0.05}),
                 "ipa1_crop": (["center","top", "bottom", "left", "right"],),
                 "ipa1_offset": ("INT", { "default": 0, "min": -2048, "max": 2048, "step": 1, "display": "number" }),
 
+
+                "ipa2_weight": ("FLOAT", {"default": 0.5, "min": 0, "max": 3, "step": 0.01}),
+                "ipa2_wtype": (["original", "linear", "channel penalty"],),
+                "ipa2_noise": ("FLOAT", {"default": 0.0, "min": 0, "max": 1, "step": 0.05}),
+                "ipa2_start": ("FLOAT", {"default": 0.00, "min": 0, "max": 1, "step": 0.05}),
+                "ipa2_stop": ("FLOAT", {"default": 1.00, "min": 0, "max": 1, "step": 0.05}),
                 "ipa2_crop": (["center","top", "bottom", "left", "right"],),
                 "ipa2_offset": ("INT", { "default": 0, "min": -2048, "max": 2048, "step": 1, "display": "number" }),
 
+
+                "ipa3_weight": ("FLOAT", {"default": 0.5, "min": 0, "max": 3, "step": 0.01}),
+                "ipa3_wtype": (["original", "linear", "channel penalty"],),
+                "ipa3_noise": ("FLOAT", {"default": 0.0, "min": 0, "max": 1, "step": 0.05}),
+                "ipa3_start": ("FLOAT", {"default": 0.00, "min": 0, "max": 1, "step": 0.05}),
+                "ipa3_stop": ("FLOAT", {"default": 1.00, "min": 0, "max": 1, "step": 0.05}),
                 "ipa3_crop": (["center","top", "bottom", "left", "right"],),
                 "ipa3_offset": ("INT", { "default": 0, "min": -2048, "max": 2048, "step": 1, "display": "number" }),
 
+
+                "ipa4_weight": ("FLOAT", {"default": 0.5, "min": 0, "max": 3, "step": 0.01}),
+                "ipa4_wtype": (["original", "linear", "channel penalty"],),
+                "ipa4_noise": ("FLOAT", {"default": 0.0, "min": 0, "max": 1, "step": 0.05}),
+                "ipa4_start": ("FLOAT", {"default": 0.00, "min": 0, "max": 1, "step": 0.05}),
+                "ipa4_stop": ("FLOAT", {"default": 1.00, "min": 0, "max": 1, "step": 0.05}),
                 "ipa4_crop": (["center","top", "bottom", "left", "right"],),
                 "ipa4_offset": ("INT", { "default": 0, "min": -2048, "max": 2048, "step": 1, "display": "number" }),
-
-                "ipa5_crop": (["center","top", "bottom", "left", "right"],),
-                "ipa5_offset": ("INT", { "default": 0, "min": -2048, "max": 2048, "step": 1, "display": "number" }),
 
                 "crop_intpol": (["lanczos", "nearest", "bilinear", "bicubic", "area", "nearest-exact"],),
                 "crop_res": ("INT", { "default": 224 , "min": 224, "max": 1792, "step": 224, "display": "number" }),
@@ -982,30 +992,35 @@ class IP_Adapter_Settings:
 
     CATEGORY="JPS Nodes/Settings"
 
-    def get_ipamode(self,crop_res,crop_intpol,ipa1_crop,ipa1_offset,ipa2_crop,ipa2_offset,ipa3_crop,ipa3_offset,ipa4_crop,ipa4_offset,ipa5_crop,ipa5_offset,ipa_weight,ipa1_weight,ipa2_weight,ipa3_weight,ipa4_weight,ipa5_weight,ipa_noise,ipa1_noise,ipa2_noise,ipa3_noise,ipa4_noise,ipa5_noise):
+    def get_ipamode(self,crop_res,crop_intpol,ipa1_crop,ipa1_offset,ipa2_crop,ipa2_offset,ipa3_crop,ipa3_offset,ipa4_crop,ipa4_offset,ipa_weight,ipa_wtype,ipa1_weight,ipa1_wtype,ipa2_weight,ipa2_wtype,ipa3_weight,ipa3_wtype,ipa4_weight,ipa4_wtype,ipa_noise,ipa1_noise,ipa2_noise,ipa3_noise,ipa4_noise,ipa1_start,ipa1_stop,ipa2_start,ipa2_stop,ipa3_start,ipa3_stop,ipa4_start,ipa4_stop):
         if(ipa_weight == "Use IP Adapter #1 weight for all"):
             ipa2_weight = ipa1_weight
             ipa3_weight = ipa1_weight
             ipa4_weight = ipa1_weight
-            ipa5_weight = ipa1_weight
+        if(ipa_wtype == "Use IP Adapter #1 wtype for all"):
+            ipa2_wtype = ipa1_wtype
+            ipa3_wtype = ipa1_wtype
+            ipa4_wtype = ipa1_wtype
         if(ipa_noise == "Use IP Adapter #1 noise for all"):
             ipa2_noise = ipa1_noise
             ipa3_noise = ipa1_noise
             ipa4_noise = ipa1_noise
-            ipa5_noise = ipa1_noise
 
         ipa1weight = ipa1_weight
+        ipa1wtype = ipa1_wtype
         ipa1noise = ipa1_noise
         ipa2weight = ipa2_weight
+        ipa2wtype = ipa2_wtype        
         ipa2noise = ipa2_noise
         ipa3weight = ipa3_weight
+        ipa3wtype = ipa3_wtype
         ipa3noise = ipa3_noise
         ipa4weight = ipa4_weight
+        ipa4wtype = ipa4_wtype
         ipa4noise = ipa4_noise
-        ipa5weight = ipa5_weight
-        ipa5noise = ipa5_noise
 
-        ip_adapter_settings = crop_res,crop_intpol,ipa1_crop,ipa1_offset,ipa2_crop,ipa2_offset,ipa3_crop,ipa3_offset,ipa4_crop,ipa4_offset,ipa5_crop,ipa5_offset,ipa1weight,ipa2weight,ipa3weight,ipa4weight,ipa5weight,ipa1noise,ipa2noise,ipa3noise,ipa4noise,ipa5noise
+
+        ip_adapter_settings = crop_res,crop_intpol,ipa1_crop,ipa1_offset,ipa2_crop,ipa2_offset,ipa3_crop,ipa3_offset,ipa4_crop,ipa4_offset,ipa1weight,ipa1wtype,ipa2weight,ipa2wtype,ipa3weight,ipa3wtype,ipa4weight,ipa4wtype,ipa1noise,ipa2noise,ipa3noise,ipa4noise,ipa1_start,ipa1_stop,ipa2_start,ipa2_stop,ipa3_start,ipa3_stop,ipa4_start,ipa4_stop
 
         return(ip_adapter_settings,)
 
@@ -1023,17 +1038,17 @@ class IP_Adapter_Settings_Pipe:
                 "ip_adapter_settings": ("BASIC_PIPE",),
             }
         }
-    RETURN_TYPES = ("INT",["lanczos", "nearest", "bilinear", "bicubic", "area", "nearest-exact"],["center","top", "bottom", "left", "right"],"INT",["center","top", "bottom", "left", "right"],"INT",["center","top", "bottom", "left", "right"],"INT",["center","top", "bottom", "left", "right"],"INT",["center","top", "bottom", "left", "right"],"INT","FLOAT","FLOAT","FLOAT","FLOAT","FLOAT","FLOAT","FLOAT","FLOAT","FLOAT","FLOAT")
-    RETURN_NAMES = ("crop_res", "crop_intpol", "ipa1_crop", "ipa1_offset", "ipa2_crop", "ipa2_offset", "ipa3_crop", "ipa3_offset", "ipa4_crop", "ipa4_offset", "ipa5_crop", "ipa5_offset", "ipa1_weight", "ipa2_weight", "ipa3_weight", "ipa4_weight", "ipa5_weight", "ipa1_noise", "ipa2_noise", "ipa3_noise", "ipa4_noise", "ipa5_noise")
+    RETURN_TYPES = ("INT",["lanczos", "nearest", "bilinear", "bicubic", "area", "nearest-exact"],["center","top", "bottom", "left", "right"],"INT",["center","top", "bottom", "left", "right"],"INT",["center","top", "bottom", "left", "right"],"INT",["center","top", "bottom", "left", "right"],"INT","FLOAT",["original", "linear", "channel penalty"],"FLOAT",["original", "linear", "channel penalty"],"FLOAT",["original", "linear", "channel penalty"],"FLOAT",["original", "linear", "channel penalty"],"FLOAT","FLOAT","FLOAT","FLOAT","FLOAT","FLOAT","FLOAT","FLOAT","FLOAT","FLOAT","FLOAT","FLOAT")
+    RETURN_NAMES = ("crop_res", "crop_intpol", "ipa1_crop", "ipa1_offset", "ipa2_crop", "ipa2_offset", "ipa3_crop", "ipa3_offset", "ipa4_crop", "ipa4_offset", "ipa1_weight", "ipa1_wtype", "ipa2_weight", "ipa2_wtype", "ipa3_weight", "ipa3_wtype", "ipa4_weight", "ipa4_wtype", "ipa1_noise", "ipa2_noise", "ipa3_noise", "ipa4_noise", "ipa1_start", "ipa1_stop", "ipa2_start", "ipa2_stop", "ipa3_start", "ipa3_stop", "ipa4_start", "ipa4_stop")
     FUNCTION = "get_ipamode"
 
     CATEGORY="JPS Nodes/Pipes"
 
     def get_ipamode(self,ip_adapter_settings):
 
-        crop_res,crop_intpol,ipa1_crop,ipa1_offset,ipa2_crop,ipa2_offset,ipa3_crop,ipa3_offset,ipa4_crop,ipa4_offset,ipa5_crop,ipa5_offset,ipa1weight,ipa2weight,ipa3weight,ipa4weight,ipa5weight,ipa1noise,ipa2noise,ipa3noise,ipa4noise,ipa5noise = ip_adapter_settings
+        crop_res,crop_intpol,ipa1_crop,ipa1_offset,ipa2_crop,ipa2_offset,ipa3_crop,ipa3_offset,ipa4_crop,ipa4_offset,ipa1weight,ipa1wtype,ipa2weight,ipa2wtype,ipa3weight,ipa3wtype,ipa4weight,ipa4wtype,ipa1noise,ipa2noise,ipa3noise,ipa4noise,ipa1_start,ipa1_stop,ipa2_start,ipa2_stop,ipa3_start,ipa3_stop,ipa4_start,ipa4_stop = ip_adapter_settings
 
-        return(int(crop_res),crop_intpol,ipa1_crop,int(ipa1_offset),ipa2_crop,int(ipa2_offset),ipa3_crop,int(ipa3_offset),ipa4_crop,int(ipa4_offset),ipa5_crop,int(ipa5_offset),float(ipa1weight),float(ipa2weight),float(ipa3weight),float(ipa4weight),float(ipa5weight),float(ipa1noise),float(ipa2noise),float(ipa3noise),float(ipa4noise),float(ipa5noise),)
+        return(int(crop_res),crop_intpol,ipa1_crop,int(ipa1_offset),ipa2_crop,int(ipa2_offset),ipa3_crop,int(ipa3_offset),ipa4_crop,int(ipa4_offset),float(ipa1weight),ipa1wtype,float(ipa2weight),ipa2wtype,float(ipa3weight),ipa3wtype,float(ipa4weight),ipa4wtype,float(ipa1noise),float(ipa2noise),float(ipa3noise),float(ipa4noise),float(ipa1_start),float(ipa1_stop),float(ipa2_start),float(ipa2_stop),float(ipa3_start),float(ipa3_stop),float(ipa4_start),float(ipa4_stop),)
 
 #---------------------------------------------------------------------------------------------------------------------------------------------------#
 
@@ -1711,7 +1726,7 @@ class SDXL_Prompt_Styler:
             if (text_neg_style != ''):
                 text_neg_style = text_neg_style + ', text, watermark, low-quality, signature, moire pattern, downsampling, aliasing, distorted, blurry, glossy, blur, jpeg artifacts, compression artifacts, poorly drawn, low-resolution, bad, distortion, twisted, excessive, exaggerated pose, exaggerated limbs, grainy, symmetrical, duplicate, error, pattern, beginner, pixelated, fake, hyper, glitch, overexposed, high-contrast, bad-contrast'
             else:
-                text_neg_style = 'text, watermark, low-quality, signature, moiré pattern, downsampling, aliasing, distorted, blurry, glossy, blur, jpeg artifacts, compression artifacts, poorly drawn, low-resolution, bad, distortion, twisted, excessive, exaggerated pose, exaggerated limbs, grainy, symmetrical, duplicate, error, pattern, beginner, pixelated, fake, hyper, glitch, overexposed, high-contrast, bad-contrast'
+                text_neg_style = 'text, watermark, low-quality, signature, moire pattern, downsampling, aliasing, distorted, blurry, glossy, blur, jpeg artifacts, compression artifacts, poorly drawn, low-resolution, bad, distortion, twisted, excessive, exaggerated pose, exaggerated limbs, grainy, symmetrical, duplicate, error, pattern, beginner, pixelated, fake, hyper, glitch, overexposed, high-contrast, bad-contrast'
 
         return text_pos_g_style, text_pos_l_style, text_pos_style, text_neg_style
 
