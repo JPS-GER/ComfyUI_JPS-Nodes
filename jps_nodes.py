@@ -934,7 +934,8 @@ class Generation_Settings_Pipe:
 class IP_Adapter_Settings:
     ipaweight = ["Use IP Adapter #1 weight for all","Use separate IP Adapter weights"]
     ipawtype = ["Use IP Adapter #1 wtype for all","Use separate IP Adapter wtypes"]
-    ipanoise = ["Use IP Adapter #1 noise for all","Use separate IP Adapter noises"]    
+    ipanoise = ["Use IP Adapter #1 noise for all","Use separate IP Adapter noises"]
+    ipamasktype = ["No Mask","Mask Editor","Mask Editor (inverted)","Red from Image","Green from Image","Blue from Image"]    
 
     def __init__(self):
         pass
@@ -954,7 +955,7 @@ class IP_Adapter_Settings:
                 "ipa1_stop": ("FLOAT", {"default": 1.00, "min": 0, "max": 1, "step": 0.05}),
                 "ipa1_crop": (["center","top", "bottom", "left", "right"],),
                 "ipa1_offset": ("INT", { "default": 0, "min": -2048, "max": 2048, "step": 1, "display": "number" }),
-
+                "ipa1_mask": (s.ipamasktype,),
 
                 "ipa2_weight": ("FLOAT", {"default": 0.5, "min": 0, "max": 3, "step": 0.01}),
                 "ipa2_wtype": (["original", "linear", "channel penalty"],),
@@ -963,6 +964,7 @@ class IP_Adapter_Settings:
                 "ipa2_stop": ("FLOAT", {"default": 1.00, "min": 0, "max": 1, "step": 0.05}),
                 "ipa2_crop": (["center","top", "bottom", "left", "right"],),
                 "ipa2_offset": ("INT", { "default": 0, "min": -2048, "max": 2048, "step": 1, "display": "number" }),
+                "ipa2_mask": (s.ipamasktype,),
 
 
                 "ipa3_weight": ("FLOAT", {"default": 0.5, "min": 0, "max": 3, "step": 0.01}),
@@ -972,6 +974,7 @@ class IP_Adapter_Settings:
                 "ipa3_stop": ("FLOAT", {"default": 1.00, "min": 0, "max": 1, "step": 0.05}),
                 "ipa3_crop": (["center","top", "bottom", "left", "right"],),
                 "ipa3_offset": ("INT", { "default": 0, "min": -2048, "max": 2048, "step": 1, "display": "number" }),
+                "ipa3_mask": (s.ipamasktype,),
 
 
                 "ipa4_weight": ("FLOAT", {"default": 0.5, "min": 0, "max": 3, "step": 0.01}),
@@ -981,6 +984,7 @@ class IP_Adapter_Settings:
                 "ipa4_stop": ("FLOAT", {"default": 1.00, "min": 0, "max": 1, "step": 0.05}),
                 "ipa4_crop": (["center","top", "bottom", "left", "right"],),
                 "ipa4_offset": ("INT", { "default": 0, "min": -2048, "max": 2048, "step": 1, "display": "number" }),
+                "ipa4_mask": (s.ipamasktype,),
 
                 "crop_intpol": (["lanczos", "nearest", "bilinear", "bicubic", "area", "nearest-exact"],),
                 "crop_res": ("INT", { "default": 224 , "min": 224, "max": 1792, "step": 224, "display": "number" }),
@@ -992,7 +996,7 @@ class IP_Adapter_Settings:
 
     CATEGORY="JPS Nodes/Settings"
 
-    def get_ipamode(self,crop_res,crop_intpol,ipa1_crop,ipa1_offset,ipa2_crop,ipa2_offset,ipa3_crop,ipa3_offset,ipa4_crop,ipa4_offset,ipa_weight,ipa_wtype,ipa1_weight,ipa1_wtype,ipa2_weight,ipa2_wtype,ipa3_weight,ipa3_wtype,ipa4_weight,ipa4_wtype,ipa_noise,ipa1_noise,ipa2_noise,ipa3_noise,ipa4_noise,ipa1_start,ipa1_stop,ipa2_start,ipa2_stop,ipa3_start,ipa3_stop,ipa4_start,ipa4_stop):
+    def get_ipamode(self,crop_res,crop_intpol,ipa1_crop,ipa1_offset,ipa2_crop,ipa2_offset,ipa3_crop,ipa3_offset,ipa4_crop,ipa4_offset,ipa_weight,ipa_wtype,ipa1_weight,ipa1_wtype,ipa2_weight,ipa2_wtype,ipa3_weight,ipa3_wtype,ipa4_weight,ipa4_wtype,ipa_noise,ipa1_noise,ipa2_noise,ipa3_noise,ipa4_noise,ipa1_start,ipa1_stop,ipa2_start,ipa2_stop,ipa3_start,ipa3_stop,ipa4_start,ipa4_stop,ipa1_mask,ipa2_mask,ipa3_mask,ipa4_mask):
         if(ipa_weight == "Use IP Adapter #1 weight for all"):
             ipa2_weight = ipa1_weight
             ipa3_weight = ipa1_weight
@@ -1005,6 +1009,54 @@ class IP_Adapter_Settings:
             ipa2_noise = ipa1_noise
             ipa3_noise = ipa1_noise
             ipa4_noise = ipa1_noise
+
+        ipa1mask = int(0)
+        if(ipa1_mask == "Mask Editor"):
+            ipa1mask = int(1)
+        elif(ipa1_mask == "Mask Editor (inverted)"):
+            ipa1mask = int(2)
+        elif(ipa1_mask == "Red from Image"):
+            ipa1mask = int(3)
+        elif(ipa1_mask == "Green from Image"):
+            ipa1mask = int(4)
+        elif(ipa1_mask == "Blue from Image"):
+            ipa1mask = int(5)
+
+        ipa2mask = int(0)
+        if(ipa2_mask == "Mask Editor"):
+            ipa2mask = int(1)
+        elif(ipa2_mask == "Mask Editor (inverted)"):
+            ipa2mask = int(2)
+        elif(ipa2_mask == "Red from Image"):
+            ipa2mask = int(3)
+        elif(ipa2_mask == "Green from Image"):
+            ipa2mask = int(4)
+        elif(ipa2_mask == "Blue from Image"):
+            ipa2mask = int(5)
+
+        ipa3mask = int(0)
+        if(ipa3_mask == "Mask Editor"):
+            ipa3mask = int(1)
+        elif(ipa3_mask == "Mask Editor (inverted)"):
+            ipa3mask = int(2)
+        elif(ipa3_mask == "Red from Image"):
+            ipa3mask = int(3)
+        elif(ipa3_mask == "Green from Image"):
+            ipa3mask = int(4)
+        elif(ipa3_mask == "Blue from Image"):
+            ipa3mask = int(5)
+
+        ipa4mask = int(0)
+        if(ipa4_mask == "Mask Editor"):
+            ipa4mask = int(1)
+        elif(ipa4_mask == "Mask Editor (inverted)"):
+            ipa4mask = int(2)
+        elif(ipa4_mask == "Red from Image"):
+            ipa4mask = int(3)
+        elif(ipa4_mask == "Green from Image"):
+            ipa4mask = int(4)
+        elif(ipa4_mask == "Blue from Image"):
+            ipa4mask = int(5)
 
         ipa1weight = ipa1_weight
         ipa1wtype = ipa1_wtype
@@ -1020,7 +1072,7 @@ class IP_Adapter_Settings:
         ipa4noise = ipa4_noise
 
 
-        ip_adapter_settings = crop_res,crop_intpol,ipa1_crop,ipa1_offset,ipa2_crop,ipa2_offset,ipa3_crop,ipa3_offset,ipa4_crop,ipa4_offset,ipa1weight,ipa1wtype,ipa2weight,ipa2wtype,ipa3weight,ipa3wtype,ipa4weight,ipa4wtype,ipa1noise,ipa2noise,ipa3noise,ipa4noise,ipa1_start,ipa1_stop,ipa2_start,ipa2_stop,ipa3_start,ipa3_stop,ipa4_start,ipa4_stop
+        ip_adapter_settings = crop_res,crop_intpol,ipa1_crop,ipa1_offset,ipa2_crop,ipa2_offset,ipa3_crop,ipa3_offset,ipa4_crop,ipa4_offset,ipa1weight,ipa1wtype,ipa2weight,ipa2wtype,ipa3weight,ipa3wtype,ipa4weight,ipa4wtype,ipa1noise,ipa2noise,ipa3noise,ipa4noise,ipa1_start,ipa1_stop,ipa2_start,ipa2_stop,ipa3_start,ipa3_stop,ipa4_start,ipa4_stop,ipa1mask,ipa2mask,ipa3mask,ipa4mask
 
         return(ip_adapter_settings,)
 
@@ -1038,17 +1090,17 @@ class IP_Adapter_Settings_Pipe:
                 "ip_adapter_settings": ("BASIC_PIPE",),
             }
         }
-    RETURN_TYPES = ("INT",["lanczos", "nearest", "bilinear", "bicubic", "area", "nearest-exact"],["center","top", "bottom", "left", "right"],"INT",["center","top", "bottom", "left", "right"],"INT",["center","top", "bottom", "left", "right"],"INT",["center","top", "bottom", "left", "right"],"INT","FLOAT",["original", "linear", "channel penalty"],"FLOAT",["original", "linear", "channel penalty"],"FLOAT",["original", "linear", "channel penalty"],"FLOAT",["original", "linear", "channel penalty"],"FLOAT","FLOAT","FLOAT","FLOAT","FLOAT","FLOAT","FLOAT","FLOAT","FLOAT","FLOAT","FLOAT","FLOAT")
-    RETURN_NAMES = ("crop_res", "crop_intpol", "ipa1_crop", "ipa1_offset", "ipa2_crop", "ipa2_offset", "ipa3_crop", "ipa3_offset", "ipa4_crop", "ipa4_offset", "ipa1_weight", "ipa1_wtype", "ipa2_weight", "ipa2_wtype", "ipa3_weight", "ipa3_wtype", "ipa4_weight", "ipa4_wtype", "ipa1_noise", "ipa2_noise", "ipa3_noise", "ipa4_noise", "ipa1_start", "ipa1_stop", "ipa2_start", "ipa2_stop", "ipa3_start", "ipa3_stop", "ipa4_start", "ipa4_stop")
+    RETURN_TYPES = ("INT",["lanczos", "nearest", "bilinear", "bicubic", "area", "nearest-exact"],["center","top", "bottom", "left", "right"],"INT",["center","top", "bottom", "left", "right"],"INT",["center","top", "bottom", "left", "right"],"INT",["center","top", "bottom", "left", "right"],"INT","FLOAT",["original", "linear", "channel penalty"],"FLOAT",["original", "linear", "channel penalty"],"FLOAT",["original", "linear", "channel penalty"],"FLOAT",["original", "linear", "channel penalty"],"FLOAT","FLOAT","FLOAT","FLOAT","FLOAT","FLOAT","FLOAT","FLOAT","FLOAT","FLOAT","FLOAT","FLOAT","INT","INT","INT","INT")
+    RETURN_NAMES = ("crop_res", "crop_intpol", "ipa1_crop", "ipa1_offset", "ipa2_crop", "ipa2_offset", "ipa3_crop", "ipa3_offset", "ipa4_crop", "ipa4_offset", "ipa1_weight", "ipa1_wtype", "ipa2_weight", "ipa2_wtype", "ipa3_weight", "ipa3_wtype", "ipa4_weight", "ipa4_wtype", "ipa1_noise", "ipa2_noise", "ipa3_noise", "ipa4_noise", "ipa1_start", "ipa1_stop", "ipa2_start", "ipa2_stop", "ipa3_start", "ipa3_stop", "ipa4_start", "ipa4_stop","ipa1_mask","ipa2_mask","ipa3_mask","ipa4_mask")
     FUNCTION = "get_ipamode"
 
     CATEGORY="JPS Nodes/Pipes"
 
     def get_ipamode(self,ip_adapter_settings):
 
-        crop_res,crop_intpol,ipa1_crop,ipa1_offset,ipa2_crop,ipa2_offset,ipa3_crop,ipa3_offset,ipa4_crop,ipa4_offset,ipa1weight,ipa1wtype,ipa2weight,ipa2wtype,ipa3weight,ipa3wtype,ipa4weight,ipa4wtype,ipa1noise,ipa2noise,ipa3noise,ipa4noise,ipa1_start,ipa1_stop,ipa2_start,ipa2_stop,ipa3_start,ipa3_stop,ipa4_start,ipa4_stop = ip_adapter_settings
+        crop_res,crop_intpol,ipa1_crop,ipa1_offset,ipa2_crop,ipa2_offset,ipa3_crop,ipa3_offset,ipa4_crop,ipa4_offset,ipa1weight,ipa1wtype,ipa2weight,ipa2wtype,ipa3weight,ipa3wtype,ipa4weight,ipa4wtype,ipa1noise,ipa2noise,ipa3noise,ipa4noise,ipa1_start,ipa1_stop,ipa2_start,ipa2_stop,ipa3_start,ipa3_stop,ipa4_start,ipa4_stop,ipa1mask,ipa2mask,ipa3mask,ipa4mask = ip_adapter_settings
 
-        return(int(crop_res),crop_intpol,ipa1_crop,int(ipa1_offset),ipa2_crop,int(ipa2_offset),ipa3_crop,int(ipa3_offset),ipa4_crop,int(ipa4_offset),float(ipa1weight),ipa1wtype,float(ipa2weight),ipa2wtype,float(ipa3weight),ipa3wtype,float(ipa4weight),ipa4wtype,float(ipa1noise),float(ipa2noise),float(ipa3noise),float(ipa4noise),float(ipa1_start),float(ipa1_stop),float(ipa2_start),float(ipa2_stop),float(ipa3_start),float(ipa3_stop),float(ipa4_start),float(ipa4_stop),)
+        return(int(crop_res),crop_intpol,ipa1_crop,int(ipa1_offset),ipa2_crop,int(ipa2_offset),ipa3_crop,int(ipa3_offset),ipa4_crop,int(ipa4_offset),float(ipa1weight),ipa1wtype,float(ipa2weight),ipa2wtype,float(ipa3weight),ipa3wtype,float(ipa4weight),ipa4wtype,float(ipa1noise),float(ipa2noise),float(ipa3noise),float(ipa4noise),float(ipa1_start),float(ipa1_stop),float(ipa2_start),float(ipa2_stop),float(ipa3_start),float(ipa3_stop),float(ipa4_start),float(ipa4_stop),int(ipa1mask),int(ipa2mask),int(ipa3mask),int(ipa4mask),)
 
 #---------------------------------------------------------------------------------------------------------------------------------------------------#
 
@@ -1389,6 +1441,50 @@ class Integer_Switch:
             int_out = int_5
 
         return (int_out,)
+
+#---------------------------------------------------------------------------------------------------------------------------------------------------#
+
+class Mask_Switch:
+
+    CATEGORY = 'JPS Nodes/Switches'
+    RETURN_TYPES = ("MASK",)
+    RETURN_NAMES = ("mask_out",)
+    FUNCTION = "get_mask"
+
+    def __init__(self):
+        pass
+
+    @classmethod
+    def INPUT_TYPES(cls):
+        return {
+            "required": {
+                "select": ("INT", {}),
+            },
+            "optional": {
+                "mask_1": ("MASK",),
+                "mask_2": ("MASK",),
+                "mask_3": ("MASK",),
+                "mask_4": ("MASK",),
+                "mask_5": ("MASK",),
+            }
+        }
+
+    def get_mask(self,select,mask_1=None,mask_2=None,mask_3=None,mask_4=None,mask_5=None,):
+        
+        mask_out = None
+
+        if (select == 1):
+            mask_out = mask_1
+        if (select == 2):
+            mask_out = mask_2
+        elif (select == 3):
+            mask_out = mask_3
+        elif (select == 4):
+            mask_out = mask_4
+        elif (select == 5):
+            mask_out = mask_5
+
+        return (mask_out,)
 
 #---------------------------------------------------------------------------------------------------------------------------------------------------#
 
@@ -1910,6 +2006,7 @@ NODE_CLASS_MAPPINGS = {
     "Conditioning Switch (JPS)": Conditioning_Switch,
     "Model Switch (JPS)": Model_Switch,
     "VAE Switch (JPS)": VAE_Switch,
+    "Mask Switch (JPS)": Mask_Switch,
     "ControlNet Switch (JPS)": ControlNet_Switch,
     "Disable Enable Switch (JPS)": Disable_Enable_Switch,
     "Enable Disable Switch (JPS)": Enable_Disable_Switch,
