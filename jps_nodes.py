@@ -242,8 +242,7 @@ class SDXL_Resolutions:
 #---------------------------------------------------------------------------------------------------------------------------------------------------#
 
 class SDXL_Basic_Settings:
-    freeuswitch = ["OFF","ON"]
-    resolution = ["square - 1024x1024 (1:1)","landscape - 1152x896 (4:3)","landscape - 1216x832 (3:2)","landscape - 1344x768 (16:9)","landscape - 1536x640 (21:9)", "portrait - 896x1152 (3:4)","portrait - 832x1216 (2:3)","portrait - 768x1344 (9:16)","portrait - 640x1536 (9:21)"]
+    resolution = ["Use Image Resolution", "square - 1024x1024 (1:1)","landscape - 1152x896 (4:3)","landscape - 1216x832 (3:2)","landscape - 1344x768 (16:9)","landscape - 1536x640 (21:9)", "portrait - 896x1152 (3:4)","portrait - 832x1216 (2:3)","portrait - 768x1344 (9:16)","portrait - 640x1536 (9:21)"]
 
     def __init__(self):
         pass
@@ -255,11 +254,10 @@ class SDXL_Basic_Settings:
                 "resolution": (s.resolution,),
                 "sampler_name": (comfy.samplers.KSampler.SAMPLERS,),
                 "scheduler": (comfy.samplers.KSampler.SCHEDULERS,),
-                "scheduler": (comfy.samplers.KSampler.SCHEDULERS,),
                 "steps_total": ("INT", {"default": 60, "min": 20, "max": 250, "step": 5}),
                 "base_percentage": ("INT", {"default": 80, "min": 5, "max": 100, "step": 5}),
-                "cfg_base": ("FLOAT", {"default": 6.5, "min": 1, "max": 20, "step": 0.5}),
-                "cfg_refiner": ("FLOAT", {"default": 6.5, "min": 0, "max": 20, "step": 0.5}),
+                "cfg_base": ("FLOAT", {"default": 6.5, "min": 1, "max": 20, "step": 0.1}),
+                "cfg_refiner": ("FLOAT", {"default": 6.5, "min": 0, "max": 20, "step": 0.1}),
                 "ascore_refiner": ("FLOAT", {"default": 6, "min": 1, "max": 10, "step": 0.5}),
                 "clip_skip": ("INT", {"default": -2, "min": -24, "max": -1}),
                 "filename": ("STRING", {"default": "JPS"}),
@@ -281,7 +279,10 @@ class SDXL_Basic_Settings:
         cfg_refiner = float (cfg_refiner)
         ascore_refiner = float (ascore_refiner)
         base_percentage = int (base_percentage)
+        image_res = 1
 
+        if(resolution == "Use Image Resolution"):
+            image_res = 2
         if(resolution == "square - 1024x1024 (1:1)"):
             width = 1024
             height = 1024
@@ -313,7 +314,7 @@ class SDXL_Basic_Settings:
         if(cfg_refiner == 0):
             cfg_refiner = cfg_base
         
-        sdxl_basic_settings = width, height, sampler_name, scheduler, steps_total, step_split, cfg_base, cfg_refiner, ascore_refiner, clip_skip, filename
+        sdxl_basic_settings = width, height, sampler_name, scheduler, steps_total, step_split, cfg_base, cfg_refiner, ascore_refiner, clip_skip, filename,image_res
 
         return(sdxl_basic_settings,)
 
@@ -332,17 +333,17 @@ class SDXL_Basic_Settings_Pipe:
                 "sdxl_basic_settings": ("BASIC_PIPE",)
             },
         }
-    RETURN_TYPES = ("INT","INT",comfy.samplers.KSampler.SAMPLERS,comfy.samplers.KSampler.SCHEDULERS,"INT","INT","FLOAT","FLOAT","FLOAT","INT","STRING",)
-    RETURN_NAMES = ("width","height","sampler_name","scheduler","steps_total","step_split","cfg_base","cfg_refiner","ascore_refiner","clip_skip","filename",)
+    RETURN_TYPES = ("INT","INT","INT",comfy.samplers.KSampler.SAMPLERS,comfy.samplers.KSampler.SCHEDULERS,"INT","INT","FLOAT","FLOAT","FLOAT","INT","STRING",)
+    RETURN_NAMES = ("image_res","width","height","sampler_name","scheduler","steps_total","step_split","cfg_base","cfg_refiner","ascore_refiner","clip_skip","filename",)
     FUNCTION = "give_values"
 
     CATEGORY="JPS Nodes/Pipes"
 
     def give_values(self,sdxl_basic_settings):
         
-        width, height, sampler_name, scheduler, steps_total, step_split, cfg_base, cfg_refiner, ascore_refiner, clip_skip, filename = sdxl_basic_settings
+        width, height, sampler_name, scheduler, steps_total, step_split, cfg_base, cfg_refiner, ascore_refiner, clip_skip, filename,image_res = sdxl_basic_settings
 
-        return(int(width), int(height), sampler_name, scheduler, int(steps_total), int(step_split), float(cfg_base), float(cfg_refiner), float(ascore_refiner), int(clip_skip), str(filename),)
+        return(int(image_res), int(width), int(height), sampler_name, scheduler, int(steps_total), int(step_split), float(cfg_base), float(cfg_refiner), float(ascore_refiner), int(clip_skip), str(filename),)
 
 #---------------------------------------------------------------------------------------------------------------------------------------------------#
 
@@ -821,8 +822,7 @@ class Generation_TXT_IMG_Settings:
 #---------------------------------------------------------------------------------------------------------------------------------------------------#
 
 class Generation_Settings:
-    mode = ["Text Prompt","Image to Image", "CtrlNet Canny", "CtrlNet Depth", "Inpainting"]
-    resfrom = ["Use Settings Resolution", "Use Image Resolution"]
+    ctrlfrom = ["Source Image", "Support Image", "Support Direct"]
     
     def __init__(self):
         pass
@@ -831,18 +831,41 @@ class Generation_Settings:
     def INPUT_TYPES(s):
         return {
             "required": {
-                "mode": (s.mode,),
-                "resfrom": (s.resfrom,),
-                "img_to_img_strength": ("INT", {"default": 50, "min": 2, "max": 100, "step": 2}),
-                "inpainting_strength": ("INT", {"default": 100, "min": 2, "max": 100, "step": 2}),
-                "ctrl_strength": ("INT", {"default": 40, "min": 2, "max": 100, "step": 2}),
-                "ctrl_start_percent": ("INT", {"default": 0, "min": 0, "max": 100, "step": 5}),
-                "ctrl_stop_percent": ("INT", {"default": 70, "min": 0, "max": 100, "step": 5}),
-                "ctrl_low_threshold": ("INT", {"default": 100, "min": 0, "max": 255, "step": 5}),
-                "ctrl_high_threshold": ("INT", {"default": 200, "min": 0, "max": 255, "step": 5}),
-                "crop_position": (["center", "left", "right", "top", "bottom"],),
-                "crop_offset": ("INT", { "default": 0, "min": -2048, "max": 2048, "step": 1, "display": "number" }),
+                "source_crop_pos": (["center","top", "bottom", "left", "right"],),
+                "source_crop_offset": ("INT", { "default": 0, "min": -2048, "max": 2048, "step": 1, "display": "number" }),
+                "support_crop_pos": (["center","top", "bottom", "left", "right"],),
+                "support_crop_offset": ("INT", { "default": 0, "min": -2048, "max": 2048, "step": 1, "display": "number" }),
                 "crop_intpol": (["lanczos", "nearest", "bilinear", "bicubic", "area", "nearest-exact"],),
+                "img2img_strength": ("INT", {"default": 50, "min": 0, "max": 100, "step": 2}),
+                "inpaint_strength": ("INT", {"default": 100, "min": 2, "max": 100, "step": 2}),
+                "inpaint_grow_mask": ("INT", {"default": 20, "min": 0, "max": 200, "step": 2}),
+                "unsampler_strength": ("INT", {"default": 30, "min": 0, "max": 100, "step": 1}),
+                "unsampler_cfg": ("FLOAT", {"default": 1, "min": 1, "max": 10, "step": 0.1}),
+                "unsampler_sampler": (comfy.samplers.KSampler.SAMPLERS,),
+                "unsampler_scheduler": (comfy.samplers.KSampler.SCHEDULERS,),
+                "cannyedge_from": (s.ctrlfrom,),
+                "cannyedge_strength": ("FLOAT", {"default": 1.00, "min": 0.00, "max": 10.00, "step": 0.10}),
+                "cannyedge_start": ("FLOAT", {"default": 0.000, "min": 0.000, "max": 1.000, "step": 0.05}),
+                "cannyedge_end": ("FLOAT", {"default": 1.000, "min": 0.000, "max": 1.000, "step": 0.05}),
+                "cannyedge_low": ("INT", {"default": 100, "min": 0, "max": 255, "step": 1}),
+                "cannyedge_high": ("INT", {"default": 200, "min": 0, "max": 255, "step": 1}),
+                "zoe_from": (s.ctrlfrom,),
+                "zoe_strength": ("FLOAT", {"default": 1.00, "min": 0.00, "max": 10.00, "step": 0.10}),
+                "zoe_start": ("FLOAT", {"default": 0.000, "min": 0.000, "max": 1.000, "step": 0.05}),
+                "zoe_end": ("FLOAT", {"default": 1.000, "min": 0.000, "max": 1.000, "step": 0.05}),
+                "midas_from": (s.ctrlfrom,),
+                "midas_strength": ("FLOAT", {"default": 1.00, "min": 0.00, "max": 10.00, "step": 0.10}),
+                "midas_start": ("FLOAT", {"default": 0.000, "min": 0.000, "max": 1.000, "step": 0.05}),
+                "midas_end": ("FLOAT", {"default": 1.000, "min": 0.000, "max": 1.000, "step": 0.05}),
+                "midas_a": ("FLOAT", {"default": 6.28, "min": 0.00, "max": 15.71, "step": 0.05}),
+                "midas_bg": ("FLOAT", {"default": 0.10, "min": 0.00, "max": 1.00, "step": 0.05}),
+                "openpose_from": (s.ctrlfrom,),
+                "openpose_strength": ("FLOAT", {"default": 1.00, "min": 0.00, "max": 10.00, "step": 0.10}),
+                "openpose_start": ("FLOAT", {"default": 0.000, "min": 0.000, "max": 1.000, "step": 0.05}),
+                "openpose_end": ("FLOAT", {"default": 1.000, "min": 0.000, "max": 1.000, "step": 0.05}),
+                "openpose_body": (["enable","disable"],),
+                "openpose_face": (["enable","disable"],),
+                "openpose_hand": (["enable","disable"],),
             }   
         }
     RETURN_TYPES = ("BASIC_PIPE",) 
@@ -851,55 +874,39 @@ class Generation_Settings:
 
     CATEGORY="JPS Nodes/Settings"
 
-    def get_genfull(self, mode, resfrom, img_to_img_strength, inpainting_strength, ctrl_strength, ctrl_start_percent, ctrl_stop_percent, ctrl_low_threshold, ctrl_high_threshold, crop_position, crop_offset, crop_intpol):
-        gen_mode = 1
-        res_from = 1
-        if(mode == "Text Prompt"):
-            gen_mode = int(1)
-            img_strength = 0
-            ctrl_strength = 0
-            ctrl_start = 0
-            ctrl_stop = 0
-            ctrl_low = 0
-            ctrl_high = 0
-        if(mode == "Image to Image"):
-            gen_mode = int(2)
-            img_strength = img_to_img_strength / 100
-            ctrl_strength = 0
-            ctrl_start = 0
-            ctrl_stop = 0
-            ctrl_low = 0
-            ctrl_high = 0
-        if(mode == "CtrlNet Canny"):
-            gen_mode = int(3)
-            img_strength = 0
-            ctrl_strength = ctrl_strength / 100
-            ctrl_start = ctrl_start_percent / 100
-            ctrl_stop = ctrl_stop_percent / 100
-            ctrl_low = ctrl_low_threshold
-            ctrl_high = ctrl_high_threshold
-        if(mode == "CtrlNet Depth"):
-            gen_mode = int(4)
-            img_strength = 0
-            ctrl_strength = ctrl_strength / 100
-            ctrl_start = ctrl_start_percent / 100
-            ctrl_stop = ctrl_stop_percent / 100
-            ctrl_low = ctrl_low_threshold
-            ctrl_high = ctrl_high_threshold
-        if(mode == "Inpainting"):
-            gen_mode = int(5)
-            img_strength = (100 - inpainting_strength + 0.001) / 100
-            ctrl_strength = 0
-            ctrl_start = 0
-            ctrl_stop = 0
-            ctrl_low = 0
-            ctrl_high = 0
-        if(resfrom == "Use Settings Resolution"):
-            res_from = int(1)
-        if(resfrom == "Use Image Resolution"):
-            res_from = int(2)
+    def get_genfull(self, source_crop_pos, source_crop_offset, support_crop_pos, support_crop_offset, crop_intpol, img2img_strength, inpaint_strength, inpaint_grow_mask, unsampler_strength, unsampler_cfg, unsampler_sampler, unsampler_scheduler, cannyedge_from, cannyedge_strength, cannyedge_start, cannyedge_end, cannyedge_low, cannyedge_high, zoe_from, zoe_strength, zoe_start, zoe_end, midas_from, midas_strength, midas_start, midas_end, midas_a, midas_bg, openpose_from, openpose_strength, openpose_start, openpose_end, openpose_body, openpose_face, openpose_hand):
+
+        cannyedge_source = int (1)
+        if (cannyedge_from == "Support Image"):
+            cannyedge_source = int(2)
+        if (cannyedge_from == "Support Direct"):
+            cannyedge_source = int(3)
+
+        zoe_source = int (1)
+        if (zoe_from == "Support Image"):
+            zoe_source = int(2)
+        if (zoe_from == "Support Direct"):
+            zoe_source = int(3)
+
+        midas_source = int (1)
+        if (midas_from == "Support Image"):
+            midas_source = int(2)
+        if (midas_from == "Support Direct"):
+            midas_source = int(3)
+
+        openpose_source = int (1)
+        if (openpose_from == "Support Image"):
+            openpose_source = int(2)
+        if (openpose_from == "Support Direct"):
+            openpose_source = int(3)
+
+        img2img_strength = (img2img_strength + 0.001) / 100
+
+        inpaint_strength = (100 - inpaint_strength + 0.001) / 100
+
+        unsampler_strength = (unsampler_strength + 0.001) / 100
         
-        generation_settings = gen_mode, res_from, img_strength, ctrl_strength, ctrl_start, ctrl_stop, ctrl_low, ctrl_high, crop_position, crop_offset, crop_intpol
+        generation_settings = source_crop_pos, source_crop_offset, support_crop_pos, support_crop_offset, crop_intpol, img2img_strength, inpaint_strength, inpaint_grow_mask, unsampler_strength, unsampler_cfg, unsampler_sampler, unsampler_scheduler, cannyedge_source, cannyedge_strength, cannyedge_start, cannyedge_end, cannyedge_low, cannyedge_high, zoe_source, zoe_strength, zoe_start, zoe_end, midas_source, midas_strength, midas_start, midas_end, midas_a, midas_bg, openpose_source, openpose_strength, openpose_start, openpose_end, openpose_body, openpose_face, openpose_hand
 
         return(generation_settings,)
 
@@ -917,17 +924,17 @@ class Generation_Settings_Pipe:
                 "generation_settings": ("BASIC_PIPE",)
             },
         }
-    RETURN_TYPES = ("INT","INT","FLOAT","FLOAT","FLOAT","FLOAT","INT","INT",["center", "left", "right", "top", "bottom"],"INT",["lanczos", "nearest", "bilinear", "bicubic", "area", "nearest-exact"],)
-    RETURN_NAMES = ("gen_mode", "res_from", "img_strength", "ctrl_strength", "ctrl_start", "ctrl_stop", "ctrl_low", "ctrl_high", "crop_position", "crop_offset","crop_intpol")
+    RETURN_TYPES = (["center","top", "bottom", "left", "right"],"INT",["center","top", "bottom", "left", "right"],"INT",["lanczos", "nearest", "bilinear", "bicubic", "area", "nearest-exact"],"FLOAT", "FLOAT", "INT", "FLOAT", "FLOAT", comfy.samplers.KSampler.SAMPLERS, comfy.samplers.KSampler.SCHEDULERS, "INT", "FLOAT", "FLOAT", "FLOAT", "INT", "INT", "INT", "FLOAT", "FLOAT", "FLOAT", "INT", "FLOAT", "FLOAT", "FLOAT", "FLOAT", "FLOAT", "INT", "FLOAT", "FLOAT", "FLOAT", ["enable","disable"], ["enable","disable"], ["enable","disable"],)
+    RETURN_NAMES = ("source_crop_pos", "source_crop_offset", "support_crop_pos", "support_crop_offset", "crop_intpol", "img2img_strength", "inpaint_strength", "inpaint_grow_mask", "unsampler_strength", "unsampler_cfg", "unsampler_sampler", "unsampler_scheduler", "cannyedge_source", "cannyedge_strength", "cannyedge_start", "cannyedge_end", "cannyedge_low", "cannyedge_high", "zoe_source", "zoe_strength", "zoe_start", "zoe_end", "midas_source", "midas_strength", "midas_start", "midas_end", "midas_a", "midas_bg", "openpose_source", "openpose_strength", "openpose_start", "openpose_end", "openpose_body", "openpose_face", "openpose_hand",)
     FUNCTION = "give_values"
 
     CATEGORY="JPS Nodes/Pipes"
 
     def give_values(self,generation_settings):
         
-        gen_mode, res_from, img_strength, ctrl_strength, ctrl_start, ctrl_stop, ctrl_low, ctrl_high, crop_position, crop_offset, crop_intpol = generation_settings
+        source_crop_pos, source_crop_offset, support_crop_pos, support_crop_offset, crop_intpol, img2img_strength, inpaint_strength, inpaint_grow_mask, unsampler_strength, unsampler_cfg, unsampler_sampler, unsampler_scheduler, cannyedge_source, cannyedge_strength, cannyedge_start, cannyedge_end, cannyedge_low, cannyedge_high, zoe_source, zoe_strength, zoe_start, zoe_end, midas_source, midas_strength, midas_start, midas_end, midas_a, midas_bg, openpose_source, openpose_strength, openpose_start, openpose_end, openpose_body, openpose_face, openpose_hand = generation_settings
 
-        return(int(gen_mode), int(res_from), float(img_strength), float(ctrl_strength), float(ctrl_start), float(ctrl_stop), int(ctrl_low), int(ctrl_high), crop_position, int(crop_offset), crop_intpol, )
+        return(source_crop_pos, source_crop_offset, support_crop_pos, support_crop_offset, crop_intpol, img2img_strength, inpaint_strength, inpaint_grow_mask, unsampler_strength, unsampler_cfg, unsampler_sampler, unsampler_scheduler, cannyedge_source, cannyedge_strength, cannyedge_start, cannyedge_end, cannyedge_low, cannyedge_high, zoe_source, zoe_strength, zoe_start, zoe_end, midas_source, midas_strength, midas_start, midas_end, midas_a, midas_bg, openpose_source, openpose_strength, openpose_start, openpose_end, openpose_body, openpose_face, openpose_hand,)
 
 #---------------------------------------------------------------------------------------------------------------------------------------------------#
 
@@ -1909,7 +1916,7 @@ class Crop_Image_TargetSize:
                 "image": ("IMAGE",),
                 "target_w": ("INT", { "default": 0 , "min": 0, "step": 8, "display": "number" }),
                 "target_h": ("INT", { "default": 0 , "min": 0, "step": 8, "display": "number" }),                
-                "crop_position": (["center", "left", "right", "top", "bottom"],),
+                "crop_position": (["center","top", "bottom", "left", "right"],),
                 "offset": ("INT", { "default": 0, "min": -2048, "max": 2048, "step": 1, "display": "number" }),
                 "interpolation": (["lanczos", "nearest", "bilinear", "bicubic", "area", "nearest-exact"],),
             }
