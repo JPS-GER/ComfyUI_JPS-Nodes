@@ -10,12 +10,69 @@
 # for ComfyUI               https://github.com/comfyanonymous/ComfyUI    #
 #------------------------------------------------------------------------#
 
+import torch
 import json
 import os
 import comfy.sd
 import folder_paths
 from datetime import datetime
+from PIL import Image, ImageOps, ImageSequence
+import numpy as np
+from PIL.PngImagePlugin import PngInfo
+from comfy.cli_args import args
 import torch.nn.functional as F
+
+def min_(tensor_list):
+    # return the element-wise min of the tensor list.
+    x = torch.stack(tensor_list)
+    mn = x.min(axis=0)[0]
+    return torch.clamp(mn, min=0)
+    
+def max_(tensor_list):
+    # return the element-wise max of the tensor list.
+    x = torch.stack(tensor_list)
+    mx = x.max(axis=0)[0]
+    return torch.clamp(mx, max=1)
+
+# From https://github.com/Jamy-L/Pytorch-Contrast-Adaptive-Sharpening/
+def contrast_adaptive_sharpening(image, amount):
+    img = F.pad(image, pad=(1, 1, 1, 1)).cpu()
+
+    a = img[..., :-2, :-2]
+    b = img[..., :-2, 1:-1]
+    c = img[..., :-2, 2:]
+    d = img[..., 1:-1, :-2]
+    e = img[..., 1:-1, 1:-1]
+    f = img[..., 1:-1, 2:]
+    g = img[..., 2:, :-2]
+    h = img[..., 2:, 1:-1]
+    i = img[..., 2:, 2:]
+    
+    # Computing contrast
+    cross = (b, d, e, f, h)
+    mn = min_(cross)
+    mx = max_(cross)
+    
+    diag = (a, c, g, i)
+    mn2 = min_(diag)
+    mx2 = max_(diag)
+    mx = mx + mx2
+    mn = mn + mn2
+    
+    # Computing local weight
+    inv_mx = torch.reciprocal(mx)
+    amp = inv_mx * torch.minimum(mn, (2 - mx))
+
+    # scaling
+    amp = torch.sqrt(amp)
+    w = - amp * (amount * (1/5 - 1/8) + 1/8)
+    div = torch.reciprocal(1 + 4*w)
+
+    output = ((b + d + f + h)*w + e) * div
+    output = output.clamp(0, 1)
+    output = torch.nan_to_num(output)
+
+    return (output)
 
 def read_json_file(file_path):
     """
@@ -349,7 +406,7 @@ class SDXL_Basic_Settings_Pipe:
 
 class SDXL_Prompt_Handling_Plus:
     handling = ["Copy to Both if Empty","Use Positive_G + Positive_L","Copy Positive_G to Both","Copy Positive_L to Both","Ignore Positive_G Input", "Ignore Positive_L Input", "Combine Positive_G + Positive_L", "Combine Positive_L + Positive_G",]
-    uni_neg = ["OFF","ON"]
+
     def __init__(self):
         pass
 
@@ -358,19 +415,18 @@ class SDXL_Prompt_Handling_Plus:
         return {
             "required": {
                 "handling": (s.handling,),
-                "pos_g": ("STRING", {"default": ""}),
-                "pos_l": ("STRING", {"default": ""}),
-                "neg": ("STRING", {"default": ""}),
-                "universal_neg": (s.uni_neg,),
+                "pos_g": ("STRING", {"multiline": True, "placeholder": "Prompt Text pos_g"}),
+                "pos_l": ("STRING", {"multiline": True, "placeholder": "Prompt Text pos_l"}),
             },
         }
-    RETURN_TYPES = ("STRING","STRING","STRING",)
-    RETURN_NAMES = ("pos_g","pos_l","neg",)
+    
+    RETURN_TYPES = ("STRING","STRING",)
+    RETURN_NAMES = ("pos_g","pos_l",)
     FUNCTION = "pick_handling"
 
     CATEGORY="JPS Nodes/Text"
 
-    def pick_handling(self,handling,pos_g,pos_l,neg,universal_neg):
+    def pick_handling(self,handling,pos_g,pos_l):
         
         if(handling == "Copy Positive_G to Both"):
             pos_l = pos_g
@@ -393,13 +449,31 @@ class SDXL_Prompt_Handling_Plus:
         elif(handling == "Copy to Both if Empty" and pos_g == ''):
             pos_g = pos_l
 
-        if(universal_neg == "ON"):
-            if (neg != ''):
-                neg = neg + ', text, watermark, low-quality, signature, moire pattern, downsampling, aliasing, distorted, blurry, glossy, blur, jpeg artifacts, compression artifacts, poorly drawn, low-resolution, bad, distortion, twisted, excessive, exaggerated pose, exaggerated limbs, grainy, symmetrical, duplicate, error, pattern, beginner, pixelated, fake, hyper, glitch, overexposed, high-contrast, bad-contrast'
-            else:
-                neg = 'text, watermark, low-quality, signature, moire pattern, downsampling, aliasing, distorted, blurry, glossy, blur, jpeg artifacts, compression artifacts, poorly drawn, low-resolution, bad, distortion, twisted, excessive, exaggerated pose, exaggerated limbs, grainy, symmetrical, duplicate, error, pattern, beginner, pixelated, fake, hyper, glitch, overexposed, high-contrast, bad-contrast'
+        return(pos_g,pos_l,)
 
-        return(pos_g,pos_l,neg,)
+#---------------------------------------------------------------------------------------------------------------------------------------------------#
+
+class Text_Prompt:
+    def __init__(self):
+        pass
+
+    @classmethod
+    def INPUT_TYPES(s):
+        return {
+            "required": {
+                "text": ("STRING", {"multiline": True, "placeholder": "Prompt Text"}),
+            },
+        }
+    
+    RETURN_TYPES = ("STRING",)
+    RETURN_NAMES = ("text",)
+    FUNCTION = "text_prompt"
+
+    CATEGORY="JPS Nodes/Text"
+
+    def text_prompt(self,text):
+
+        return(text,)
 
 #---------------------------------------------------------------------------------------------------------------------------------------------------#
 
@@ -821,8 +895,7 @@ class Generation_TXT_IMG_Settings:
 
 #---------------------------------------------------------------------------------------------------------------------------------------------------#
 
-class Generation_Settings:
-    ctrlfrom = ["Source Image", "Support Image", "Support Direct"]
+class CropImage_Settings:
     
     def __init__(self):
         pass
@@ -836,30 +909,187 @@ class Generation_Settings:
                 "support_crop_pos": (["center","top", "bottom", "left", "right"],),
                 "support_crop_offset": ("INT", { "default": 0, "min": -2048, "max": 2048, "step": 1, "display": "number" }),
                 "crop_intpol": (["lanczos", "nearest", "bilinear", "bicubic", "area", "nearest-exact"],),
-                "img2img_strength": ("INT", {"default": 50, "min": 0, "max": 100, "step": 2}),
-                "inpaint_strength": ("INT", {"default": 100, "min": 2, "max": 100, "step": 2}),
+            }   
+        }
+    RETURN_TYPES = ("BASIC_PIPE",) 
+    RETURN_NAMES = ("cropimage_settings",)
+    FUNCTION = "get_cropimage"
+
+    CATEGORY="JPS Nodes/Settings"
+
+    def get_cropimage(self, source_crop_pos, source_crop_offset, support_crop_pos, support_crop_offset, crop_intpol,):
+       
+        cropimage_settings = source_crop_pos, source_crop_offset, support_crop_pos, support_crop_offset, crop_intpol
+
+        return(cropimage_settings,)
+
+#---------------------------------------------------------------------------------------------------------------------------------------------------#
+
+class CropImage_Pipe:
+
+    def __init__(self):
+        pass
+
+    @classmethod
+    def INPUT_TYPES(s):
+        return {
+            "required": {
+                "cropimage_settings": ("BASIC_PIPE",)
+            },
+        }
+    RETURN_TYPES = (["center","top", "bottom", "left", "right"],"INT",["center","top", "bottom", "left", "right"],"INT",["lanczos", "nearest", "bilinear", "bicubic", "area", "nearest-exact"],)
+    RETURN_NAMES = ("source_crop_pos", "source_crop_offset", "support_crop_pos", "support_crop_offset", "crop_intpol",)
+    FUNCTION = "give_values"
+
+    CATEGORY="JPS Nodes/Pipes"
+
+    def give_values(self,cropimage_settings):
+        
+        source_crop_pos, source_crop_offset, support_crop_pos, support_crop_offset, crop_intpol = cropimage_settings
+
+        return(source_crop_pos, source_crop_offset, support_crop_pos, support_crop_offset, crop_intpol,)
+
+#---------------------------------------------------------------------------------------------------------------------------------------------------#
+
+class ImageToImage_Settings:
+    
+    def __init__(self):
+        pass
+
+    @classmethod
+    def INPUT_TYPES(s):
+        return {
+            "required": {
+                "img2img_strength": ("INT", {"default": 50, "min": 0, "max": 100, "step": 1}),
+                "inpaint_strength": ("INT", {"default": 100, "min": 2, "max": 100, "step": 1}),
                 "inpaint_grow_mask": ("INT", {"default": 20, "min": 0, "max": 200, "step": 2}),
                 "unsampler_strength": ("INT", {"default": 30, "min": 0, "max": 100, "step": 1}),
                 "unsampler_cfg": ("FLOAT", {"default": 1, "min": 1, "max": 10, "step": 0.1}),
                 "unsampler_sampler": (comfy.samplers.KSampler.SAMPLERS,),
                 "unsampler_scheduler": (comfy.samplers.KSampler.SCHEDULERS,),
-                "cannyedge_from": (s.ctrlfrom,),
+            }   
+        }
+    RETURN_TYPES = ("BASIC_PIPE",) 
+    RETURN_NAMES = ("img2img_settings",)
+    FUNCTION = "get_img2img"
+
+    CATEGORY="JPS Nodes/Settings"
+
+    def get_img2img(self, img2img_strength, inpaint_strength, inpaint_grow_mask, unsampler_strength, unsampler_cfg, unsampler_sampler, unsampler_scheduler,):
+
+        img2img_strength = (img2img_strength + 0.001) / 100
+
+        inpaint_strength = (100 - inpaint_strength + 0.001) / 100
+
+        unsampler_strength = (unsampler_strength + 0.001) / 100
+        
+        img2img_settings = img2img_strength, inpaint_strength, inpaint_grow_mask, unsampler_strength, unsampler_cfg, unsampler_sampler, unsampler_scheduler
+
+        return(img2img_settings,)
+
+#---------------------------------------------------------------------------------------------------------------------------------------------------#
+
+class ImageToImage_Pipe:
+
+    def __init__(self):
+        pass
+
+    @classmethod
+    def INPUT_TYPES(s):
+        return {
+            "required": {
+                "img2img_settings": ("BASIC_PIPE",)
+            },
+        }
+    RETURN_TYPES = ("FLOAT", "FLOAT", "INT", "FLOAT", "FLOAT", comfy.samplers.KSampler.SAMPLERS, comfy.samplers.KSampler.SCHEDULERS,)
+    RETURN_NAMES = ("img2img_strength", "inpaint_strength", "inpaint_grow_mask", "unsampler_strength", "unsampler_cfg", "unsampler_sampler", "unsampler_scheduler",)
+    FUNCTION = "give_values"
+
+    CATEGORY="JPS Nodes/Pipes"
+
+    def give_values(self,img2img_settings):
+        
+        img2img_strength, inpaint_strength, inpaint_grow_mask, unsampler_strength, unsampler_cfg, unsampler_sampler, unsampler_scheduler = img2img_settings
+
+        return(img2img_strength, inpaint_strength, inpaint_grow_mask, unsampler_strength, unsampler_cfg, unsampler_sampler, unsampler_scheduler,)
+
+#---------------------------------------------------------------------------------------------------------------------------------------------------#
+
+class CtrlNet_CannyEdge_Settings:
+    cannyedgefrom = ["Source Image", "Support Image", "Support Direct"]
+    
+    def __init__(self):
+        pass
+
+    @classmethod
+    def INPUT_TYPES(s):
+        return {
+            "required": {
+                "cannyedge_from": (s.cannyedgefrom,),
                 "cannyedge_strength": ("FLOAT", {"default": 1.00, "min": 0.00, "max": 10.00, "step": 0.10}),
                 "cannyedge_start": ("FLOAT", {"default": 0.000, "min": 0.000, "max": 1.000, "step": 0.05}),
                 "cannyedge_end": ("FLOAT", {"default": 1.000, "min": 0.000, "max": 1.000, "step": 0.05}),
                 "cannyedge_low": ("INT", {"default": 100, "min": 0, "max": 255, "step": 1}),
                 "cannyedge_high": ("INT", {"default": 200, "min": 0, "max": 255, "step": 1}),
-                "zoe_from": (s.ctrlfrom,),
-                "zoe_strength": ("FLOAT", {"default": 1.00, "min": 0.00, "max": 10.00, "step": 0.10}),
-                "zoe_start": ("FLOAT", {"default": 0.000, "min": 0.000, "max": 1.000, "step": 0.05}),
-                "zoe_end": ("FLOAT", {"default": 1.000, "min": 0.000, "max": 1.000, "step": 0.05}),
-                "midas_from": (s.ctrlfrom,),
-                "midas_strength": ("FLOAT", {"default": 1.00, "min": 0.00, "max": 10.00, "step": 0.10}),
-                "midas_start": ("FLOAT", {"default": 0.000, "min": 0.000, "max": 1.000, "step": 0.05}),
-                "midas_end": ("FLOAT", {"default": 1.000, "min": 0.000, "max": 1.000, "step": 0.05}),
-                "midas_a": ("FLOAT", {"default": 6.28, "min": 0.00, "max": 15.71, "step": 0.05}),
-                "midas_bg": ("FLOAT", {"default": 0.10, "min": 0.00, "max": 1.00, "step": 0.05}),
-                "openpose_from": (s.ctrlfrom,),
+            }   
+        }
+    RETURN_TYPES = ("BASIC_PIPE",) 
+    RETURN_NAMES = ("cannyedge_settings",)
+    FUNCTION = "get_ctrlnet_cannyedge"
+
+    CATEGORY="JPS Nodes/Settings"
+
+    def get_ctrlnet_cannyedge(self, cannyedge_from, cannyedge_strength, cannyedge_start, cannyedge_end, cannyedge_low, cannyedge_high):
+
+        cannyedge_source = int (1)
+        if (cannyedge_from == "Support Image"):
+            cannyedge_source = int(2)
+        if (cannyedge_from == "Support Direct"):
+            cannyedge_source = int(3)
+        
+        cannyedge_settings = cannyedge_source, cannyedge_strength, cannyedge_start, cannyedge_end, cannyedge_low, cannyedge_high
+
+        return(cannyedge_settings,)
+
+#---------------------------------------------------------------------------------------------------------------------------------------------------#
+
+class CtrlNet_CannyEdge_Pipe:
+
+    def __init__(self):
+        pass
+
+    @classmethod
+    def INPUT_TYPES(s):
+        return {
+            "required": {
+                "cannyedge_settings": ("BASIC_PIPE",)
+            },
+        }
+    RETURN_TYPES = ("INT", "FLOAT", "FLOAT", "FLOAT", "INT", "INT", )
+    RETURN_NAMES = ("cannyedge_source", "cannyedge_strength", "cannyedge_start", "cannyedge_end", "cannyedge_low", "cannyedge_high",)
+    FUNCTION = "give_values"
+
+    CATEGORY="JPS Nodes/Pipes"
+
+    def give_values(self,cannyedge_settings):
+        
+        cannyedge_source, cannyedge_strength, cannyedge_start, cannyedge_end, cannyedge_low, cannyedge_high = cannyedge_settings
+
+        return(cannyedge_source, cannyedge_strength, cannyedge_start, cannyedge_end, cannyedge_low, cannyedge_high,)
+
+#---------------------------------------------------------------------------------------------------------------------------------------------------#
+
+class CtrlNet_OpenPose_Settings:
+    openposefrom = ["Source Image", "Support Image", "Support Direct"]
+    
+    def __init__(self):
+        pass
+
+    @classmethod
+    def INPUT_TYPES(s):
+        return {
+            "required": {
+                "openpose_from": (s.openposefrom,),
                 "openpose_strength": ("FLOAT", {"default": 1.00, "min": 0.00, "max": 10.00, "step": 0.10}),
                 "openpose_start": ("FLOAT", {"default": 0.000, "min": 0.000, "max": 1.000, "step": 0.05}),
                 "openpose_end": ("FLOAT", {"default": 1.000, "min": 0.000, "max": 1.000, "step": 0.05}),
@@ -869,50 +1099,26 @@ class Generation_Settings:
             }   
         }
     RETURN_TYPES = ("BASIC_PIPE",) 
-    RETURN_NAMES = ("generation_settings",)
-    FUNCTION = "get_genfull"
+    RETURN_NAMES = ("openpose_settings",)
+    FUNCTION = "get_ctrlnet_openpose"
 
     CATEGORY="JPS Nodes/Settings"
 
-    def get_genfull(self, source_crop_pos, source_crop_offset, support_crop_pos, support_crop_offset, crop_intpol, img2img_strength, inpaint_strength, inpaint_grow_mask, unsampler_strength, unsampler_cfg, unsampler_sampler, unsampler_scheduler, cannyedge_from, cannyedge_strength, cannyedge_start, cannyedge_end, cannyedge_low, cannyedge_high, zoe_from, zoe_strength, zoe_start, zoe_end, midas_from, midas_strength, midas_start, midas_end, midas_a, midas_bg, openpose_from, openpose_strength, openpose_start, openpose_end, openpose_body, openpose_face, openpose_hand):
-
-        cannyedge_source = int (1)
-        if (cannyedge_from == "Support Image"):
-            cannyedge_source = int(2)
-        if (cannyedge_from == "Support Direct"):
-            cannyedge_source = int(3)
-
-        zoe_source = int (1)
-        if (zoe_from == "Support Image"):
-            zoe_source = int(2)
-        if (zoe_from == "Support Direct"):
-            zoe_source = int(3)
-
-        midas_source = int (1)
-        if (midas_from == "Support Image"):
-            midas_source = int(2)
-        if (midas_from == "Support Direct"):
-            midas_source = int(3)
+    def get_ctrlnet_openpose(self, openpose_from, openpose_strength, openpose_start, openpose_end, openpose_body, openpose_face, openpose_hand):
 
         openpose_source = int (1)
         if (openpose_from == "Support Image"):
             openpose_source = int(2)
         if (openpose_from == "Support Direct"):
             openpose_source = int(3)
-
-        img2img_strength = (img2img_strength + 0.001) / 100
-
-        inpaint_strength = (100 - inpaint_strength + 0.001) / 100
-
-        unsampler_strength = (unsampler_strength + 0.001) / 100
         
-        generation_settings = source_crop_pos, source_crop_offset, support_crop_pos, support_crop_offset, crop_intpol, img2img_strength, inpaint_strength, inpaint_grow_mask, unsampler_strength, unsampler_cfg, unsampler_sampler, unsampler_scheduler, cannyedge_source, cannyedge_strength, cannyedge_start, cannyedge_end, cannyedge_low, cannyedge_high, zoe_source, zoe_strength, zoe_start, zoe_end, midas_source, midas_strength, midas_start, midas_end, midas_a, midas_bg, openpose_source, openpose_strength, openpose_start, openpose_end, openpose_body, openpose_face, openpose_hand
+        openpose_settings = openpose_source, openpose_strength, openpose_start, openpose_end, openpose_body, openpose_face, openpose_hand
 
-        return(generation_settings,)
+        return(openpose_settings,)
 
 #---------------------------------------------------------------------------------------------------------------------------------------------------#
 
-class Generation_Settings_Pipe:
+class CtrlNet_OpenPose_Pipe:
 
     def __init__(self):
         pass
@@ -921,20 +1127,146 @@ class Generation_Settings_Pipe:
     def INPUT_TYPES(s):
         return {
             "required": {
-                "generation_settings": ("BASIC_PIPE",)
+                "openpose_settings": ("BASIC_PIPE",)
             },
         }
-    RETURN_TYPES = (["center","top", "bottom", "left", "right"],"INT",["center","top", "bottom", "left", "right"],"INT",["lanczos", "nearest", "bilinear", "bicubic", "area", "nearest-exact"],"FLOAT", "FLOAT", "INT", "FLOAT", "FLOAT", comfy.samplers.KSampler.SAMPLERS, comfy.samplers.KSampler.SCHEDULERS, "INT", "FLOAT", "FLOAT", "FLOAT", "INT", "INT", "INT", "FLOAT", "FLOAT", "FLOAT", "INT", "FLOAT", "FLOAT", "FLOAT", "FLOAT", "FLOAT", "INT", "FLOAT", "FLOAT", "FLOAT", ["enable","disable"], ["enable","disable"], ["enable","disable"],)
-    RETURN_NAMES = ("source_crop_pos", "source_crop_offset", "support_crop_pos", "support_crop_offset", "crop_intpol", "img2img_strength", "inpaint_strength", "inpaint_grow_mask", "unsampler_strength", "unsampler_cfg", "unsampler_sampler", "unsampler_scheduler", "cannyedge_source", "cannyedge_strength", "cannyedge_start", "cannyedge_end", "cannyedge_low", "cannyedge_high", "zoe_source", "zoe_strength", "zoe_start", "zoe_end", "midas_source", "midas_strength", "midas_start", "midas_end", "midas_a", "midas_bg", "openpose_source", "openpose_strength", "openpose_start", "openpose_end", "openpose_body", "openpose_face", "openpose_hand",)
+    RETURN_TYPES = ("INT", "FLOAT", "FLOAT", "FLOAT", ["enable","disable"], ["enable","disable"], ["enable","disable"],)
+    RETURN_NAMES = ("openpose_source", "openpose_strength", "openpose_start", "openpose_end", "openpose_body", "openpose_face", "openpose_hand",)
     FUNCTION = "give_values"
 
     CATEGORY="JPS Nodes/Pipes"
 
-    def give_values(self,generation_settings):
+    def give_values(self,openpose_settings):
         
-        source_crop_pos, source_crop_offset, support_crop_pos, support_crop_offset, crop_intpol, img2img_strength, inpaint_strength, inpaint_grow_mask, unsampler_strength, unsampler_cfg, unsampler_sampler, unsampler_scheduler, cannyedge_source, cannyedge_strength, cannyedge_start, cannyedge_end, cannyedge_low, cannyedge_high, zoe_source, zoe_strength, zoe_start, zoe_end, midas_source, midas_strength, midas_start, midas_end, midas_a, midas_bg, openpose_source, openpose_strength, openpose_start, openpose_end, openpose_body, openpose_face, openpose_hand = generation_settings
+        openpose_source, openpose_strength, openpose_start, openpose_end, openpose_body, openpose_face, openpose_hand = openpose_settings
 
-        return(source_crop_pos, source_crop_offset, support_crop_pos, support_crop_offset, crop_intpol, img2img_strength, inpaint_strength, inpaint_grow_mask, unsampler_strength, unsampler_cfg, unsampler_sampler, unsampler_scheduler, cannyedge_source, cannyedge_strength, cannyedge_start, cannyedge_end, cannyedge_low, cannyedge_high, zoe_source, zoe_strength, zoe_start, zoe_end, midas_source, midas_strength, midas_start, midas_end, midas_a, midas_bg, openpose_source, openpose_strength, openpose_start, openpose_end, openpose_body, openpose_face, openpose_hand,)
+        return(openpose_source, openpose_strength, openpose_start, openpose_end, openpose_body, openpose_face, openpose_hand,)
+
+#---------------------------------------------------------------------------------------------------------------------------------------------------#
+
+class CtrlNet_MiDaS_Settings:
+    midasfrom = ["Source Image", "Support Image", "Support Direct"]
+    
+    def __init__(self):
+        pass
+
+    @classmethod
+    def INPUT_TYPES(s):
+        return {
+            "required": {
+                "midas_from": (s.midasfrom,),
+                "midas_strength": ("FLOAT", {"default": 1.00, "min": 0.00, "max": 10.00, "step": 0.10}),
+                "midas_start": ("FLOAT", {"default": 0.000, "min": 0.000, "max": 1.000, "step": 0.05}),
+                "midas_end": ("FLOAT", {"default": 1.000, "min": 0.000, "max": 1.000, "step": 0.05}),
+                "midas_a": ("FLOAT", {"default": 6.28, "min": 0.00, "max": 15.71, "step": 0.05}),
+                "midas_bg": ("FLOAT", {"default": 0.10, "min": 0.00, "max": 1.00, "step": 0.05}),
+            }   
+        }
+    RETURN_TYPES = ("BASIC_PIPE",) 
+    RETURN_NAMES = ("midas_settings",)
+    FUNCTION = "get_ctrlnet_midas"
+
+    CATEGORY="JPS Nodes/Settings"
+
+    def get_ctrlnet_midas(self, midas_from, midas_strength, midas_start, midas_end, midas_a, midas_bg):
+
+        midas_source = int (1)
+        if (midas_from == "Support Image"):
+            midas_source = int(2)
+        if (midas_from == "Support Direct"):
+            midas_source = int(3)
+        
+        midas_settings = midas_source, midas_strength, midas_start, midas_end, midas_a, midas_bg
+
+        return(midas_settings,)
+
+#---------------------------------------------------------------------------------------------------------------------------------------------------#
+
+class CtrlNet_MiDaS_Pipe:
+
+    def __init__(self):
+        pass
+
+    @classmethod
+    def INPUT_TYPES(s):
+        return {
+            "required": {
+                "midas_settings": ("BASIC_PIPE",)
+            },
+        }
+    RETURN_TYPES = ("INT", "FLOAT", "FLOAT", "FLOAT", "FLOAT", "FLOAT",)
+    RETURN_NAMES = ("midas_source", "midas_strength", "midas_start", "midas_end", "midas_a", "midas_bg",)
+    FUNCTION = "give_values"
+
+    CATEGORY="JPS Nodes/Pipes"
+
+    def give_values(self,midas_settings):
+        
+        midas_source, midas_strength, midas_start, midas_end, midas_a, midas_bg = midas_settings
+
+        return(midas_source, midas_strength, midas_start, midas_end, midas_a, midas_bg,)
+
+#---------------------------------------------------------------------------------------------------------------------------------------------------#
+
+class CtrlNet_ZoeDepth_Settings:
+    zoefrom = ["Source Image", "Support Image", "Support Direct"]
+    
+    def __init__(self):
+        pass
+
+    @classmethod
+    def INPUT_TYPES(s):
+        return {
+            "required": {
+                "zoe_from": (s.zoefrom,),
+                "zoe_strength": ("FLOAT", {"default": 1.00, "min": 0.00, "max": 10.00, "step": 0.10}),
+                "zoe_start": ("FLOAT", {"default": 0.000, "min": 0.000, "max": 1.000, "step": 0.05}),
+                "zoe_end": ("FLOAT", {"default": 1.000, "min": 0.000, "max": 1.000, "step": 0.05}),
+            }   
+        }
+    RETURN_TYPES = ("BASIC_PIPE",) 
+    RETURN_NAMES = ("zoedepth_settings",)
+    FUNCTION = "get_ctrlnet_zoedepth"
+
+    CATEGORY="JPS Nodes/Settings"
+
+    def get_ctrlnet_zoedepth(self, zoe_from, zoe_strength, zoe_start, zoe_end):
+
+        zoe_source = int (1)
+        if (zoe_from == "Support Image"):
+            zoe_source = int(2)
+        if (zoe_from == "Support Direct"):
+            zoe_source = int(3)
+        
+        zoedepth_settings = zoe_source, zoe_strength, zoe_start, zoe_end
+
+        return(zoedepth_settings,)
+
+#---------------------------------------------------------------------------------------------------------------------------------------------------#
+
+class CtrlNet_ZoeDepth_Pipe:
+
+    def __init__(self):
+        pass
+
+    @classmethod
+    def INPUT_TYPES(s):
+        return {
+            "required": {
+                "zoedepth_settings": ("BASIC_PIPE",)
+            },
+        }
+    RETURN_TYPES = ("INT", "FLOAT", "FLOAT", "FLOAT",)
+    RETURN_NAMES = ("zoe_source", "zoe_strength", "zoe_start", "zoe_end",)
+    FUNCTION = "give_values"
+
+    CATEGORY="JPS Nodes/Pipes"
+
+    def give_values(self,zoedepth_settings):
+        
+        zoe_source, zoe_strength, zoe_start, zoe_end = zoedepth_settings
+
+        return(zoe_source, zoe_strength, zoe_start, zoe_end,)
 
 #---------------------------------------------------------------------------------------------------------------------------------------------------#
 
@@ -961,7 +1293,7 @@ class IP_Adapter_Settings:
                 "ipa1_start": ("FLOAT", {"default": 0.00, "min": 0, "max": 1, "step": 0.05}),
                 "ipa1_stop": ("FLOAT", {"default": 1.00, "min": 0, "max": 1, "step": 0.05}),
                 "ipa1_crop": (["center","top", "bottom", "left", "right"],),
-                "ipa1_offset": ("INT", { "default": 0, "min": -2048, "max": 2048, "step": 1, "display": "number" }),
+                "ipa1_offset": ("INT", { "default": 0, "min": -4096, "max": 4096, "step": 1, "display": "number" }),
                 "ipa1_mask": (s.ipamasktype,),
 
                 "ipa2_weight": ("FLOAT", {"default": 0.5, "min": 0, "max": 3, "step": 0.01}),
@@ -970,7 +1302,7 @@ class IP_Adapter_Settings:
                 "ipa2_start": ("FLOAT", {"default": 0.00, "min": 0, "max": 1, "step": 0.05}),
                 "ipa2_stop": ("FLOAT", {"default": 1.00, "min": 0, "max": 1, "step": 0.05}),
                 "ipa2_crop": (["center","top", "bottom", "left", "right"],),
-                "ipa2_offset": ("INT", { "default": 0, "min": -2048, "max": 2048, "step": 1, "display": "number" }),
+                "ipa2_offset": ("INT", { "default": 0, "min": -4096, "max": 4096, "step": 1, "display": "number" }),
                 "ipa2_mask": (s.ipamasktype,),
 
 
@@ -980,7 +1312,7 @@ class IP_Adapter_Settings:
                 "ipa3_start": ("FLOAT", {"default": 0.00, "min": 0, "max": 1, "step": 0.05}),
                 "ipa3_stop": ("FLOAT", {"default": 1.00, "min": 0, "max": 1, "step": 0.05}),
                 "ipa3_crop": (["center","top", "bottom", "left", "right"],),
-                "ipa3_offset": ("INT", { "default": 0, "min": -2048, "max": 2048, "step": 1, "display": "number" }),
+                "ipa3_offset": ("INT", { "default": 0, "min": -4096, "max": 4096, "step": 1, "display": "number" }),
                 "ipa3_mask": (s.ipamasktype,),
 
 
@@ -990,7 +1322,7 @@ class IP_Adapter_Settings:
                 "ipa4_start": ("FLOAT", {"default": 0.00, "min": 0, "max": 1, "step": 0.05}),
                 "ipa4_stop": ("FLOAT", {"default": 1.00, "min": 0, "max": 1, "step": 0.05}),
                 "ipa4_crop": (["center","top", "bottom", "left", "right"],),
-                "ipa4_offset": ("INT", { "default": 0, "min": -2048, "max": 2048, "step": 1, "display": "number" }),
+                "ipa4_offset": ("INT", { "default": 0, "min": -4096, "max": 4096, "step": 1, "display": "number" }),
                 "ipa4_mask": (s.ipamasktype,),
 
                 "crop_intpol": (["lanczos", "nearest", "bilinear", "bicubic", "area", "nearest-exact"],),
@@ -1084,6 +1416,76 @@ class IP_Adapter_Settings:
         return(ip_adapter_settings,)
 
 #---------------------------------------------------------------------------------------------------------------------------------------------------#
+    
+class IP_Adapter_Single_Settings:
+    ipamasktype = ["No Mask","Mask Editor","Mask Editor (inverted)","Red from Image","Green from Image","Blue from Image"]    
+
+    def __init__(self):
+        pass
+
+    @classmethod
+    def INPUT_TYPES(s):
+        return {
+            "required": {
+                "ipa_weight": ("FLOAT", {"default": 0.5, "min": 0, "max": 3, "step": 0.01}),
+                "ipa_wtype": (["original", "linear", "channel penalty"],),
+                "ipa_noise": ("FLOAT", {"default": 0.0, "min": 0, "max": 1, "step": 0.05}),
+                "ipa_start": ("FLOAT", {"default": 0.00, "min": 0, "max": 1, "step": 0.05}),
+                "ipa_stop": ("FLOAT", {"default": 1.00, "min": 0, "max": 1, "step": 0.05}),
+                "ipa_crop": (["center","top", "bottom", "left", "right"],),
+                "ipa_zoom": ("FLOAT", { "default": 1, "min": 1, "max": 5, "step": 0.1, "display": "number" }),
+                "ipa_offset_x": ("INT", { "default": 0, "min": -4096, "max": 4096, "step": 1, "display": "number" }),
+                "ipa_offset_y": ("INT", { "default": 0, "min": -4096, "max": 4096, "step": 1, "display": "number" }),                
+                "ipa_mask": (s.ipamasktype,),
+                "crop_intpol": (["lanczos", "nearest", "bilinear", "bicubic", "area", "nearest-exact"],),
+                "sharpening": ("FLOAT", { "default": 0.0, "min": 0, "max": 1, "step": 0.05, "display": "number" }),
+                "ipa_model": (["SDXL ViT-H", "SDXL Plus ViT-H", "SDXL Plus Face ViT-H"],),
+            }
+        }
+    RETURN_TYPES = ("BASIC_PIPE",)
+    RETURN_NAMES = ("ip_adapter_single_settings",)
+    FUNCTION = "get_ipamodesingle"
+
+    CATEGORY="JPS Nodes/Settings"
+
+    def get_ipamodesingle(self,ipa_weight,ipa_wtype,ipa_noise,ipa_start,ipa_stop,ipa_crop,ipa_zoom,ipa_offset_x,ipa_offset_y,ipa_mask,crop_intpol,sharpening,ipa_model):
+
+        ipamask = int(0)
+        if(ipa_mask == "Mask Editor"):
+            ipamask = int(1)
+        elif(ipa_mask == "Mask Editor (inverted)"):
+            ipamask = int(2)
+        elif(ipa_mask == "Red from Image"):
+            ipamask = int(3)
+        elif(ipa_mask == "Green from Image"):
+            ipamask = int(4)
+        elif(ipa_mask == "Blue from Image"):
+            ipamask = int(5)
+
+        ipamodel = int (0)
+        if(ipa_model == "SDXL ViT-H"):
+            ipamodel = int(1)
+        elif(ipa_model == "SDXL Plus ViT-H"):
+            ipamodel = int(2)
+        elif(ipa_model == "SDXL Plus Face ViT-H"):
+            ipamodel = int(3)
+
+        ipaweight = ipa_weight
+        ipawtype = ipa_wtype
+        ipanoise = ipa_noise
+        ipastart = ipa_start
+        ipastop = ipa_stop
+        ipacrop = ipa_crop
+        ipazoom = ipa_zoom
+        ipaoffsetx = ipa_offset_x
+        ipaoffsety = ipa_offset_y
+        cropintpol = crop_intpol
+        
+        ip_adapter_settings = ipaweight,ipawtype,ipanoise,ipastart,ipastop,ipacrop,ipazoom,ipaoffsetx,ipaoffsety,ipamask,cropintpol,sharpening,ipamodel
+
+        return(ip_adapter_settings,)
+
+#---------------------------------------------------------------------------------------------------------------------------------------------------#    
 
 class IP_Adapter_Settings_Pipe:
 
@@ -1108,6 +1510,32 @@ class IP_Adapter_Settings_Pipe:
         crop_res,crop_intpol,ipa1_crop,ipa1_offset,ipa2_crop,ipa2_offset,ipa3_crop,ipa3_offset,ipa4_crop,ipa4_offset,ipa1weight,ipa1wtype,ipa2weight,ipa2wtype,ipa3weight,ipa3wtype,ipa4weight,ipa4wtype,ipa1noise,ipa2noise,ipa3noise,ipa4noise,ipa1_start,ipa1_stop,ipa2_start,ipa2_stop,ipa3_start,ipa3_stop,ipa4_start,ipa4_stop,ipa1mask,ipa2mask,ipa3mask,ipa4mask = ip_adapter_settings
 
         return(int(crop_res),crop_intpol,ipa1_crop,int(ipa1_offset),ipa2_crop,int(ipa2_offset),ipa3_crop,int(ipa3_offset),ipa4_crop,int(ipa4_offset),float(ipa1weight),ipa1wtype,float(ipa2weight),ipa2wtype,float(ipa3weight),ipa3wtype,float(ipa4weight),ipa4wtype,float(ipa1noise),float(ipa2noise),float(ipa3noise),float(ipa4noise),float(ipa1_start),float(ipa1_stop),float(ipa2_start),float(ipa2_stop),float(ipa3_start),float(ipa3_stop),float(ipa4_start),float(ipa4_stop),int(ipa1mask),int(ipa2mask),int(ipa3mask),int(ipa4mask),)
+
+#---------------------------------------------------------------------------------------------------------------------------------------------------#    
+
+class IP_Adapter_Single_Settings_Pipe:
+
+    def __init__(self):
+        pass
+
+    @classmethod
+    def INPUT_TYPES(s):
+        return {
+            "required": {
+                "ip_adapter_settings": ("BASIC_PIPE",),
+            }
+        }
+    RETURN_TYPES = ("FLOAT",["original", "linear", "channel penalty"],"FLOAT","FLOAT","FLOAT",["center","top", "bottom", "left", "right"],"FLOAT","INT","INT","INT",["lanczos", "nearest", "bilinear", "bicubic", "area", "nearest-exact"],"FLOAT","INT")
+    RETURN_NAMES = ("ipa_weight","ipa_wtype","ipa_noise","ipa_start","ipa_stop","ipa_crop","ipa_zoom","ipa_offset_x","ipa_offset_y","ipa_mask","crop_intpol","sharpening","ipa_model")
+    FUNCTION = "get_ipamode_single"
+
+    CATEGORY="JPS Nodes/Pipes"
+
+    def get_ipamode_single(self,ip_adapter_settings):
+
+        ipaweight,ipawtype,ipanoise,ipastart,ipastop,ipacrop,ipazoom,ipaoffsetx,ipaoffsety,ipamask,cropintpol,sharpening,ipamodel = ip_adapter_settings
+
+        return(float(ipaweight),ipawtype,float(ipanoise),float(ipastart),float(ipastop),ipacrop,float(ipazoom),int(ipaoffsetx),int(ipaoffsety),int(ipamask),cropintpol,float(sharpening),int(ipamodel),)
 
 #---------------------------------------------------------------------------------------------------------------------------------------------------#
 
@@ -1322,6 +1750,48 @@ class Model_Switch:
             model_out = model_5
 
         return (model_out,)
+
+#---------------------------------------------------------------------------------------------------------------------------------------------------#
+
+class IPA_Switch:
+
+    CATEGORY = 'JPS Nodes/Switches'
+    RETURN_TYPES = ("IPADAPTER",)
+    RETURN_NAMES = ("IPA_out",)
+    FUNCTION = "get_ipa"
+
+    def __init__(self):
+        pass
+
+    @classmethod
+    def INPUT_TYPES(cls):
+        return {
+            "required": {
+                "select": ("INT", {}),
+            },
+            "optional": {
+                "ipa_1": ("IPADAPTER",),
+                "ipa_2": ("IPADAPTER",),
+                "ipa_3": ("IPADAPTER",),
+                "ipa_4": ("IPADAPTER",),
+                "ipa_5": ("IPADAPTER",),
+            }
+        }
+
+    def get_ipa(self,select,ipa_1,ipa_2=None,ipa_3=None,ipa_4=None,ipa_5=None,):
+        
+        ipa_out = ipa_1
+
+        if (select == 2):
+            ipa_out = ipa_2
+        elif (select == 3):
+            ipa_out  = ipa_3
+        elif (select == 4):
+            ipa_out = ipa_4
+        elif (select == 5):
+            ipa_out = ipa_5
+
+        return (ipa_out,)
 
 #---------------------------------------------------------------------------------------------------------------------------------------------------#
 
@@ -1842,9 +2312,12 @@ class Crop_Image_Square:
             "required": {
                 "image": ("IMAGE",),
                 "crop_position": (["center", "top", "bottom", "left", "right"],),
-                "offset": ("INT", { "default": 0, "min": -2048, "max": 2048, "step": 1, "display": "number" }),
+                "offset_x": ("INT", { "default": 0, "min": -4096, "max": 4096, "step": 1, "display": "number" }),
+                "offset_y": ("INT", { "default": 0, "min": -4096, "max": 4096, "step": 1, "display": "number" }),
+                "zoom": ("FLOAT", { "default": 1, "min": 1, "max": 5, "step": 0.1, "display": "number" }),
                 "interpolation": (["lanczos", "nearest", "bilinear", "bicubic", "area", "nearest-exact"],),
                 "target_rez": ("INT", { "default": 0 , "min": 0, "step": 8, "display": "number" }),
+                "sharpening": ("FLOAT", {"default": 0.0, "min": 0, "max": 1, "step": 0.05}),
             }
         }
     
@@ -1853,46 +2326,58 @@ class Crop_Image_Square:
     FUNCTION = "crop_square"
     CATEGORY = "JPS Nodes/Image"
 
-    def crop_square(self, image, crop_position, offset, interpolation, target_rez):
+    def crop_square(self, image, crop_position, offset_x, offset_y, zoom, interpolation, target_rez,sharpening):
         _, h, w, _ = image.shape
         crop_size = min(h, w)
 
+        offset_x = int (offset_x * zoom)
+        offset_y = int (offset_y * zoom)
+
         if "center" in crop_position:
-            x = round((w-crop_size) / 2)
-            y = round((h-crop_size) / 2)
+            x = round((w*zoom-crop_size) / 2)
+            y = round((h*zoom-crop_size) / 2)
         if "top" in crop_position:
-            x = round((w-crop_size) / 2)
+            x = round((w*zoom-crop_size) / 2)
             y = 0
         if "bottom" in crop_position:
-            x = round((w-crop_size) / 2)
-            y = h-crop_size
+            x = round((w*zoom-crop_size) / 2)
+            y = h*zoom-crop_size
         if "left" in crop_position:
             x = 0
-            y = round((h-crop_size) / 2)
+            y = round((h*zoom-crop_size) / 2)
         if "right" in crop_position:
-            x = w-crop_size
-            y = round((h-crop_size) / 2)
+            x = w*zoom-crop_size
+            y = round((h*zoom-crop_size) / 2)
 
-        if h < w:
-            if (x + offset >= 0 and x + crop_size + offset <= w):
-                x = x + offset
-            elif (x + offset >= 0):
-                x = w - crop_size
-            elif (x + crop_size + offset <= w):
-                x = 0
+        x = int(x)
+        y = int(y)
 
-        if h > w:
-            if (y + offset >= 0 and y + crop_size + offset <= h):
-                y = y + offset
-            elif (y + offset >= 0):
-                y = h - crop_size
-            elif (y + crop_size + offset <= h):
-                y = 0
+        if (x + offset_x >= 0 and x + crop_size + offset_x <= int(w*zoom)):
+            x = x + offset_x
+        elif (x + offset_x >= 0):
+            x = int(w*zoom) - crop_size
+        elif (x + crop_size + offset_x <= int(w*zoom)):
+            x = 0
+
+        if (y + offset_y >= 0 and y + crop_size + offset_y <= int(h*zoom)):
+            y = y + offset_y
+        elif (y + offset_y >= 0):
+            y = int(h*zoom) - crop_size
+        elif (y + crop_size + offset_y <= int(h*zoom)):
+            y = 0
 
         x2 = x+crop_size
         y2 = y+crop_size
 
-        output = image[:, y:y2, x:x2, :]
+        zoomedimage = image[:, 0:h, 0:w, :]
+
+        zoomedimage = zoomedimage.permute([0,3,1,2])        
+
+        zoomedimage = comfy.utils.lanczos(zoomedimage, int(w*zoom), int(h*zoom))
+
+        zoomedimage = zoomedimage.permute([0,2,3,1])
+
+        output = zoomedimage[:, y:y2, x:x2, :]
 
         output = output.permute([0,3,1,2])
 
@@ -1901,6 +2386,9 @@ class Crop_Image_Square:
                 output = comfy.utils.lanczos(output, target_rez, target_rez)
             else:
                 output = F.interpolate(output, size=(target_rez, target_rez), mode=interpolation)
+
+        if sharpening > 0:
+            output = contrast_adaptive_sharpening(output, sharpening)
     
         output = output.permute([0,2,3,1])
 
@@ -1919,6 +2407,7 @@ class Crop_Image_TargetSize:
                 "crop_position": (["center","top", "bottom", "left", "right"],),
                 "offset": ("INT", { "default": 0, "min": -2048, "max": 2048, "step": 1, "display": "number" }),
                 "interpolation": (["lanczos", "nearest", "bilinear", "bicubic", "area", "nearest-exact"],),
+                "sharpening": ("FLOAT", {"default": 0.0, "min": 0, "max": 1, "step": 0.05}),
             }
         }
     
@@ -1927,7 +2416,7 @@ class Crop_Image_TargetSize:
     FUNCTION = "crop_targetsize"
     CATEGORY = "JPS Nodes/Image"
 
-    def crop_targetsize(self, image, target_w, target_h, crop_position, offset, interpolation):
+    def crop_targetsize(self, image, target_w, target_h, crop_position, offset, interpolation, sharpening):
         _, current_h, current_w, _ = image.shape
 
         current_ar = current_w / current_h
@@ -1992,9 +2481,65 @@ class Crop_Image_TargetSize:
  #       print("y: "+str(y))
  #       print("y2: "+str(y2))
 
+        if sharpening > 0:
+            output_image = contrast_adaptive_sharpening(output_image, sharpening)
+
         output_image = output_image[:, y:y2, x:x2, :]
 
         return(output_image, )
+
+#---------------------------------------------------------------------------------------------------------------------------------------------------#    
+
+class Save_Images_Plus:
+    def __init__(self):
+        self.output_dir = folder_paths.get_output_directory()
+        self.type = "output"
+        self.prefix_append = ""
+        self.compress_level = 4
+
+    @classmethod
+    def INPUT_TYPES(s):
+        return {"required": 
+                    {"images": ("IMAGE", ),
+                     "filename_prefix": ("STRING", {"default": "ComfyUI"})},
+                "hidden": {"prompt": "PROMPT", "extra_pnginfo": "EXTRA_PNGINFO"},
+                }
+
+    RETURN_TYPES = ("INT",)
+    RETURN_NAMES = ("dummy_out",)
+    FUNCTION = "save_images_plus"
+
+    OUTPUT_NODE = True
+
+    CATEGORY = "JPS Nodes/IO"
+
+    def save_images_plus(self, images, filename_prefix="ComfyUI", prompt=None, extra_pnginfo=None):
+        filename_prefix += self.prefix_append
+        full_output_folder, filename, counter, subfolder, filename_prefix = folder_paths.get_save_image_path(filename_prefix, self.output_dir, images[0].shape[1], images[0].shape[0])
+        results = list()
+        for image in images:
+            i = 255. * image.cpu().numpy()
+            img = Image.fromarray(np.clip(i, 0, 255).astype(np.uint8))
+            metadata = None
+            if not args.disable_metadata:
+                metadata = PngInfo()
+                if prompt is not None:
+                    metadata.add_text("prompt", json.dumps(prompt))
+                if extra_pnginfo is not None:
+                    for x in extra_pnginfo:
+                        metadata.add_text(x, json.dumps(extra_pnginfo[x]))
+
+            file = f"{filename}_{counter:03}.png"
+            img.save(os.path.join(full_output_folder, file), pnginfo=metadata, compress_level=self.compress_level)
+            results.append({
+                "filename": file,
+                "subfolder": subfolder,
+                "type": self.type
+            })
+            counter += 1
+
+        #return { "ui": { "images": results } }
+        return(int(1), )            
 
 #---------------------------------------------------------------------------------------------------------------------------------------------------#    
 
@@ -2003,23 +2548,36 @@ NODE_CLASS_MAPPINGS = {
     "SDXL Resolutions (JPS)": SDXL_Resolutions,
     "SDXL Basic Settings (JPS)": SDXL_Basic_Settings,
     "Generation TXT IMG Settings (JPS)": Generation_TXT_IMG_Settings,
-    "Generation Settings (JPS)": Generation_Settings,
+    "Crop Image Settings (JPS)": CropImage_Settings,
+    "ImageToImage Settings (JPS)": ImageToImage_Settings,    
+    "CtrlNet CannyEdge Settings (JPS)": CtrlNet_CannyEdge_Settings,
+    "CtrlNet ZoeDepth Settings (JPS)": CtrlNet_ZoeDepth_Settings,
+    "CtrlNet MiDaS Settings (JPS)": CtrlNet_MiDaS_Settings,
+    "CtrlNet OpenPose Settings (JPS)": CtrlNet_OpenPose_Settings,
     "Revision Settings (JPS)": Revision_Settings,
     "IP Adapter Settings (JPS)": IP_Adapter_Settings,
+    "IP Adapter Single Settings (JPS)": IP_Adapter_Single_Settings,
     "Sampler Scheduler Settings (JPS)": Sampler_Scheduler_Settings,
     "Integer Switch (JPS)": Integer_Switch,
     "Image Switch (JPS)": Image_Switch,
     "Latent Switch (JPS)": Latent_Switch,
     "Conditioning Switch (JPS)": Conditioning_Switch,
     "Model Switch (JPS)": Model_Switch,
+    "IPA Switch (JPS)": IPA_Switch,
     "VAE Switch (JPS)": VAE_Switch,
     "Mask Switch (JPS)": Mask_Switch,
     "ControlNet Switch (JPS)": ControlNet_Switch,
     "Disable Enable Switch (JPS)": Disable_Enable_Switch,
     "Enable Disable Switch (JPS)": Enable_Disable_Switch,
     "SDXL Basic Settings Pipe (JPS)": SDXL_Basic_Settings_Pipe,
-    "Generation Settings Pipe (JPS)": Generation_Settings_Pipe,
+    "Crop Image Pipe (JPS)": CropImage_Pipe,
+    "ImageToImage Pipe (JPS)": ImageToImage_Pipe,
+    "CtrlNet CannyEdge Pipe (JPS)": CtrlNet_CannyEdge_Pipe,
+    "CtrlNet ZoeDepth Pipe (JPS)": CtrlNet_ZoeDepth_Pipe,
+    "CtrlNet MiDaS Pipe (JPS)": CtrlNet_MiDaS_Pipe,
+    "CtrlNet OpenPose Pipe (JPS)": CtrlNet_OpenPose_Pipe,    
     "IP Adapter Settings Pipe (JPS)": IP_Adapter_Settings_Pipe,
+    "IP Adapter Single Settings Pipe (JPS)": IP_Adapter_Single_Settings_Pipe,
     "Revision Settings Pipe (JPS)": Revision_Settings_Pipe,
     "SDXL Fundamentals MultiPipe (JPS)": SDXL_Fundamentals_MultiPipe,
     "Images Masks MultiPipe (JPS)": Images_Masks_MultiPipe,
@@ -2038,4 +2596,6 @@ NODE_CLASS_MAPPINGS = {
     "SDXL Prompt Styler (JPS)": SDXL_Prompt_Styler,
     "SDXL Prompt Handling (JPS)": SDXL_Prompt_Handling,
     "SDXL Prompt Handling Plus (JPS)": SDXL_Prompt_Handling_Plus,
+    "Text Prompt (JPS)": Text_Prompt,
+    "Save Images Plus (JPS)": Save_Images_Plus,
 }
